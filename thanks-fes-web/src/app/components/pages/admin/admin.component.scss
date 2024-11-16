@@ -1,0 +1,53 @@
+@use "global";
+@use "flex";
+@use "color";
+@use "spacing";
+@use "typography";
+
+.admin-page {
+  height: 100%;
+  width: 100%;
+  @extend .pa-3;
+  @extend .d-flex-column;
+  @extend .gy-6;
+  @extend .scroll-y;
+}
+
+.step-status {
+  width: 100%;
+  @extend .pa-3;
+  @extend .fs-20;
+  background-color: rgba($color: white, $alpha: 0.5);
+  p {
+    @extend .mb-3;
+    @extend .text-ellipsis;
+  }
+  p:last-child {
+    @extend .mb-0;
+  }
+}
+
+.admin-button {
+  width: 100%;
+}
+
+.team-answer-form {
+  @extend .d-flex;
+  @extend .align-center;
+  @extend .gx-1;
+  $label-width: 120px;
+
+  .team-answer-form-label {
+    @extend .text-end;
+    @extend .text-no-wrap;
+    @extend .text-white;
+    width: $label-width;
+  }
+  .team-answer-form {
+    width: calc(100% - $label-width);
+  }
+}
+
+.form {
+  background-color: white;
+}

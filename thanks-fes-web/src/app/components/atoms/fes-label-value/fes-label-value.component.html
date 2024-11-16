@@ -1,0 +1,15 @@
+<div class="d-flex-column" [style.width]="width + 'px'">
+  <span
+    class="mb-1 fs-12 text-disabled text-no-wrap"
+    [innerHtml]="label || '&nbsp;'"
+  ></span>
+  <span *ngIf="value" class="fs-16 text-primary text-ellipsis">{{
+    value
+  }}</span>
+  <mat-progress-spinner
+    *ngIf="!value"
+    color="primary"
+    mode="indeterminate"
+    [diameter]="24"
+  ></mat-progress-spinner>
+</div>

@@ -1,0 +1,34 @@
+<ng-container
+  *ngIf="autosize; then autosizeTemplate; else fixedSizeTemplate"
+></ng-container>
+<ng-template #autosizeTemplate>
+  <textarea
+    #textareaRef
+    cdkTextareaAutosize
+    [id]="elementId"
+    class="textarea autosize"
+    [ngClass]="{dense}"
+    [value]="value"
+    [disabled]="disabled"
+    [placeholder]="placeholder"
+    (focus)="imeComposing = false"
+    (blur)="_blur()"
+    (input)="_input(textareaRef.value)"
+    (keyup.enter)="_submit(textareaRef.value)"
+  ></textarea>
+</ng-template>
+<ng-template #fixedSizeTemplate>
+  <textarea
+    #textareaRef
+    [id]="elementId"
+    class="textarea"
+    [ngClass]="{dense}"
+    [value]="value"
+    [disabled]="disabled"
+    [placeholder]="placeholder"
+    (focus)="imeComposing = false"
+    (blur)="_blur()"
+    (input)="_input(textareaRef.value)"
+    (keyup.enter)="_submit(textareaRef.value)"
+  ></textarea>
+</ng-template>

@@ -1,0 +1,41 @@
+<mat-form-field appearance="outline" class="w-100 max-w-100">
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+  <input
+    #inputRef
+    matInput
+    [matTooltip]="tooltip"
+    matTooltipPosition="above"
+    [id]="elementId"
+    [value]="value"
+    [type]="passwordShowing ? 'text' : type"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    (focus)="imeComposing = false"
+    (input)="_input(inputRef.value)"
+    (keyup.enter)="_submit(inputRef.value)"
+  />
+  <span *ngIf="prefixIcon" matPrefix class="mdi" [ngClass]="prefixIcon"></span>
+  <span *ngIf="prefixText" matTextPrefix class="fs-12">{{ prefixText }}</span>
+  <span *ngIf="suffixIcon" matSuffix class="mdi" [ngClass]="suffixIcon"></span>
+  <span *ngIf="suffixText" matTextSuffix class="fs-12">{{ suffixText }}</span>
+  <button
+    *ngIf="type === 'password'"
+    matSuffix
+    mat-icon-button
+    (click)="passwordShowing = !passwordShowing"
+  >
+    <span
+      class="mdi"
+      [ngClass]="passwordShowing ? 'mdi-eye' : 'mdi-eye-off'"
+    ></span>
+  </button>
+  <button
+    *ngIf="clearable && inputRef.value"
+    [id]="[elementId, 'clear-button'].join('-')"
+    matSuffix
+    mat-icon-button
+    (click)="clear($event)"
+  >
+    <span class="mdi mdi-close"></span>
+  </button>
+</mat-form-field>

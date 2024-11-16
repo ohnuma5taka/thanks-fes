@@ -1,0 +1,102 @@
+<div class="admin-page">
+  <div class="step-status">
+    <p>ピリオド：{{ periodLabel }}</p>
+    <p>問題：{{ questionLabel }}</p>
+    <p>ステップ：{{ step }}</p>
+  </div>
+  <div class="w-100 d-flex gx-3">
+    <fes-button
+      class="admin-button"
+      [height]="100"
+      colorMode="alert"
+      [disabled]="!stepIndex"
+      (emitClick)="back()"
+    >
+      <span class="fs-24">前：{{ previousStep }}</span>
+    </fes-button>
+    <fes-button
+      class="admin-button"
+      [height]="100"
+      colorMode="success"
+      [disabled]="
+        !step ||
+        step === steps.slice(-1)[0] ||
+        (question &&
+          !question.answer &&
+          step === '解答開始' &&
+          !answerSubmitted &&
+          !teamAnswerSubmitted)
+      "
+      (emitClick)="next()"
+    >
+      <span class="fs-24">次：{{ nextStep }}</span>
+    </fes-button>
+  </div>
+  <div class="w-100 d-flex justify-end gx-3">
+    <div class="w-100"></div>
+    <fes-button
+      class="admin-button"
+      [height]="50"
+      [disabled]="
+        !step ||
+        periodLabel === '開始前' ||
+        step === 'ピリオドランキング' ||
+        step === 'ピリオド成績' ||
+        periodLabel === '終了'
+      "
+      (emitClick)="skip()"
+    >
+      ピリオドスキップ
+    </fes-button>
+  </div>
+  <div
+    *ngIf="step === 'タイトル' || step === 'オープニング'"
+    class="step-status"
+  >
+    <p>登録済み解答者（現在：{{ totalRegisteredCount }}名）</p>
+    <p *ngFor="let registeredCount of registeredCounts">
+      {{ registeredCount.team }}チーム：{{ registeredCount.count }}名
+    </p>
+  </div>
+  <div
+    *ngIf="
+      question &&
+      !question.answer &&
+      question.panelistType === '個人' &&
+      step === '解答開始' &&
+      !answerSubmitted
+    "
+    class="d-flex-column gy-3"
+  >
+    <fes-select
+      class="form"
+      [value]="answer"
+      [options]="answerOptions"
+      (select)="answer = $event"
+    ></fes-select>
+    <fes-button [height]="32" (emitClick)="registerAnswer()">登録</fes-button>
+  </div>
+  <div
+    *ngIf="
+      question &&
+      !question.answer &&
+      question.panelistType === 'チーム' &&
+      step === '解答開始' &&
+      !teamAnswerSubmitted
+    "
+    class="d-flex-column gy-3"
+  >
+    <div *ngFor="let teamAnswer of teamAnswers" class="team-answer-form">
+      <span class="team-answer-form-label">{{ teamAnswer.team }}チーム：</span>
+      <fes-input
+        class="form team-answer-form"
+        [value]="teamAnswer.correctText"
+        type="number"
+        placeholder="正解数"
+        [clearable]="true"
+        (emitInput)="teamAnswer.correctText = $event"
+      ></fes-input>
+    </div>
+    <fes-button [height]="32" (emitClick)="answerTeam()">登録</fes-button>
+  </div>
+</div>

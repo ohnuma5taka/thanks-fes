@@ -1,0 +1,13 @@
+#.env*
+ssl/*
+!ssl/.gitkeep
+
+**/__pycache__/
+**/.DS_Store
+**/.dockervenv
+**/.idea
+**/.venv
+**/.vscode
+**/.history
+**/__pycache__
+**/.pytest_cache

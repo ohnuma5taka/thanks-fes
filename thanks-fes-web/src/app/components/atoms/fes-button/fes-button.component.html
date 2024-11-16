@@ -1,0 +1,27 @@
+<div
+  [id]="elementId"
+  #buttonRef
+  matRipple
+  [matRippleDisabled]="isSp || disabled"
+  class="fes-button"
+  [ngClass]="_buttonClass"
+  [style.width]="circled ? size + 'px' : width ? width + 'px' : '100%'"
+  [style.height]="circled ? size + 'px' : height + 'px'"
+  [style.borderRadius]="
+    (circled ? size / 2 : rounded ? height / 2 : borderRadius) + 'px'
+  "
+  [style.borderWidth]="transparent ? 0 : borderWidth + 'px'"
+  (click)="click($event)"
+>
+  <ng-container *ngIf="!loading; else loadingTemplate">
+    <ng-content></ng-content>
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <mat-progress-spinner
+      class="fes-button-loading"
+      mode="indeterminate"
+      [diameter]="loadingSpinnerSize"
+    >
+    </mat-progress-spinner>
+  </ng-template>
+</div>

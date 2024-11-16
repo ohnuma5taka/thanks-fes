@@ -1,0 +1,35 @@
+<form class="wh-100" [formGroup]="formGroup">
+  <div class="confirm-dialog">
+    <span class="mdi fs-40 mb-3" [ngClass]="iconClass"></span>
+    <span class="text-primary font-20-bold mb-8">{{ data.title }}</span>
+    <ng-container *ngIf="data.description">
+      <span
+        class="text-wrap text-center text-medium mb-3"
+        [innerHtml]="data.description"
+      ></span>
+    </ng-container>
+    <ng-content></ng-content>
+    <div class="w-100 d-flex justify-space-around mt-3">
+      <fes-button
+        [elementId]="[data.elementId, 'cancel-button'].join('-')"
+        [transparent]="true"
+        [height]="36"
+        class="w-40"
+        style="max-width: 150px"
+        (emitClick)="cancel()"
+        >{{ data.action.close.label }}</fes-button
+      >
+      <fes-button
+        *ngIf="data.action.confirm"
+        [elementId]="[data.elementId, 'action-button'].join('-')"
+        [colorMode]="data.action.confirm.colorMode"
+        [loading]="loading"
+        [height]="36"
+        class="w-40"
+        style="max-width: 150px"
+        (emitClick)="confirm()"
+        >{{ data.action.confirm.label }}</fes-button
+      >
+    </div>
+  </div>
+</form>

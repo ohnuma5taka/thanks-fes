@@ -1,0 +1,14 @@
+.dockerignore
+Dockerfile
+
+.angular
+.browserslistrc
+.editorconfig
+.git
+.gitattributes
+.gitignore
+.htmlhintrc
+dist
+*Dockerfile*
+*docker-compose*
+node_modules

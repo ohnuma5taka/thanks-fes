@@ -1,0 +1,9 @@
+.dockerignore
+Dockerfile
+.DS_Store
+.git
+.gitattributes
+.gitignore
+/.idea
+/__pycache__
+/venv

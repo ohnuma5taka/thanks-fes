@@ -1,0 +1,284 @@
+$text-primary-color: rgba(#000, 0.87);
+$text-medium-color: rgba(#000, 0.6);
+$text-disabled-color: rgba(#000, 0.38);
+$border-color: rgba(#000, 0.12);
+$hover-color: rgba(#000, 0.05);
+
+$primary-color-map: (
+  50: #e5efff,
+  100: #b3cfff,
+  200: #80aeff,
+  300: #4d8dff,
+  400: #266fff,
+  500: #407cff,
+  600: #0064e5,
+  700: #0057cc,
+  800: #004bb3,
+  900: #003380,
+  A100: #a3b6ff,
+  A200: #708aff,
+  A400: #3d5dff,
+  A700: #1e46ff,
+  contrast: (
+    5: $text-primary-color,
+    50: $text-primary-color,
+    100: $text-primary-color,
+    200: #ffffff,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: $text-primary-color,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$secondary-color-map: (
+  50: #e3f0ed,
+  100: #b9d9d2,
+  200: #8bc0b5,
+  300: #5da697,
+  400: #3a9380,
+  500: #17806a,
+  600: #147862,
+  700: #116d57,
+  800: #0d634d,
+  900: #07503c,
+  A100: #85ffd7,
+  A200: #52ffc7,
+  A400: #1fffb7,
+  A700: #05ffae,
+  contrast: (
+    5: $text-primary-color,
+    50: $text-primary-color,
+    100: $text-primary-color,
+    200: $text-primary-color,
+    300: $text-primary-color,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: $text-primary-color,
+    A200: $text-primary-color,
+    A400: $text-primary-color,
+    A700: $text-primary-color,
+  ),
+);
+
+$success-color-map: (
+  50: #e7f4e1,
+  100: #c3e5b3,
+  200: #9bd581,
+  300: #73c44e,
+  400: #55b52b,
+  500: #54ba2c,
+  600: #4ea328,
+  700: #488b24,
+  800: #427420,
+  900: #375716,
+  A100: #b7ffa1,
+  A200: #87ff70,
+  A400: #57ff3f,
+  A700: #3eff26,
+  contrast: (
+    5: $text-primary-color,
+    50: $text-primary-color,
+    100: $text-primary-color,
+    200: #ffffff,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: $text-primary-color,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$warn-color-map: (
+  50: #fff7e0,
+  100: #ffecb3,
+  200: #ffe080,
+  300: #ffd34d,
+  400: #ffc926,
+  500: #ffc200,
+  600: #e6ae00,
+  700: #cc9900,
+  800: #b38400,
+  900: #805c00,
+  A100: #ffffb3,
+  A200: #ffff80,
+  A400: #ffff4d,
+  A700: #ffff26,
+  contrast: (
+    5: $text-primary-color,
+    50: $text-primary-color,
+    100: $text-primary-color,
+    200: $text-primary-color,
+    300: $text-primary-color,
+    400: $text-primary-color,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: $text-primary-color,
+    A200: $text-primary-color,
+    A400: $text-primary-color,
+    A700: $text-primary-color,
+  ),
+);
+
+$alert-color-map: (
+  50: #f9e0de,
+  100: #f2b3b0,
+  200: #eb807d,
+  300: #e44d4a,
+  400: #df2624,
+  500: #d82a1e,
+  600: #c5241a,
+  700: #af2016,
+  800: #991b12,
+  900: #73120b,
+  A100: #ff9f9c,
+  A200: #ff6c69,
+  A400: #ff3936,
+  A700: #ff201f,
+  contrast: (
+    5: $text-primary-color,
+    50: $text-primary-color,
+    100: $text-primary-color,
+    200: #ffffff,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: $text-primary-color,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$gray-color-map: (
+  50: #fafafa,
+  100: #f2f2f2,
+  200: #dedede,
+  300: #cdcdcd,
+  400: #bdbdbd,
+  500: #aeaeae,
+  600: #9e9e9e,
+  700: #616161,
+  800: #4f4f4f,
+  900: #212121,
+  "black": #060d14,
+  contrast: (
+    50: $text-medium-color,
+    100: $text-medium-color,
+    200: $text-medium-color,
+    300: $text-medium-color,
+    400: $text-primary-color,
+    500: $text-primary-color,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    "black": #ffffff,
+  ),
+);
+
+$bg-color: #fcfcfc;
+$primary-color: map-get($primary-color-map, 500);
+$secondary-color: map-get($secondary-color-map, 800);
+$success-color: map-get($success-color-map, 500);
+$warn-color: map-get($warn-color-map, 500);
+$alert-color: map-get($alert-color-map, 500);
+$primary-hover-color: map-get($primary-color-map, 50);
+$secondary-hover-color: map-get($secondary-color-map, 50);
+$success-hover-color: map-get($success-color-map, 50);
+$warn-hover-color: map-get($warn-color-map, 50);
+$alert-hover-color: map-get($alert-color-map, 50);
+$gray-hover-color: map-get($gray-color-map, 100);
+
+$text-color-map: (
+  primary: $text-primary-color,
+  medium: $text-medium-color,
+  disabled: $text-disabled-color,
+  "white": #ffffff,
+);
+$color-map: (
+  primary: $primary-color,
+  secondary: $secondary-color,
+  warn: $warn-color,
+  alert: $alert-color,
+  A: #407cff,
+);
+$hover-bg-color-map: (
+  primary: $primary-hover-color,
+  secondary: $secondary-hover-color,
+  warn: $warn-hover-color,
+  alert: $alert-hover-color,
+);
+
+@each $key, $color in $text-color-map {
+  .text-#{$key} {
+    color: $color;
+  }
+}
+.divider-color {
+  color: $border-color;
+}
+@each $key, $color in $color-map {
+  .#{$key}-color {
+    color: $color;
+  }
+}
+@each $key, $color in $color-map {
+  .#{$key}-bg-color {
+    background: $color;
+  }
+}
+@each $key, $color in $hover-bg-color-map {
+  .#{$key}-hover-bg-color {
+    background: $color;
+  }
+}
+
+@function text-border($color, $px) {
+  @return $px 0px 0px $color, 0px $px 0px $color, calc(-1 * $px) 0px 0px $color,
+    0px calc(-1 * $px) 0px $color;
+}
+
+.text-border-black {
+  text-shadow: text-border(#000, 2px);
+}
+
+.text-border-black-thin {
+  text-shadow: text-border(#000, 1px);
+}
+
+.text-border-white-bold {
+  text-shadow: text-border(#fff, 6px);
+}
+
+.text-border-white {
+  text-shadow: text-border(#fff, 2px);
+}
+
+.text-border-white-thin {
+  text-shadow: text-border(#fff, 1px);
+}

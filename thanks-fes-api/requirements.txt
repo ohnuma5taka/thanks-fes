@@ -1,0 +1,15 @@
+uvicorn~=0.30.1
+fastapi~=0.111.0
+requests==2.32.2
+SQLAlchemy~=2.0.30
+starlette~=0.37.2
+python-dotenv~=1.0.1
+python-jose~=3.3.0
+pydantic~=2.7.1
+pydantic-settings~=2.3.1
+ibm-db~=3.2.3
+ibm-db-sa~=0.4.0
+tenacity~=8.4.1
+broadcaster[redis]~=0.2.0
+asyncio-redis~=0.16.0
+kanjize

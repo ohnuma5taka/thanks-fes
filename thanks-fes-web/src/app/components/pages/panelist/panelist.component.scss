@@ -1,0 +1,223 @@
+@use "global";
+@use "color";
+@use "flex";
+@use "spacing";
+@use "typography";
+
+.panelist-page {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  @extend .d-flex-column-center;
+  @extend .gy-9;
+}
+
+#thanks-fes-title {
+  width: 75vw;
+}
+.ranking-title-image {
+  width: 75vw;
+}
+
+#wake-lock-overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  @extend .d-flex-column-center;
+  @extend .gy-9;
+  @extend .text-primary;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  &.title-page {
+    background-color: rgba(0, 0, 0, 0);
+    padding-top: 240px;
+  }
+}
+
+.opening-team-label {
+  font-weight: 900;
+  font-size: 48px;
+  font-family: "Hiragino Kaku Gothic StdN";
+  -webkit-text-stroke: 2px white;
+
+  &.A {
+    color: #ff0000;
+    -webkit-text-stroke-color: white;
+  }
+  &.B {
+    color: #ff7f00;
+    -webkit-text-stroke-color: white;
+  }
+  &.C {
+    color: #ffff00;
+    -webkit-text-stroke-color: black;
+  }
+  &.D {
+    color: #00ff00;
+    -webkit-text-stroke-color: black;
+  }
+  &.E {
+    color: #00f2ff;
+    -webkit-text-stroke-color: black;
+  }
+  &.F {
+    -webkit-text-stroke-color: white;
+    color: #7575ff;
+  }
+  &.G {
+    -webkit-text-stroke-color: white;
+    color: #cc86ff;
+  }
+}
+
+.register-button {
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 48px;
+  text-align: center;
+
+  &.A {
+    background-color: #ff0000;
+    color: white;
+  }
+  &.B {
+    background-color: #ff7f00;
+    color: white;
+  }
+  &.C {
+    background-color: #ffff00;
+    color: #333;
+    font-weight: 500;
+  }
+  &.D {
+    background-color: #00ff00;
+    color: #333;
+    font-weight: 500;
+  }
+  &.E {
+    background-color: #00f2ff;
+    color: #333;
+    font-weight: 500;
+  }
+  &.F {
+    background-color: #7575ff;
+    color: white;
+  }
+  &.G {
+    background-color: #cc86ff;
+    color: white;
+  }
+}
+
+.panelist-register-glass {
+  @extend .glass;
+  border-radius: 4px;
+  padding: 24px;
+  @extend .flex-column-main;
+}
+
+.panelist-label-base {
+  font-weight: 900;
+  line-height: 1;
+  font-family: "Hiragino Kaku Gothic StdN";
+  -webkit-text-stroke: 5px white;
+  $shadow-width: 1px;
+  $shadow-height: 1.5px;
+  text-shadow: global.text-shadow(
+      $shadow-width,
+      $shadow-height,
+      $shadow-width,
+      #b0adb0,
+      1
+    ),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 2),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 3),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 4),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 5),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 6),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 7),
+    global.text-shadow($shadow-width, $shadow-height, 0px, #b0adb0, 8);
+}
+
+.period-label {
+  @extend .panelist-label-base;
+  color: #ff0266;
+  font-size: 60px;
+  -webkit-text-stroke-width: 4px;
+}
+.period-label-no-shadow {
+  @extend .period-label;
+  text-shadow: none;
+}
+.period-number {
+  @extend .panelist-label-base;
+  color: #ff00c9;
+  font-size: 140px;
+  -webkit-text-stroke-width: 4px;
+}
+
+.answer-container {
+  height: 96px;
+  @extend .d-flex-center;
+
+  span {
+    line-height: 96px;
+  }
+  img {
+    height: 100%;
+  }
+}
+
+.question-title {
+  @extend .panelist-label-base;
+  -webkit-text-stroke-width: 2px;
+  font-size: 80px;
+  color: #ff0266;
+}
+
+.error-text {
+  font-weight: 500;
+  text-shadow: 0.1px 0px 0px #fff, 0px 0.1px 0px #fff;
+}
+
+.option-button {
+  border: 3px solid transparent;
+  border-color: transparent;
+}
+
+@-webkit-keyframes border-flash {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #fff;
+  }
+  100% {
+    border-color: transparent;
+  }
+}
+
+@keyframes border-flash {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #fff;
+  }
+  100% {
+    border-color: transparent;
+  }
+}
+
+.flash-border {
+  -webkit-animation: border-flash 1s infinite;
+  animation: border-flash 1s infinite;
+}
+
+.show-border {
+  border: 3px solid #fff;
+}

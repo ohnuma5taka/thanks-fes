@@ -1,0 +1,38 @@
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label *ngIf="label" class="pointer">{{ label }}</mat-label>
+  <mat-select
+    #selectRef
+    [id]="elementId"
+    [value]="value"
+    [disabled]="disabled"
+    (selectionChange)="_select($event.value)"
+  >
+    <ng-container *ngFor="let group of optionGroups">
+      <mat-option *ngIf="!group.options; else optGroup" [value]="group.value">{{
+        group.label
+      }}</mat-option>
+      <ng-template #optGroup>
+        <mat-optgroup [label]="group.label">
+          <mat-option
+            *ngFor="let option of group.options"
+            [id]="[elementId, option.value].join('-')"
+            [value]="option.value"
+            >{{ option.label }}</mat-option
+          >
+        </mat-optgroup>
+      </ng-template>
+    </ng-container>
+    <mat-option *ngFor="let option of options" [value]="option.value">{{
+      option.label
+    }}</mat-option>
+  </mat-select>
+  <button
+    *ngIf="clearable && valued"
+    [id]="[elementId, 'clear-button'].join('-')"
+    matSuffix
+    mat-icon-button
+    (click)="clear($event)"
+  >
+    <span class="mdi mdi-close"></span>
+  </button>
+</mat-form-field>

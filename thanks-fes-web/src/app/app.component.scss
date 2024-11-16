@@ -1,0 +1,11 @@
+@use "color";
+@use "typography";
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url("/assets/images/common/bg.jpeg");
+  background-size: cover;
+  @extend .text-primary;
+}

@@ -1,0 +1,46 @@
+@use "color";
+@use "typography";
+
+.textarea {
+  width: -webkit-fill-afeslable;
+  height: -webkit-fill-afeslable;
+  padding: 12px;
+  resize: none;
+  border-radius: 2px;
+  background-color: #ffffff;
+  color: color.$text-primary-color;
+  @extend .fs-14;
+  border: none;
+  outline: 0.1px color.$border-color solid;
+
+  &.dense {
+    height: 100%;
+    padding: 2px;
+    border: none;
+    outline: none;
+  }
+
+  &:focus {
+    outline: 0.1px color.$text-primary-color solid;
+  }
+
+  &::-webkit-input-placeholder {
+    color: color.$text-disabled-color;
+  }
+
+  &::-moz-placeholder {
+    color: color.$text-disabled-color;
+  }
+
+  &:-ms-input-placeholder {
+    color: color.$text-disabled-color;
+  }
+
+  &::-ms-input-placeholder {
+    color: color.$text-disabled-color;
+  }
+
+  &::placeholder {
+    color: color.$text-disabled-color;
+  }
+}

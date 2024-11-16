@@ -1,0 +1,690 @@
+@use "global";
+@use "color";
+@use "flex";
+@use "spacing";
+@use "typography";
+
+$border-radius: global.$border-radius;
+$glass-padding: global.$glass-padding;
+$image-option-width: 450px;
+$image-option-height: 320px;
+$question-width: 160px;
+$count-width: 96px;
+$timer-height: 140px;
+$red-highlight: #ce1e1d;
+$yellow-highlight: #fffc4b;
+
+.question-page {
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  @extend .d-flex-column-center;
+  @extend .gy-9;
+}
+
+#thanks-fes-title {
+  transform: translate(100px, 150px) scale(0);
+  transition: transform 1s;
+
+  &.display {
+    transform: translate(0) scale(1);
+  }
+}
+
+@-webkit-keyframes image-blink {
+  0% {
+    -webkit-filter: brightness(100%);
+    filter: brightness(100%);
+  }
+  50% {
+    -webkit-filter: brightness(150%);
+    filter: brightness(150%);
+  }
+  100% {
+    -webkit-filter: brightness(100%);
+    filter: brightness(100%);
+  }
+}
+
+@keyframes image-blink {
+  0% {
+    -webkit-filter: brightness(100%);
+    filter: brightness(100%);
+  }
+  50% {
+    -webkit-filter: brightness(150%);
+    filter: brightness(150%);
+  }
+  100% {
+    -webkit-filter: brightness(100%);
+    filter: brightness(100%);
+  }
+}
+
+.image-blink {
+  -webkit-animation: image-blink 1s infinite;
+  animation: image-blink 1s infinite;
+}
+
+@-webkit-keyframes glass-flash-red {
+  0% {
+    background: rgba(#fff, 0.25);
+  }
+  50% {
+    background: rgba($red-highlight, 0.95);
+  }
+  100% {
+    background: rgba(#fff, 0.25);
+  }
+}
+
+@keyframes glass-flash-red {
+  0% {
+    background: rgba(#fff, 0.25);
+  }
+  50% {
+    background: rgba($red-highlight, 0.95);
+  }
+  100% {
+    background: rgba(#fff, 0.25);
+  }
+}
+
+.main-label-base {
+  text-align: center;
+  font-weight: 900;
+  line-height: 1;
+  font-family: "Hiragino Kaku Gothic StdN";
+  -webkit-text-stroke: 10px white;
+  $shadow-width: 2px;
+  $shadow-height: 3px;
+  text-shadow: global.text-shadow(
+      $shadow-width,
+      $shadow-height,
+      $shadow-width,
+      #b0adb0,
+      1
+    ),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 2),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 3),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 4),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 5),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 6),
+    global.text-shadow($shadow-width, $shadow-height, $shadow-width, #b0adb0, 7),
+    global.text-shadow($shadow-width, $shadow-height, 0px, #b0adb0, 8);
+}
+
+.period-label {
+  @extend .main-label-base;
+  color: #ff0266;
+  font-size: 160px;
+}
+
+.period-number {
+  @extend .main-label-base;
+  color: #ff00c9;
+  font-size: 320px;
+}
+
+.period-guide-glass {
+  margin-top: 5vh;
+  @extend .glass;
+  padding: 8px;
+  .period-guide-container {
+    padding: 48px 64px;
+    position: relative;
+    @extend .d-flex-column;
+    @extend .justify-start;
+    border: 4px solid black;
+    border-radius: $border-radius;
+    background: repeating-linear-gradient(
+      135deg,
+      #f62371,
+      #f62371 20px,
+      #ff78a9 20px,
+      #ff78a9 40px
+    );
+
+    .period-guide-title {
+      @extend .text-no-wrap;
+      font-size: 64px;
+      font-weight: 900;
+      color: #f74c00;
+      @extend .text-border-white;
+      $shadow-width: 4px;
+      $shadow-blur: calc($shadow-width * 1.5);
+      text-shadow: $shadow-width $shadow-width $shadow-blur white,
+        calc(-1 * $shadow-width) calc(-1 * $shadow-width) $shadow-blur white,
+        $shadow-width calc(-1 * $shadow-width) $shadow-blur white,
+        calc(-1 * $shadow-width) $shadow-width $shadow-blur white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -225%);
+    }
+
+    .period-guide {
+      font-size: 64px;
+      font-weight: 900;
+      color: #fff6af;
+      @extend .text-border-black;
+    }
+  }
+}
+
+.question-title {
+  @extend .main-label-base;
+  -webkit-text-stroke-width: 5px;
+  font-size: 200px;
+  color: #ff0266;
+}
+
+.ranking-title {
+  @extend .main-label-base;
+  -webkit-text-stroke-width: 5px;
+  font-size: 148px;
+  color: #f76875;
+  text-shadow: -4px -4px 1px #ffa3ae;
+}
+
+.image-option-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+
+  .image-option-glass {
+    @extend .glass;
+    width: calc($image-option-width + $glass-padding * 4);
+    height: calc($image-option-height + $glass-padding * 4);
+    @extend .d-flex-center;
+
+    .image-option-container {
+      position: relative;
+      width: $image-option-width;
+      height: $image-option-height;
+      border-radius: $border-radius;
+
+      .image-option-image-container {
+        width: $image-option-width;
+        height: $image-option-height;
+        border-radius: $border-radius;
+        overflow: hidden;
+
+        img {
+          width: $image-option-width;
+          height: $image-option-height;
+          border-radius: $border-radius;
+
+          &.timer-start {
+            transform: translate(0) scale(1) !important;
+          }
+        }
+      }
+
+      .image-option-icon {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+      }
+
+      .image-option-label-glass {
+        @extend .glass;
+        border-radius: 4px $border-radius 4px $border-radius;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        .image-option-label-wrapper {
+          width: calc($image-option-width - $count-width - $glass-padding * 6);
+          height: 64px;
+          background: linear-gradient(to bottom, #bfc2d9, #ece4da);
+          border-radius: 4px $border-radius 4px $border-radius;
+          @extend .d-flex-center;
+        }
+
+        .image-option-label {
+          @extend .label;
+          color: black;
+          @extend .text-border-white;
+        }
+      }
+
+      .image-option-count-glass {
+        @extend .glass;
+        border-radius: $border-radius 4px $border-radius 4px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
+        .image-option-count-wrapper {
+          width: $count-width;
+          height: 48px;
+          background: linear-gradient(to bottom, #4b90e3, #84eee0);
+          border-radius: $border-radius 4px $border-radius 4px;
+          padding: 0 12px;
+          @extend .d-flex;
+          @extend .align-center;
+          @extend .justify-end;
+        }
+
+        .image-option-count {
+          @extend .label;
+          font-weight: bold;
+          color: white;
+          @extend .text-border-black;
+        }
+      }
+    }
+    &.correct {
+      -webkit-animation: glass-flash-red 1s infinite;
+      animation: glass-flash-red 1s infinite;
+
+      .image-option-container {
+        .image-option-icon {
+          @extend .image-blink;
+        }
+        .image-option-count-glass {
+          .image-option-count-wrapper {
+            background: linear-gradient(to bottom, $red-highlight, #dd9ea5);
+          }
+          .image-option-count {
+            color: $yellow-highlight;
+          }
+        }
+      }
+    }
+  }
+}
+
+@-webkit-keyframes glass-flash-white {
+  0% {
+    background: rgba(#fff, 0.25);
+  }
+  50% {
+    background: rgba(#fff, 0.95);
+  }
+  100% {
+    background: rgba(#fff, 0.25);
+  }
+}
+
+@keyframes glass-flash-white {
+  0% {
+    background: rgba(#fff, 0.25);
+  }
+  50% {
+    background: rgba(#fff, 0.95);
+  }
+  100% {
+    background: rgba(#fff, 0.25);
+  }
+}
+
+$text-question-image-width: 560px;
+$text-question-image-height: 640px;
+
+.text-question-image-glass {
+  @extend .glass;
+  width: calc($text-question-image-width + $glass-padding * 2);
+  height: calc($text-question-image-height + $glass-padding * 2);
+  border-radius: 0;
+
+  img {
+    width: $text-question-image-width;
+    height: $text-question-image-height;
+  }
+}
+
+.text-option-wrapper {
+  width: 100%;
+  @extend .d-flex-column;
+  @extend .gy-1;
+
+  .text-option-glass {
+    @extend .glass;
+    width: 100%;
+    height: $count-width;
+    @extend .d-flex-center;
+
+    .text-option-container {
+      width: 100%;
+      height: 100%;
+      border-radius: $border-radius;
+      background-color: rgba(#3323e4, 0.95);
+      @extend .d-flex;
+      @extend .align-center;
+      @extend .gx-3;
+      @extend .px-3;
+
+      .text-option-label {
+        @extend .label;
+        color: white;
+        @extend .mr-auto;
+        @extend .text-border-black;
+      }
+
+      .text-option-count-glass {
+        @extend .glass;
+        border-radius: $border-radius;
+
+        .text-option-count-wrapper {
+          width: $count-width;
+          height: 56px;
+          background: linear-gradient(to bottom, #4b90e3, #84eee0);
+          border-radius: calc($border-radius * 0.75);
+          padding: 0 12px;
+          @extend .d-flex;
+          @extend .align-center;
+          @extend .justify-end;
+        }
+
+        .text-option-count {
+          @extend .label;
+          font-weight: bold;
+          color: white;
+          @extend .text-border-black;
+        }
+
+        .point-container {
+          height: 56px;
+          width: 128px;
+          border-radius: 8px;
+          background: $yellow-highlight;
+          box-shadow: inset 2px 6px 8px rgba(0, 0, 0, 0.5),
+            inset -2px 0px 8px rgba(0, 0, 0, 0.5);
+          @extend .d-flex;
+          @extend .align-end;
+          @extend .justify-end;
+          padding: 8px;
+          color: #1f2488;
+
+          .point-label {
+            @extend .label;
+            font-weight: bold;
+            @extend .text-border-white;
+          }
+          .point-unit {
+            line-height: 1;
+            padding-left: 4px;
+            font-size: 24px;
+          }
+        }
+      }
+    }
+
+    &.correct {
+      -webkit-animation: glass-flash-white 1s infinite;
+      animation: glass-flash-white 1s infinite;
+      .text-option-container {
+        background-color: rgba($red-highlight, 0.95);
+        .text-option-icon {
+          @extend .image-blink;
+        }
+        .text-option-label {
+          color: $yellow-highlight;
+        }
+        .text-option-count-glass {
+          .text-option-count-wrapper {
+            background: linear-gradient(to bottom, $yellow-highlight, #ffffe2);
+          }
+          .text-option-count {
+            color: #ea4645;
+            @extend .text-border-white;
+          }
+        }
+      }
+    }
+  }
+  &.team-answers {
+    height: calc($count-width * 4 + $glass-padding * 3);
+    @extend .d-flex-column-wrap;
+    @extend .ga-1-1;
+
+    .text-option-glass {
+      width: calc(50% - $glass-padding);
+    }
+  }
+}
+
+// QUESTION
+
+.question-glass {
+  position: relative;
+  @extend .glass;
+
+  .question-wrapper {
+    @extend .align-center;
+    width: 100%;
+    height: 100%;
+    border-radius: $border-radius;
+    background: linear-gradient(to bottom, #40248a, #3653ff);
+
+    .question-q {
+      font-size: 64px;
+      color: #59d0cb;
+      text-shadow: -1px -1px 1px #fff, 1px 1px #59d0cb;
+      font-family: "Arial Rounded MT Bold";
+    }
+
+    .question-box {
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #fff, $alpha: 0.6);
+      border-radius: $border-radius;
+      @extend .d-flex-center;
+      span {
+        @extend .text-wrap;
+        @extend .label;
+        color: #544db1;
+        @extend .text-border-white;
+      }
+    }
+  }
+  .timer-container {
+    position: absolute;
+    width: $question-width;
+    height: $timer-height;
+    overflow: hidden;
+    border-radius: 50%;
+    .timer {
+      width: $question-width;
+      height: $timer-height;
+      transform: scale(1.65);
+    }
+  }
+}
+
+.image-question-glass {
+  width: $question-width;
+  height: calc(100% - 96px);
+  .image-question-wrapper {
+    @extend .d-flex-column;
+    padding: 10px 10px 78px 10px;
+
+    .question-box {
+      span {
+        max-height: 360px;
+      }
+    }
+
+    .question-box span {
+      -webkit-writing-mode: vertical-rl;
+      -ms-writing-mode: tb-rl;
+      writing-mode: vertical-rl;
+    }
+  }
+
+  .timer-container {
+    bottom: calc(-1 * $timer-height / 2);
+    left: 0;
+  }
+}
+
+.text-question-glass {
+  width: 100%;
+  height: $question-width;
+  .text-question-wrapper {
+    @extend .d-flex;
+    @extend .gx-6;
+    padding: 10px 98px 10px 24px;
+
+    .question-box {
+      width: 840px;
+      span {
+        line-height: auto;
+      }
+    }
+  }
+  .timer-container {
+    height: $timer-height;
+    width: $question-width;
+    top: calc(($question-width - $timer-height) / 2);
+    right: calc(-1 * $question-width / 2);
+  }
+}
+
+.ranking-container {
+  @extend .d-flex-center;
+  @extend .gx-1;
+
+  .ranking-result-wrapper {
+    @extend .d-flex-column;
+    @extend .gy-1;
+
+    .ranking-result {
+      height: 64px;
+      padding: 4px 32px 4px 4px;
+      border-radius: 12px 32px 32px 12px;
+      background: linear-gradient(to bottom, #1f2488, #353ccb);
+      @extend .d-flex;
+      @extend .align-center;
+      @extend .gx-3;
+      transform: translateY(-96px) rotateX(90deg);
+      transition: all 1s;
+
+      &.displayed {
+        transform: translateY(0) rotateX(0);
+      }
+
+      .rank-container-glass {
+        @extend .glass;
+        padding: 2px;
+        border-radius: 8px;
+        height: 100%;
+        width: 72px;
+        .rank-container {
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom, #102ac5, #1578e2);
+          border-radius: 8px;
+          @extend .d-flex-center;
+
+          span {
+            @extend .label;
+            font-weight: bold;
+            color: #fff;
+            @extend .text-border-black;
+          }
+        }
+      }
+      .panelist-name {
+        min-width: 500px;
+        @extend .label;
+        color: white;
+        @extend .mr-auto;
+        @extend .text-border-black;
+      }
+
+      .team-name {
+        min-width: 360px;
+        @extend .label;
+        color: white;
+        @extend .mr-auto;
+        @extend .text-border-black;
+      }
+
+      .point-container {
+        height: 100%;
+        width: 128px;
+        border-radius: 8px;
+        background: $yellow-highlight;
+        box-shadow: inset 2px 6px 8px rgba(0, 0, 0, 0.5),
+          inset -2px 0px 8px rgba(0, 0, 0, 0.5);
+        @extend .d-flex;
+        @extend .align-end;
+        @extend .justify-end;
+        padding: 8px;
+        color: #1f2488;
+
+        .point-label {
+          @extend .label;
+          font-weight: bold;
+          @extend .text-border-white;
+        }
+        .point-unit {
+          line-height: 1;
+          padding-left: 4px;
+          font-size: 24px;
+        }
+      }
+
+      .second-label {
+        width: 140px;
+        @extend .label;
+        font-weight: bold;
+        color: white;
+        @extend .text-border-black;
+        @extend .text-end;
+      }
+
+      &.grand-prix {
+        background: linear-gradient(to bottom, $red-highlight, #cc757c);
+
+        .rank-container-glass {
+          .rank-container {
+            background: linear-gradient(to bottom, $red-highlight, #cc757c);
+          }
+        }
+        .panelist-name {
+          color: $yellow-highlight;
+        }
+
+        .point-container {
+          background: $red-highlight;
+          box-shadow: inset 8px 16px 20px rgba(255, 252, 75, 0.5),
+            inset -8px 0px 20px rgba(255, 252, 75, 0.5);
+          color: $yellow-highlight;
+          .point-label {
+            text-shadow: none;
+          }
+        }
+      }
+    }
+  }
+
+  .ranking-title-glass {
+    width: $question-width;
+    height: 600px;
+    @extend .glass;
+
+    .ranking-title-wrapper {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #303fc7, #0f59a1);
+      border-radius: $border-radius;
+      @extend .d-flex-center;
+
+      .ranking-title-label {
+        @extend .label;
+        font-size: 48px;
+        font-weight: bold;
+        color: $yellow-highlight;
+        @extend .text-border-black;
+
+        -webkit-writing-mode: vertical-rl;
+        -ms-writing-mode: tb-rl;
+        writing-mode: vertical-rl;
+      }
+    }
+  }
+}

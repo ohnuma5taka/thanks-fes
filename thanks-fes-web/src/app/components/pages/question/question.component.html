@@ -1,0 +1,283 @@
+<div class="question-page">
+  <ng-container *ngIf="step === 'タイトル'">
+    <img id="thanks-fes-title" src="/assets/images/common/logo.png" />
+  </ng-container>
+
+  <ng-container *ngIf="step === 'オープニング'">
+    <span class="large-title">オープニング</span>
+  </ng-container>
+
+  <ng-container *ngIf="step === 'タイトル' || step === 'オープニング'">
+    <audio src="/assets/audios/opening.mp3" autoplay loop></audio>
+  </ng-container>
+
+  <ng-container *ngIf="step === 'ピリオド開始'">
+    <div class="flex-column-sub animate__animated animate__fadeIn">
+      <span class="period-label">Period</span>
+      <span class="period-number">{{ period }}</span>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="step === 'ピリオド説明'">
+    <div class="period-guide-glass">
+      <div class="period-guide-container">
+        <span class="period-guide-title">12問連続一般常識クイズ</span>
+        <span class="period-guide"
+          >今年起きた問題を中心としたクイズ<br />シンキングタイムは10秒</span
+        >
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="step === 'ピリオド開始' || step === 'ピリオド説明'">
+    <audio src="/assets/audios/period_start.mp3" autoplay></audio>
+  </ng-container>
+
+  <ng-container *ngIf="step === '問題開始'">
+    <span class="question-title">問題</span>
+    <audio src="/assets/audios/question.mp3" autoplay></audio>
+  </ng-container>
+
+  <ng-container
+    *ngIf="
+      question &&
+      (step === '解答開始' ||
+        step === '解答結果' ||
+        step === '解答開示' ||
+        step === 'ピリオド終了')
+    "
+  >
+    <div *ngIf="question.format === '画像'" class="d-flex-center gx-2">
+      <div class="image-option-wrapper">
+        <div
+          *ngFor="let option of question.options; index as i"
+          class="image-option-glass"
+          [ngClass]="{
+            correct:
+              (step === '解答開示' || step === 'ピリオド終了') &&
+              option.value === questionAnswer
+          }"
+        >
+          <div class="image-option-container">
+            <div class="image-option-image-container">
+              <img
+                [src]="optionResources[i].image"
+                [ngClass]="{ 'timer-start': questionStarted }"
+                [style.transform]="option.transform"
+                [style.transition]="'all ' + question.second + 's'"
+              />
+            </div>
+            <img class="image-option-icon" [src]="optionResources[i].icon" />
+            <div
+              *ngIf="step === '解答開示' || step === 'ピリオド終了'"
+              class="image-option-label-glass"
+            >
+              <div class="image-option-label-wrapper">
+                <span class="image-option-label">{{ option.text }}</span>
+              </div>
+            </div>
+            <div
+              *ngIf="isNumber(answerCount[option.value])"
+              class="image-option-count-glass"
+            >
+              <div class="image-option-count-wrapper">
+                <span class="image-option-count">{{
+                  answerCount[option.value]
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="question-glass image-question-glass">
+        <div class="question-wrapper image-question-wrapper">
+          <div class="py-2">
+            <img src="/assets/images/common/Q.png" />
+          </div>
+          <div class="question-box">
+            <span [innerHTML]="question.text"></span>
+          </div>
+          <div class="timer-container">
+            <video class="timer" autoplay>
+              <source
+                [src]="'/assets/videos/timer/' + question.second + '.mp4'"
+                type="video/mp4"
+              />
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="question.format === '文字'" class="d-flex-column-center gy-3">
+      <div class="question-glass text-question-glass">
+        <div class="question-wrapper text-question-wrapper">
+          <div class="py-2">
+            <img src="/assets/images/common/Q.png" />
+          </div>
+          <div class="question-box">
+            <span [innerHTML]="question.text"></span>
+          </div>
+          <div class="timer-container">
+            <video class="timer" autoplay>
+              <source
+                [src]="'/assets/videos/timer/' + question.second + '.mp4'"
+                type="video/mp4"
+              />
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="w-100 d-flex align-center gx-1">
+        <div *ngIf="question.filePath" class="text-question-image-glass">
+          <img [src]="question.filePath" />
+        </div>
+        <div class="text-option-wrapper">
+          <div
+            *ngFor="let option of question.options; index as i"
+            class="text-option-glass"
+            [ngClass]="{
+              correct:
+                (step === '解答開示' || step === 'ピリオド終了') &&
+                option.value === questionAnswer
+            }"
+          >
+            <div class="text-option-container">
+              <img class="text-option-icon" [src]="optionResources[i].icon" />
+              <span class="text-option-label">{{ option.text }}</span>
+              <div
+                *ngIf="isNumber(answerCount[option.value])"
+                class="text-option-count-glass"
+              >
+                <div class="text-option-count-wrapper">
+                  <span class="text-option-count">{{
+                    answerCount[option.value]
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!question.format" class="d-flex-column-center gy-3">
+      <div class="question-glass text-question-glass">
+        <div class="question-wrapper text-question-wrapper">
+          <div class="py-2">
+            <img src="/assets/images/common/Q.png" />
+          </div>
+          <div class="question-box">
+            <span [innerHTML]="question.text"></span>
+          </div>
+          <div class="timer-container">
+            <video class="timer" autoplay>
+              <source
+                [src]="'/assets/videos/timer/' + question.second + '.mp4'"
+                type="video/mp4"
+              />
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="text-option-wrapper team-answers">
+        <div
+          *ngFor="let teamAnswer of teamAnswers"
+          class="text-option-glass"
+          [ngClass]="{
+            correct:
+              (step === '解答開示' || step === 'ピリオド終了') &&
+              teamAnswer.correct
+          }"
+        >
+          <div class="text-option-container">
+            <span class="text-option-label pl-3"
+              >{{ teamAnswer.team }}チーム</span
+            >
+            <div *ngIf="step !== '解答開始'" class="text-option-count-glass">
+              <div class="point-container">
+                <span class="point-label">{{
+                  (teamAnswer.correct * 10).toFixed(0)
+                }}</span>
+                <span class="point-unit">P</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <audio
+      *ngIf="step === '解答結果'"
+      src="/assets/audios/answer_check.mp3"
+      autoplay
+    ></audio>
+    <audio
+      *ngIf="step === '解答開示'"
+      src="/assets/audios/answer_open.mp3"
+      autoplay
+    ></audio>
+    <audio
+      *ngIf="step === 'ピリオド終了'"
+      src="/assets/audios/period_end.mp3"
+      autoplay
+    ></audio>
+  </ng-container>
+
+  <ng-container *ngIf="step === '総合チームランキングタイトル'">
+    <img src="/assets/images/common/total_team_ranking_title.png" />
+  </ng-container>
+
+  <ng-container *ngIf="step === '総合個人ランキングタイトル'">
+    <img src="/assets/images/common/total_panelist_ranking_title.png" />
+  </ng-container>
+
+  <ng-container
+    *ngIf="
+      step === 'ピリオドランキング' ||
+      step === 'ピリオド成績' ||
+      step === '総合チームランキング' ||
+      step === '総合チーム成績' ||
+      step === '総合個人ランキング' ||
+      step === '総合個人成績'
+    "
+  >
+    <div class="ranking-container">
+      <div class="ranking-result-wrapper">
+        <div *ngIf="!results.length" style="width: 912px"></div>
+        <div
+          class="ranking-result"
+          *ngFor="let result of results; index as i"
+          [ngClass]="{
+            'grand-prix': result.rank === 1,
+            displayed: !!result.displayed
+          }"
+        >
+          <div class="rank-container-glass">
+            <div class="rank-container">
+              <span>{{ result.rank }}</span>
+            </div>
+          </div>
+          <span class="panelist-name">{{ result.name }}</span>
+          <div class="point-container">
+            <span class="point-label">{{ result.correctText }}</span>
+            <span class="point-unit">P</span>
+          </div>
+          <span class="second-label">{{
+            result.elapsedSecond.toFixed(2)
+          }}</span>
+        </div>
+      </div>
+      <div class="ranking-title-glass">
+        <div class="ranking-title-wrapper">
+          <span class="ranking-title-label">{{
+            step === "ピリオドランキング" || step === "ピリオド成績"
+              ? "早押しランキング"
+              : step === "総合チームランキング" || step === "総合チーム成績"
+              ? "総合チームランキング"
+              : "総合個人ランキング"
+          }}</span>
+        </div>
+      </div>
+    </div>
+    <audio src="/assets/audios/ranking.mp3" autoplay></audio>
+  </ng-container>
+</div>
