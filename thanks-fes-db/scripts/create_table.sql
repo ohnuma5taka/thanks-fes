@@ -11,7 +11,6 @@ CREATE TABLE questions (
     panelist_type VARCHAR(100) DEFAULT '',
     format VARCHAR(100) DEFAULT '',
     text VARCHAR(100) DEFAULT '',
-    file_name VARCHAR(100) DEFAULT '',
     thinking_second INTEGER DEFAULT 0,
     answer VARCHAR(1) DEFAULT '',
     point INTEGER DEFAULT 0
