@@ -9,12 +9,13 @@ from app.models.option_model import OptionModel
 
 class QuestionModel(BaseModel):
     id: Optional[int] = None
+    qid: Optional[int] = None
     period: Optional[int] = None
     index: Optional[int] = None
     panelist_type: Optional[str] = None
-    format: Optional[str] = None
+    question_format: Optional[str] = None
+    option_format: Optional[str] = None
     text: Optional[str] = None
-    file: Optional[str] = None
     second: Optional[int] = None
     answer: Optional[str] = None
     point: Optional[int] = None
@@ -23,12 +24,13 @@ class QuestionModel(BaseModel):
     def __init__(self, question: Question):
         super().__init__()
         self.id = question.id
+        self.qid = question.qid
         self.period = question.period
         self.index = question.idx
         self.panelist_type = question.panelist_type
-        self.format = question.format
+        self.question_format = question.question_format
+        self.option_format = question.option_format
         self.text = question.text
-        self.file = question.file_name
         self.second = question.thinking_second
         self.answer = question.answer
         self.point = question.point

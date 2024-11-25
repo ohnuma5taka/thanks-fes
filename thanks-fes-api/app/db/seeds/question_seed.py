@@ -7,18 +7,18 @@ from app.db.models.question import Question
 def seed_questions(seeds_data_dir: str):
     option_rows = csv.DictReader(open(f'{seeds_data_dir}/options.tsv'), delimiter='\t')
     question_rows = csv.DictReader(open(f'{seeds_data_dir}/questions.tsv'), delimiter='\t')
-    option_rows = [x for x in option_rows]
+    option_rows = sorted([x for x in option_rows], key=lambda x: (x['period'], x['idx']))
     for question_row in question_rows:
-        _option_rows = [x for x in option_rows
-                        if x['period'] == question_row['period'] and x['idx'] == question_row['idx']]
+        _option_rows = [x for x in option_rows if x['qid'] == question_row['qid']]
         answer = sum([i + 1 if x['answer'] == '1' else 0 for i, x in enumerate(_option_rows)])
         question = Question(
+            qid=int(question_row['qid']),
             period=int(question_row['period']),
             idx=int(question_row['idx']),
             panelist_type=question_row['panelist_type'],
-            format=question_row['format'],
+            question_format=question_row['question_format'],
+            option_format=question_row['option_format'],
             text=question_row['text'],
-            file_name=question_row['file_name'],
             thinking_second=int(question_row['thinking_second']),
             answer=str(answer) if answer else '',
             point=int(question_row['point']),
