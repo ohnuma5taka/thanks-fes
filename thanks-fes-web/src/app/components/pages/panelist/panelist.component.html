@@ -8,7 +8,7 @@
   </div>
 
   <ng-container *ngIf="step === 'タイトル' || step === 'オープニング'">
-    <img id="thanks-fes-title" src="/assets/images/common/logo.png" />
+    <img id="thanks-fes-title" src="/assets/images/logo.png" />
   </ng-container>
 
   <ng-container *ngIf="step === 'オープニング'">
@@ -86,7 +86,7 @@
           (step === '解答開示' || step === 'ピリオド終了') && questionAnswer
         "
         [src]="
-          '/assets/images/common/' +
+          '/assets/images/' +
           (selectedAnswer === questionAnswer ? 'correct' : 'incorrect') +
           '.png'
         "
@@ -97,7 +97,9 @@
       *ngIf="question.panelistType === '個人'"
       class="w-100"
       [ngClass]="
-        question.format === '画像' ? 'd-flex-wrap ga-3-3' : 'd-flex-column gy-3'
+        question.questionFormat === '画像'
+          ? 'd-flex-wrap ga-3-3'
+          : 'd-flex-column gy-3'
       "
     >
       <fes-button
@@ -111,8 +113,10 @@
         }"
         [colorMode]="questionOptions[i].colorMode"
         [borderWidth]="2"
-        [height]="question.format === '画像' ? 120 : 60"
-        [style.width]="question.format === '画像' ? 'calc(50% - 12px)' : '100%'"
+        [height]="question.questionFormat === '画像' ? 120 : 60"
+        [style.width]="
+          question.questionFormat === '画像' ? 'calc(50% - 12px)' : '100%'
+        "
         (emitClick)="answer(option.value)"
       >
         <div class="wh-100 d-flex-center title position-relative">
@@ -156,7 +160,7 @@
   >
     <img
       class="ranking-title-image"
-      src="/assets/images/common/total_team_ranking_title.png"
+      src="/assets/images/total_team_ranking_title.png"
     />
   </ng-container>
 
@@ -183,7 +187,7 @@
   >
     <img
       class="ranking-title-image"
-      src="/assets/images/common/total_panelist_ranking_title.png"
+      src="/assets/images/total_panelist_ranking_title.png"
     />
   </ng-container>
 

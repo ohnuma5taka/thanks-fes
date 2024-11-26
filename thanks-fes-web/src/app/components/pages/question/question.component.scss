@@ -10,8 +10,10 @@ $image-option-width: 450px;
 $image-option-height: 320px;
 $question-width: 160px;
 $count-width: 96px;
+$count-height: 56px;
 $timer-height: 140px;
-$red-highlight: #ce1e1d;
+$red-highlight-2: #d95a5a;
+$red-highlight-1: #ce1e1d;
 $yellow-highlight: #fffc4b;
 
 .question-page {
@@ -71,7 +73,7 @@ $yellow-highlight: #fffc4b;
     background: rgba(#fff, 0.25);
   }
   50% {
-    background: rgba($red-highlight, 0.95);
+    background: rgba($red-highlight-1, 0.95);
   }
   100% {
     background: rgba(#fff, 0.25);
@@ -83,7 +85,7 @@ $yellow-highlight: #fffc4b;
     background: rgba(#fff, 0.25);
   }
   50% {
-    background: rgba($red-highlight, 0.95);
+    background: rgba($red-highlight-1, 0.95);
   }
   100% {
     background: rgba(#fff, 0.25);
@@ -168,6 +170,7 @@ $yellow-highlight: #fffc4b;
       font-weight: 900;
       color: #fff6af;
       @extend .text-border-black;
+      @extend .text-center;
     }
   }
 }
@@ -187,112 +190,50 @@ $yellow-highlight: #fffc4b;
   text-shadow: -4px -4px 1px #ffa3ae;
 }
 
-.image-option-wrapper {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+.question-additional-info {
+  &.vertical-info {
+    min-height: calc(100vh - $question-width - 96px);
 
-  .image-option-glass {
-    @extend .glass;
-    width: calc($image-option-width + $glass-padding * 4);
-    height: calc($image-option-height + $glass-padding * 4);
+    img,
+    video {
+      height: 100%;
+    }
+  }
+  &.horizontal-info {
+    $horizontal-info-height: calc(100vh - $question-width - 96px * 2);
     @extend .d-flex-center;
-
-    .image-option-container {
-      position: relative;
-      width: $image-option-width;
-      height: $image-option-height;
-      border-radius: $border-radius;
-
-      .image-option-image-container {
-        width: $image-option-width;
-        height: $image-option-height;
-        border-radius: $border-radius;
-        overflow: hidden;
-
-        img {
-          width: $image-option-width;
-          height: $image-option-height;
-          border-radius: $border-radius;
-
-          &.timer-start {
-            transform: translate(0) scale(1) !important;
-          }
-        }
-      }
-
-      .image-option-icon {
-        position: absolute;
-        top: 4px;
-        left: 4px;
-      }
-
-      .image-option-label-glass {
-        @extend .glass;
-        border-radius: 4px $border-radius 4px $border-radius;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-
-        .image-option-label-wrapper {
-          width: calc($image-option-width - $count-width - $glass-padding * 6);
-          height: 64px;
-          background: linear-gradient(to bottom, #bfc2d9, #ece4da);
-          border-radius: 4px $border-radius 4px $border-radius;
-          @extend .d-flex-center;
-        }
-
-        .image-option-label {
-          @extend .label;
-          color: black;
-          @extend .text-border-white;
-        }
-      }
-
-      .image-option-count-glass {
-        @extend .glass;
-        border-radius: $border-radius 4px $border-radius 4px;
-        position: absolute;
-        bottom: 0;
-        right: 0;
-
-        .image-option-count-wrapper {
-          width: $count-width;
-          height: 48px;
-          background: linear-gradient(to bottom, #4b90e3, #84eee0);
-          border-radius: $border-radius 4px $border-radius 4px;
-          padding: 0 12px;
-          @extend .d-flex;
-          @extend .align-center;
-          @extend .justify-end;
-        }
-
-        .image-option-count {
-          @extend .label;
-          font-weight: bold;
-          color: white;
-          @extend .text-border-black;
-        }
-      }
+    width: 100%;
+    min-height: $horizontal-info-height;
+    max-height: $horizontal-info-height;
+    img,
+    video {
+      width: auto;
+      height: $horizontal-info-height;
     }
-    &.correct {
-      -webkit-animation: glass-flash-red 1s infinite;
-      animation: glass-flash-red 1s infinite;
+  }
+}
 
-      .image-option-container {
-        .image-option-icon {
-          @extend .image-blink;
-        }
-        .image-option-count-glass {
-          .image-option-count-wrapper {
-            background: linear-gradient(to bottom, $red-highlight, #dd9ea5);
-          }
-          .image-option-count {
-            color: $yellow-highlight;
-          }
-        }
-      }
-    }
+@-webkit-keyframes opacity-flash {
+  0% {
+    opacity: 0.87;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.87;
+  }
+}
+
+@keyframes opacity-flash {
+  0% {
+    opacity: 0.87;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.87;
   }
 }
 
@@ -320,33 +261,127 @@ $yellow-highlight: #fffc4b;
   }
 }
 
-$text-question-image-width: 560px;
-$text-question-image-height: 640px;
-
-.text-question-image-glass {
+.answer-count-glass {
   @extend .glass;
-  width: calc($text-question-image-width + $glass-padding * 2);
-  height: calc($text-question-image-height + $glass-padding * 2);
-  border-radius: 0;
+  .answer-count-container {
+    width: $count-width;
+    height: $count-height;
+    background: linear-gradient(to bottom, #4b90e3, #84eee0);
+    padding: 0 12px;
+    @extend .d-flex;
+    @extend .align-center;
+    @extend .justify-end;
 
-  img {
-    width: $text-question-image-width;
-    height: $text-question-image-height;
+    .answer-count {
+      @extend .label;
+      font-weight: bold;
+      color: white;
+      @extend .text-border-black;
+    }
+  }
+
+  &.image-answer-count-glass {
+    border-radius: $border-radius $glass-padding $border-radius $glass-padding;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    .answer-count-container {
+      border-radius: $border-radius $glass-padding $border-radius $glass-padding;
+    }
+  }
+  &.text-answer-count-glass {
+    border-radius: $border-radius;
+    .answer-count-container {
+      border-radius: calc($border-radius * 0.75);
+    }
   }
 }
 
-.text-option-wrapper {
-  width: 100%;
-  @extend .d-flex-column;
-  @extend .gy-1;
+.option-glass {
+  @extend .glass;
+  @extend .d-flex-center;
+  &.image-option-glass {
+    width: calc($image-option-width + $glass-padding * 1.5 * 2);
+    height: calc($image-option-height + $glass-padding * 1.5 * 2);
 
-  .text-option-glass {
-    @extend .glass;
+    .image-option-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: $border-radius;
+
+      .option-icon {
+        position: absolute;
+        top: $glass-padding;
+        left: $glass-padding;
+      }
+
+      .image-option-container {
+        width: $image-option-width;
+        height: $image-option-height;
+        border-radius: $border-radius;
+        overflow: hidden;
+
+        img {
+          width: $image-option-width;
+          height: $image-option-height;
+          border-radius: $border-radius;
+
+          &.timer-start {
+            transform: translate(0) scale(1) !important;
+          }
+        }
+      }
+
+      .image-label-glass {
+        @extend .glass;
+        border-radius: $glass-padding $border-radius $glass-padding
+          $border-radius;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        .image-label-wrapper {
+          width: calc($image-option-width - $count-width - $glass-padding * 6);
+          height: 64px;
+          background: linear-gradient(to bottom, #bfc2d9, #ece4da);
+          border-radius: $glass-padding $border-radius $glass-padding
+            $border-radius;
+          @extend .d-flex-center;
+
+          .image-label {
+            @extend .label;
+            color: black;
+            @extend .text-border-white;
+          }
+        }
+      }
+    }
+
+    &.correct {
+      -webkit-animation: glass-flash-red 1s infinite;
+      animation: glass-flash-red 1s infinite;
+
+      .option-icon {
+        @extend .image-blink;
+      }
+      .answer-count-glass {
+        .answer-count-container {
+          background: linear-gradient(to bottom, $red-highlight-1, #dd9ea5);
+          -webkit-animation: opacity-flash 1s infinite;
+          animation: opacity-flash 1s infinite;
+        }
+        .answer-count {
+          color: $yellow-highlight;
+        }
+      }
+    }
+  }
+  &.text-option-glass {
     width: 100%;
-    height: $count-width;
-    @extend .d-flex-center;
+    height: calc($count-width + $glass-padding * 2);
 
-    .text-option-container {
+    .text-option-wrapper {
       width: 100%;
       height: 100%;
       border-radius: $border-radius;
@@ -362,72 +397,24 @@ $text-question-image-height: 640px;
         @extend .mr-auto;
         @extend .text-border-black;
       }
-
-      .text-option-count-glass {
-        @extend .glass;
-        border-radius: $border-radius;
-
-        .text-option-count-wrapper {
-          width: $count-width;
-          height: 56px;
-          background: linear-gradient(to bottom, #4b90e3, #84eee0);
-          border-radius: calc($border-radius * 0.75);
-          padding: 0 12px;
-          @extend .d-flex;
-          @extend .align-center;
-          @extend .justify-end;
-        }
-
-        .text-option-count {
-          @extend .label;
-          font-weight: bold;
-          color: white;
-          @extend .text-border-black;
-        }
-
-        .point-container {
-          height: 56px;
-          width: 128px;
-          border-radius: 8px;
-          background: $yellow-highlight;
-          box-shadow: inset 2px 6px 8px rgba(0, 0, 0, 0.5),
-            inset -2px 0px 8px rgba(0, 0, 0, 0.5);
-          @extend .d-flex;
-          @extend .align-end;
-          @extend .justify-end;
-          padding: 8px;
-          color: #1f2488;
-
-          .point-label {
-            @extend .label;
-            font-weight: bold;
-            @extend .text-border-white;
-          }
-          .point-unit {
-            line-height: 1;
-            padding-left: 4px;
-            font-size: 24px;
-          }
-        }
-      }
     }
 
     &.correct {
       -webkit-animation: glass-flash-white 1s infinite;
       animation: glass-flash-white 1s infinite;
-      .text-option-container {
-        background-color: rgba($red-highlight, 0.95);
-        .text-option-icon {
+      .text-option-wrapper {
+        background-color: rgba($red-highlight-1, 0.95);
+        .option-icon {
           @extend .image-blink;
         }
         .text-option-label {
           color: $yellow-highlight;
         }
-        .text-option-count-glass {
-          .text-option-count-wrapper {
+        .answer-count-glass {
+          .answer-count-container {
             background: linear-gradient(to bottom, $yellow-highlight, #ffffe2);
           }
-          .text-option-count {
+          .answer-count {
             color: #ea4645;
             @extend .text-border-white;
           }
@@ -435,18 +422,44 @@ $text-question-image-height: 640px;
       }
     }
   }
-  &.team-answers {
-    height: calc($count-width * 4 + $glass-padding * 3);
-    @extend .d-flex-column-wrap;
-    @extend .ga-1-1;
+}
 
-    .text-option-glass {
-      width: calc(50% - $glass-padding);
-    }
+.one-column-option-wrapper {
+  width: 100%;
+  @extend .d-flex-column;
+  @extend .gy-1;
+}
+
+.two-column-option-wrapper {
+  height: calc($count-width * 4 + $glass-padding * 11);
+  @extend .d-flex-column-wrap;
+  @extend .ga-1-1;
+  .text-option-glass {
+    width: calc(50% - $glass-padding);
   }
 }
 
-// QUESTION
+.edge-option-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  @extend .ga-1-1;
+}
+
+$text-question-image-width: 560px;
+$text-question-image-height: 640px;
+
+.text-question-image-glass {
+  @extend .glass;
+  width: calc($text-question-image-width + $glass-padding * 2);
+  height: calc($text-question-image-height + $glass-padding * 2);
+  border-radius: 0;
+
+  img {
+    width: $text-question-image-width;
+    height: $text-question-image-height;
+  }
+}
 
 .question-glass {
   position: relative;
@@ -458,13 +471,6 @@ $text-question-image-height: 640px;
     height: 100%;
     border-radius: $border-radius;
     background: linear-gradient(to bottom, #40248a, #3653ff);
-
-    .question-q {
-      font-size: 64px;
-      color: #59d0cb;
-      text-shadow: -1px -1px 1px #fff, 1px 1px #59d0cb;
-      font-family: "Arial Rounded MT Bold";
-    }
 
     .question-box {
       width: 100%;
@@ -494,10 +500,10 @@ $text-question-image-height: 640px;
   }
 }
 
-.image-question-glass {
+.vertical-question-glass {
   width: $question-width;
   height: calc(100% - 96px);
-  .image-question-wrapper {
+  .question-wrapper {
     @extend .d-flex-column;
     padding: 10px 10px 78px 10px;
 
@@ -506,24 +512,22 @@ $text-question-image-height: 640px;
         max-height: 360px;
       }
     }
-
     .question-box span {
       -webkit-writing-mode: vertical-rl;
       -ms-writing-mode: tb-rl;
       writing-mode: vertical-rl;
     }
-  }
-
-  .timer-container {
-    bottom: calc(-1 * $timer-height / 2);
-    left: 0;
+    .timer-container {
+      bottom: calc(-1 * $timer-height / 2);
+      left: 0;
+    }
   }
 }
 
-.text-question-glass {
+.horizontal-question-glass {
   width: 100%;
   height: $question-width;
-  .text-question-wrapper {
+  .question-wrapper {
     @extend .d-flex;
     @extend .gx-6;
     padding: 10px 98px 10px 24px;
@@ -534,12 +538,12 @@ $text-question-image-height: 640px;
         line-height: auto;
       }
     }
-  }
-  .timer-container {
-    height: $timer-height;
-    width: $question-width;
-    top: calc(($question-width - $timer-height) / 2);
-    right: calc(-1 * $question-width / 2);
+    .timer-container {
+      height: $timer-height;
+      width: $question-width;
+      top: calc(($question-width - $timer-height) / 2);
+      right: calc(-1 * $question-width / 2);
+    }
   }
 }
 
@@ -621,7 +625,7 @@ $text-question-image-height: 640px;
           font-weight: bold;
           @extend .text-border-white;
         }
-        .point-unit {
+        .unit-label {
           line-height: 1;
           padding-left: 4px;
           font-size: 24px;
@@ -638,11 +642,11 @@ $text-question-image-height: 640px;
       }
 
       &.grand-prix {
-        background: linear-gradient(to bottom, $red-highlight, #cc757c);
+        background: linear-gradient(to bottom, $red-highlight-1, #cc757c);
 
         .rank-container-glass {
           .rank-container {
-            background: linear-gradient(to bottom, $red-highlight, #cc757c);
+            background: linear-gradient(to bottom, $red-highlight-1, #cc757c);
           }
         }
         .panelist-name {
@@ -650,7 +654,7 @@ $text-question-image-height: 640px;
         }
 
         .point-container {
-          background: $red-highlight;
+          background: $red-highlight-1;
           box-shadow: inset 8px 16px 20px rgba(255, 252, 75, 0.5),
             inset -8px 0px 20px rgba(255, 252, 75, 0.5);
           color: $yellow-highlight;
@@ -684,6 +688,12 @@ $text-question-image-height: 640px;
         -webkit-writing-mode: vertical-rl;
         -ms-writing-mode: tb-rl;
         writing-mode: vertical-rl;
+        span {
+          font-size: 64px;
+          -webkit-writing-mode: lr-tb;
+          -ms-writing-mode: lr-tb;
+          writing-mode: lr-tb;
+        }
       }
     }
   }

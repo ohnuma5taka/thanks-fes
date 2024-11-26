@@ -3,6 +3,7 @@ import { PeriodStep, QuestionStep, Step } from '@/app/core/models/step.model';
 
 const questionStep: QuestionStep[] = [
   '問題開始',
+  '動画再生',
   '解答開始',
   '解答結果',
   '解答開示',
@@ -12,7 +13,15 @@ const createPeriodSteps = (questions: Question[]): PeriodStep[] =>
   [
     'ピリオド開始',
     'ピリオド説明',
-    ...questions.reduce((ret, _) => [...ret, ...questionStep], []),
+    ...questions.reduce(
+      (ret, question) => [
+        ...ret,
+        ...questionStep.filter(
+          (x) => x !== '動画再生' || question.questionFormat === '動画'
+        ),
+      ],
+      []
+    ),
     'ピリオド終了',
     ...(questions.some((x) => x.panelistType === '個人')
       ? ['ピリオドランキング', 'ピリオド成績']

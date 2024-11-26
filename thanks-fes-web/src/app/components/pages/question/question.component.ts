@@ -31,7 +31,6 @@ export class QuestionComponent {
   questionAnswer: QuestionAnswer = '';
   answerCount: AnswerCount = {} as AnswerCount;
   results: Result[] = [];
-  teamAnswers: TeamAnswer[] = [];
 
   get questionIndex() {
     return this.questionNumber - 1;
@@ -47,10 +46,18 @@ export class QuestionComponent {
     );
   }
 
+  get horizontalLayout() {
+    return (
+      this.question.optionFormat === '画像' ||
+      (this.question.questionFormat !== '文字' &&
+        this.question.file?.width > this.question.file?.height)
+    );
+  }
+
   get optionResources() {
     return this.question.options.map((x, i) => ({
-      icon: `/assets/images/common/option-icon${i + 1}.png`,
-      image: `/assets/images/${this.period}-${this.questionNumber}/${x.text}.png`,
+      iconSrc: `/assets/images/option-icon${i + 1}.png`,
+      imageSrc: `/assets/questions/${this.question.qid}/${x.text}.png`,
     }));
   }
 
@@ -74,10 +81,6 @@ export class QuestionComponent {
     if (titleLogoImage) titleLogoImage.classList.add('display');
   }
 
-  getImageSrc(optionLabel: string) {
-    return `/assets/images/${this.period}-${this.questionNumber}/${optionLabel}.png`;
-  }
-
   async stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {
     this.step = res.data.step;
     this.period = res.data.period;
@@ -90,7 +93,7 @@ export class QuestionComponent {
     if (this.step === '解答開始') {
       await sleep(1);
       this.questionStarted = true;
-      this.fetchTeams();
+      if (this.question.panelistType === 'チーム') this.fetchTeams();
     }
     if (this.step === '解答結果') this.getAnswerCount();
     if (this.step === '解答開示') this.getAnswer();
@@ -110,19 +113,7 @@ export class QuestionComponent {
   }
 
   async fetchQuestions() {
-    const questions = await this.questionApi.getAll();
-    this.questions = questions.map((question) => ({
-      ...question,
-      filePath: question.file
-        ? `/assets/images/${question.period}-${question.index}/${question.file}`
-        : '',
-      options: question.options.map((x) => ({
-        ...x,
-        transform: `translate(${202.5 - x.imageOriginX}px, ${
-          144 - x.imageOriginY
-        }px) scale(${x.imageScale})`,
-      })),
-    }));
+    this.questions = await this.questionApi.getAll();
   }
 
   async getAnswer() {
@@ -131,19 +122,23 @@ export class QuestionComponent {
 
   async fetchTeams() {
     const teams = await this.panelistApi.getTeams();
-    this.teamAnswers = teams.map((team) => ({ team, correct: 0 }));
+    this.question.options = teams.map((x) => ({
+      value: x as QuestionAnswer,
+      text: `${x}チーム`,
+      imageOriginX: 0,
+      imageOriginY: 0,
+      imageScale: 0,
+    }));
   }
 
   async getAnswerCount() {
-    console.log(
-      !this.question.answer && this.question.panelistType === 'チーム',
-      this.question.answer,
-      this.question.panelistType
-    );
-
     if (!this.question.answer && this.question.panelistType === 'チーム') {
       const body = { questionId: this.question.id };
-      this.teamAnswers = await this.answerApi.getTeamAnswers(body);
+      const teamAnswers = await this.answerApi.getTeamAnswers(body);
+      this.answerCount = teamAnswers.reduce(
+        (ret, x) => ({ ...ret, [x.team]: x.correct }),
+        {} as AnswerCount
+      );
     } else {
       const body: GetAnswerCountRequest = { questionId: this.question.id };
       this.answerCount = await this.answerApi.getAnswerCount(body);
@@ -155,18 +150,23 @@ export class QuestionComponent {
   }
 
   async displayResults() {
-    if (!this.results.length) return;
-    const lastSec = 3000;
-    const constSec = 500;
-    const c =
-      (2 * ((11700 - lastSec) / this.results.length - constSec)) /
-      (this.results.length - 3);
-    for (let i of [...Array(this.results.length - 1).keys()]) {
-      await sleep(constSec + c * i);
+    const count = this.results.length;
+    if (!count) return;
+    const totalSecond = 11700;
+    const lastSecond = 2500;
+    const _seconds = [...Array(count - 1)].map(
+      (_, i) => Math.log(i + 1) / Math.log(count + 1)
+    );
+    const total = _seconds.reduce((ret, x) => ret + x, 0);
+    const sleepSeconds = _seconds.map(
+      (x) => (x / total) * (totalSecond - lastSecond)
+    );
+    for (let i = 0; i < count - 1; i++) {
+      await sleep(sleepSeconds[i]);
       const index = this.results.length - i - 1;
       this.results[index].displayed = true;
     }
-    await sleep(lastSec);
+    await sleep(lastSecond);
     this.results[0].displayed = true;
   }
 
@@ -185,7 +185,7 @@ export class QuestionComponent {
     const results = await this.resultApi.getTeamResults();
     this.results = results.map((x) => ({
       ...x,
-      correctText: x.correct.toFixed(1),
+      correctText: x.correct.toFixed(0),
     }));
     this.displayResults();
   }

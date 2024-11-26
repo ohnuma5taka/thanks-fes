@@ -17,7 +17,12 @@ export type PeriodStep =
   | 'ピリオドランキング'
   | 'ピリオド成績';
 
-export type QuestionStep = '問題開始' | '解答開始' | '解答結果' | '解答開示';
+export type QuestionStep =
+  | '問題開始'
+  | '動画再生'
+  | '解答開始'
+  | '解答結果'
+  | '解答開示';
 
 export type FesStep = {
   period: number;
