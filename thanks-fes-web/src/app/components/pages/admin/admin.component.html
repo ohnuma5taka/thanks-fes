@@ -62,7 +62,7 @@
     *ngIf="
       question &&
       !question.answer &&
-      question.panelistType === '個人' &&
+      period.panelistType === '個人' &&
       step === '解答開始' &&
       !answerSubmitted
     "
@@ -80,7 +80,7 @@
     *ngIf="
       question &&
       !question.answer &&
-      question.panelistType === 'チーム' &&
+      period.panelistType === 'チーム' &&
       step === '解答開始' &&
       !teamAnswerSubmitted
     "

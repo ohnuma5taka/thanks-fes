@@ -21,28 +21,8 @@
   <ng-container *ngIf="step === 'ピリオド説明'">
     <div class="period-guide-glass">
       <div class="period-guide-container">
-        <ng-container *ngIf="period === 1">
-          <span class="period-guide-title">連続早押し！一問一答クイズ</span>
-          <span class="period-guide"
-            >今年起きたことや2人に関するクイズ<br />シンキングタイムは10秒</span
-          >
-        </ng-container>
-        <ng-container *ngIf="period === 2">
-          <span class="period-guide-title"
-            >チームで解答！朝までそれ正解クイズ</span
-          >
-          <span class="period-guide"
-            >指定された文字から始まる言葉をチームで解答<br />シンキングタイムは60秒</span
-          >
-        </ng-container>
-        <ng-container *ngIf="period === 3">
-          <span class="period-guide-title"
-            >代表者集まれ！みんなで共感クイズ</span
-          >
-          <span class="period-guide"
-            >チーム代表お題に沿った解答をして被ったら正解<br />シンキングタイムは60秒</span
-          >
-        </ng-container>
+        <span class="period-guide-title">{{ period.title }}</span>
+        <span class="period-guide">{{ period.description }}</span>
       </div>
     </div>
   </ng-container>
@@ -140,7 +120,7 @@
           [ngClass]="{
             'edge-option-wrapper': horizontalLayout,
             'one-column-option-wrapper': !horizontalLayout,
-            'two-column-option-wrapper': question.panelistType === 'チーム'
+            'two-column-option-wrapper': period.panelistType === 'チーム'
           }"
         >
           <div
@@ -152,7 +132,7 @@
               correct:
                 (step === '解答開示' || step === 'ピリオド終了') &&
                 (option.value === questionAnswer ||
-                  (question.panelistType === 'チーム' &&
+                  (period.panelistType === 'チーム' &&
                     answerCount[option.value]))
             }"
           >
@@ -176,7 +156,7 @@
                 class="image-label-glass"
               >
                 <div class="image-label-wrapper">
-                  <span class="image-label">{{ option.text }}</span>
+                  <span class="image-label">{{ option.value }}</span>
                 </div>
               </div>
               <ng-container
@@ -190,12 +170,12 @@
               *ngIf="question.optionFormat === '文字'"
               class="text-option-wrapper"
             >
-              <ng-container *ngIf="question.panelistType === '個人'">
+              <ng-container *ngIf="period.panelistType === '個人'">
                 <ng-container
                   *ngTemplateOutlet="optionIconTemplate; context: { index: i }"
                 ></ng-container>
               </ng-container>
-              <span class="text-option-label pl-3">{{ option.text }}</span>
+              <span class="text-option-label pl-3">{{ option.value }}</span>
               <ng-container
                 *ngTemplateOutlet="
                   answerCountTemplate;
@@ -250,8 +230,7 @@
           class="ranking-result"
           *ngFor="let result of results; index as i"
           [ngClass]="{
-            'grand-prix':
-              result.rank === 1 || (period === 1 && result.rank <= 3),
+            'grand-prix': result.rank <= period.awardCount,
             displayed: !!result.displayed
           }"
         >

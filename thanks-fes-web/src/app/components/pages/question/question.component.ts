@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { StepWebsocket } from '@/app/core/ws/step.ws';
-import { Question, QuestionAnswer } from '@/app/core/models/question.model';
 import { FesStep, Step } from '@/app/core/models/step.model';
 import { QuestionApi } from '@/app/core/api/question.api';
 import { ResultApi } from '@/app/core/api/result.api';
@@ -9,12 +8,13 @@ import { AnswerApi } from '@/app/core/api/answer.api';
 import {
   AnswerCount,
   GetAnswerCountRequest,
-  TeamAnswer,
 } from '@/app/core/models/answer.model';
 import { stringUtil } from '@/app/core/utils/string.util';
 import { sleep } from '@/app/core/utils/time.util';
 import { Result } from '@/app/core/models/result.model';
 import { PanelistApi } from '@/app/core/api/panelist.api';
+import { Period } from '@/app/core/models/period.model';
+import { PeriodApi } from '@/app/core/api/period.api';
 
 @Component({
   selector: 'question',
@@ -23,27 +23,25 @@ import { PanelistApi } from '@/app/core/api/panelist.api';
 })
 export class QuestionComponent {
   isNumber = stringUtil.isNumber;
-  period = 1;
-  questions: Question[] = [];
+  periodNumber = 1;
+  periods: Period[] = [];
   questionNumber = 1;
   step: Step = 'タイトル';
   questionStarted = false;
-  questionAnswer: QuestionAnswer = '';
+  questionAnswer = '';
   answerCount: AnswerCount = {} as AnswerCount;
   results: Result[] = [];
 
-  get questionIndex() {
-    return this.questionNumber - 1;
+  get period() {
+    return this.periods.find((x) => x.number === this.periodNumber);
   }
 
-  get periodQuestions() {
-    return this.questions.filter((x) => x.period === this.period);
+  get questions() {
+    return this.period.questions;
   }
 
   get question() {
-    return this.questions.find(
-      (x) => x.period === this.period && x.index === this.questionNumber
-    );
+    return this.questions.find((x) => x.index === this.questionNumber);
   }
 
   get horizontalLayout() {
@@ -57,11 +55,12 @@ export class QuestionComponent {
   get optionResources() {
     return this.question.options.map((x, i) => ({
       iconSrc: `/assets/images/option-icon${i + 1}.png`,
-      imageSrc: `/assets/questions/${this.question.qid}/${x.text}.png`,
+      imageSrc: `/assets/questions/${this.question.id}/${x.value}.png`,
     }));
   }
 
   constructor(
+    private periodApi: PeriodApi,
     private questionApi: QuestionApi,
     private answerApi: AnswerApi,
     private resultApi: ResultApi,
@@ -71,7 +70,7 @@ export class QuestionComponent {
 
   async ngOnInit() {
     this.clearAnswers();
-    this.fetchQuestions();
+    this.fetchPeriods();
     this.connectWebsocket();
   }
 
@@ -83,8 +82,8 @@ export class QuestionComponent {
 
   async stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {
     this.step = res.data.step;
-    this.period = res.data.period;
-    this.questionNumber = res.data.question;
+    this.periodNumber = res.data.periodNumber;
+    this.questionNumber = res.data.questionNumber;
     if (this.step === '問題開始') {
       this.questionAnswer = '';
       this.answerCount = {} as AnswerCount;
@@ -93,11 +92,10 @@ export class QuestionComponent {
     if (this.step === '解答開始') {
       await sleep(1);
       this.questionStarted = true;
-      if (this.question.panelistType === 'チーム') this.fetchTeams();
+      if (this.period.panelistType === 'チーム') this.fetchTeams();
     }
     if (this.step === '解答結果') this.getAnswerCount();
     if (this.step === '解答開示') this.getAnswer();
-    if (this.step === 'ピリオド終了') this.answerDummy();
     if (this.step === 'ピリオドランキング') this.fetchPanelistPeriodResults();
     if (this.step === '総合チームランキング') this.fetchTeamResults();
     if (this.step === '総合個人ランキング') this.fetchPanelistResults();
@@ -112,8 +110,8 @@ export class QuestionComponent {
     this.answerApi.clearAll();
   }
 
-  async fetchQuestions() {
-    this.questions = await this.questionApi.getAll();
+  async fetchPeriods() {
+    this.periods = await this.periodApi.getAll();
   }
 
   async getAnswer() {
@@ -123,8 +121,7 @@ export class QuestionComponent {
   async fetchTeams() {
     const teams = await this.panelistApi.getTeams();
     this.question.options = teams.map((x) => ({
-      value: x as QuestionAnswer,
-      text: `${x}チーム`,
+      value: `${x}チーム`,
       imageOriginX: 0,
       imageOriginY: 0,
       imageScale: 0,
@@ -132,7 +129,7 @@ export class QuestionComponent {
   }
 
   async getAnswerCount() {
-    if (!this.question.answer && this.question.panelistType === 'チーム') {
+    if (!this.question.answer && this.period.panelistType === 'チーム') {
       const body = { questionId: this.question.id };
       const teamAnswers = await this.answerApi.getTeamAnswers(body);
       this.answerCount = teamAnswers.reduce(
@@ -143,10 +140,6 @@ export class QuestionComponent {
       const body: GetAnswerCountRequest = { questionId: this.question.id };
       this.answerCount = await this.answerApi.getAnswerCount(body);
     }
-  }
-
-  async answerDummy() {
-    this.answerApi.answerDummy(this.period);
   }
 
   async displayResults() {
@@ -172,7 +165,9 @@ export class QuestionComponent {
 
   async fetchPanelistPeriodResults() {
     this.results = [];
-    const results = await this.resultApi.getPanelistPeriodResults(this.period);
+    const results = await this.resultApi.getPanelistPeriodResults(
+      this.periodNumber
+    );
     this.results = results.slice(0, 10).map((x) => ({
       ...x,
       correctText: x.correct.toFixed(0),

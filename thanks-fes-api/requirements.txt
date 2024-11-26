@@ -7,8 +7,7 @@ python-dotenv~=1.0.1
 python-jose~=3.3.0
 pydantic~=2.7.1
 pydantic-settings~=2.3.1
-ibm-db~=3.2.3
-ibm-db-sa~=0.4.0
+psycopg2-binary
 tenacity~=8.4.1
 broadcaster[redis]~=0.2.0
 asyncio-redis~=0.16.0

@@ -27,17 +27,16 @@ async def get_counts(question_id: int, panelist_id: int):
     return answer_crud.get_correct(question_id, panelist_id)
 
 
-@router.post('/periods/{period}/dummy', summary='ピリオドダミー解答API', response_model=None)
-async def create_period_dummy(period: int):
-    panelists = panelist_crud.get_all()
-    question = question_crud.get_period_list(period)[-1]
+@router.post('/questions/{question_id}/dummy', summary='無解答者用ダミー解答API', response_model=None)
+async def create_question_dummy(question_id: int):
+    question = question_crud.get(question_id)
     answers = [Answer(
         panelist_id=panelist.id,
-        question_id=question.id,
+        question_id=question_id,
         answer='',
         correct=0,
         elapsed_second=question.thinking_second
-    ) for panelist in panelists if answer_crud.get_panelist_one(question.id, panelist.id) is None]
+    ) for panelist in panelist_crud.get_unanswered_list(question_id)]
     answer_crud.bulk_save(answers)
 
 
@@ -59,7 +58,7 @@ async def create_teams(body: PostTeamAnswerModel):
 async def get_team_answers(question_id: int):
     return [TeamAnswerModel(
         team=team,
-        correct=round(correct, 0),
+        correct=round(correct),
     ) for team, correct in answer_crud.get_team_answer_list(question_id)]
 
 

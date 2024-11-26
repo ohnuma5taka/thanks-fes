@@ -16,4 +16,4 @@ RUN sed s/BACKEND_API_SERVER/${BACKEND_API_SERVER}/g /etc/nginx/conf.d/default.c
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=node /app/dist/thanks-fes-web /usr/share/nginx/html
 
-# ENTRYPOINT ["nginx", "-g", "'daemon off;'"]
+# ENTRYPOINT ["tail", "-f", "/dev/null"]

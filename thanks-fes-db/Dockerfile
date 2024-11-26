@@ -1,16 +1,12 @@
-FROM ibmcom/db2:11.5.8.0
+FROM postgres:latest
 
-EXPOSE 50000
+COPY ./init.sql /docker-entrypoint-initdb.d/
 
-ENV LICENSE=accept \
-    PERSISTENT_HOME=false \
-    DB2INST1_PASSWORD=password \
-    DBNAME=bludb
+EXPOSE 5432
 
-RUN mkdir -p /var/custom
-COPY ./scripts/init.sh /var/custom
-RUN chmod a+x /var/custom/*
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=Passw0rd
+ENV POSTGRES_DB=postgres
 
-RUN mkdir -p /var/db2inst1
-COPY ./scripts/create_table.sql /var/db2inst1
-RUN chmod a+x /var/db2inst1/create_table.sql
+USER postgres
+WORKDIR /src

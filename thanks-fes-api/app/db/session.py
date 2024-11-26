@@ -3,7 +3,7 @@ from app.config import env
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-connection_url = 'db2+ibm_db://{user}:{password}@{host}:{port}/{database}'.format(
+connection_url = 'postgresql://{user}:{password}@{host}:{port}/{database}'.format(
     user=env.db_username,
     password=env.db_password,
     host=env.db_host,

@@ -25,8 +25,8 @@ export type QuestionStep =
   | '解答開示';
 
 export type FesStep = {
-  period: number;
-  question: number;
+  periodNumber: number;
+  questionNumber: number;
   step: Step;
   stepIndex: number;
 };

@@ -5,7 +5,6 @@ import { locationUtil } from '@/app/core/utils/location.util';
 import { StoreService } from '@/app/core/services/store.service';
 import { PanelistApi } from '@/app/core/api/panelist.api';
 import { Panelist } from '@/app/core/models/panelist.model';
-import { Question, QuestionAnswer } from '@/app/core/models/question.model';
 import { FesStep, Step } from '@/app/core/models/step.model';
 import { QuestionApi } from '@/app/core/api/question.api';
 import { AnswerApi } from '@/app/core/api/answer.api';
@@ -15,6 +14,8 @@ import { questionOptions } from '@/app/core/constants/question.constant';
 import { ResultApi } from '@/app/core/api/result.api';
 import { Result } from '@/app/core/models/result.model';
 import { sleep } from '@/app/core/utils/time.util';
+import { Period } from '@/app/core/models/period.model';
+import { PeriodApi } from '@/app/core/api/period.api';
 
 export type PanelistQueryParam = {
   name: string;
@@ -29,11 +30,11 @@ export type PanelistQueryParam = {
 export class PanelistComponent {
   panelist: Panelist = new Panelist();
   panelistNameError = false;
-  period = 0;
+  periodNumber = 0;
   questionNumber = 0;
-  questions: Question[] = [];
-  selectedAnswer: QuestionAnswer = '';
-  questionAnswer: QuestionAnswer = '';
+  periods: Period[] = [];
+  selectedAnswer = '';
+  questionAnswer = '';
   step: Step = 'タイトル';
   timer: NodeJS.Timeout;
   questionOptions = questionOptions;
@@ -42,22 +43,21 @@ export class PanelistComponent {
   panelistResult: Result;
   teamResult: Result;
 
-  get questionIndex() {
-    return this.questionNumber - 1;
+  get period() {
+    return this.periods.find((x) => x.number === this.periodNumber);
   }
 
-  get periodQuestions() {
-    return this.questions.filter((x) => x.period === this.period);
+  get questions() {
+    return this.period.questions;
   }
 
   get question() {
-    return this.questions.find(
-      (x) => x.period === this.period && x.index === this.questionNumber
-    );
+    return this.questions.find((x) => x.index === this.questionNumber);
   }
 
   constructor(
     private store: StoreService,
+    private periodApi: PeriodApi,
     private questionApi: QuestionApi,
     private panelistApi: PanelistApi,
     private answerApi: AnswerApi,
@@ -75,7 +75,7 @@ export class PanelistComponent {
       this.panelist.name = urlQuery.name;
       this.panelist.team = urlQuery.team;
     }
-    this.fetchQuestions();
+    this.fetchPeriods();
     this.connectWebsocket();
   }
 
@@ -89,8 +89,8 @@ export class PanelistComponent {
   stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {
     if (!this.panelist.id) return;
     this.step = res.data.step;
-    this.period = res.data.period;
-    this.questionNumber = res.data.question;
+    this.periodNumber = res.data.periodNumber;
+    this.questionNumber = res.data.questionNumber;
     if (this.step === '解答開始') {
       this.questionAnswer = '';
       this.selectedAnswer = '';
@@ -118,8 +118,8 @@ export class PanelistComponent {
     this.stepWebsocket.connect();
   }
 
-  async fetchQuestions() {
-    this.questions = await this.questionApi.getAll();
+  async fetchPeriods() {
+    this.periods = await this.periodApi.getAll();
   }
 
   async createPanelist() {
@@ -132,7 +132,7 @@ export class PanelistComponent {
     }
   }
 
-  async answer(answer: QuestionAnswer) {
+  async answer(answer: string) {
     if (this.selectedAnswer || !this.remainedSecond) return;
     clearInterval(this.timer);
     this.selectedAnswer = answer;
@@ -157,16 +157,15 @@ export class PanelistComponent {
         panelistId: this.panelist.id,
       };
       const correct = await this.answerApi.getCorrect(body);
-      this.questionAnswer = `${correct}` as QuestionAnswer;
-      if (correct) this.selectedAnswer = `${correct}` as QuestionAnswer;
-      console.log(this.questionAnswer, this.selectedAnswer);
+      this.questionAnswer = `${correct}`;
+      if (correct) this.selectedAnswer = `${correct}`;
     }
   }
 
   async fetchPanelistPeriodResult() {
     this.panelistPeriodResult = await this.resultApi.getPanelistPeriodResult(
       this.panelist.id,
-      this.period
+      this.periodNumber
     );
   }
 

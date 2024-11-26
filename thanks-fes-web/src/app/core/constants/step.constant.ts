@@ -1,4 +1,4 @@
-import { Question } from '@/app/core/models/question.model';
+import { Period } from '@/app/core/models/period.model';
 import { PeriodStep, QuestionStep, Step } from '@/app/core/models/step.model';
 
 const questionStep: QuestionStep[] = [
@@ -9,32 +9,23 @@ const questionStep: QuestionStep[] = [
   '解答開示',
 ];
 
-const createPeriodSteps = (questions: Question[]): PeriodStep[] =>
-  [
-    'ピリオド開始',
-    'ピリオド説明',
-    ...questions.reduce(
-      (ret, question) => [
-        ...ret,
-        ...questionStep.filter(
-          (x) => x !== '動画再生' || question.questionFormat === '動画'
-        ),
-      ],
-      []
-    ),
-    'ピリオド終了',
-    ...(questions.some((x) => x.panelistType === '個人')
-      ? ['ピリオドランキング', 'ピリオド成績']
-      : []),
-  ] as PeriodStep[];
-
-export const createSteps = (questions: Question[]): Step[] => {
-  const periodSteps: PeriodStep[] = questions
-    .map((x) => x.period)
-    .filter((x, i, self) => self.indexOf(x) === i)
-    .map((period) =>
-      createPeriodSteps(questions.filter((x) => x.period === period))
-    )
+export const createSteps = (periods: Period[]): Step[] => {
+  const periodSteps: PeriodStep[] = periods
+    .map((period, i) => [
+      'ピリオド開始',
+      'ピリオド説明',
+      ...period.questions.reduce(
+        (ret, question) => [
+          ...ret,
+          ...questionStep.filter(
+            (x) => x !== '動画再生' || question.questionFormat === '動画'
+          ),
+        ],
+        []
+      ),
+      'ピリオド終了',
+      ...(period.awardCount > 0 ? ['ピリオドランキング', 'ピリオド成績'] : []),
+    ])
     .reduce((ret, x) => [...ret, ...x], []);
   return [
     'タイトル',

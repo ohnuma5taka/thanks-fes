@@ -33,11 +33,6 @@ def get_panelist_list(panelist_id: int = None) -> List[Answer]:
         return db.query(Answer).filter(Answer.panelist_id == panelist_id).all()
 
 
-def get_panelist_one(question_id: int = None, panelist_id: int = None) -> Answer:
-    with connect_session() as db:
-        return db.query(Answer).filter(and_(Answer.question_id == question_id, Answer.panelist_id == panelist_id)).first()
-
-
 def get_question_count(question_id: int = None, answer: str = None) -> int:
     with connect_session() as db:
         return db.query(Answer) \

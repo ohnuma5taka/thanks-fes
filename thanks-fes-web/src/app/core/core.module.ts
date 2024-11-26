@@ -12,6 +12,7 @@ import { AnswerApi } from '@/app/core/api/answer.api';
 import { ResultApi } from '@/app/core/api/result.api';
 import { StepWebsocket } from '@/app/core/ws/step.ws';
 import { PanelistWebsocket } from '@/app/core/ws/panelist.ws';
+import { PeriodApi } from '@/app/core/api/period.api';
 
 @NgModule({
   imports: [HttpClientModule, CommonModule, FormsModule, ReactiveFormsModule],
@@ -21,6 +22,7 @@ import { PanelistWebsocket } from '@/app/core/ws/panelist.ws';
     SnackbarService,
     AnswerApi,
     PanelistApi,
+    PeriodApi,
     QuestionApi,
     ResultApi,
     StepWebsocket,

@@ -34,12 +34,6 @@ export class AnswerApi {
     return await this.apiService.post<undefined>('/answers/teams', body);
   }
 
-  async answerDummy(period: number) {
-    return await this.apiService.post<undefined>(
-      `/answers/periods/${period}/dummy`
-    );
-  }
-
   async clearAll() {
     return await this.apiService.delete<undefined>('/answers');
   }

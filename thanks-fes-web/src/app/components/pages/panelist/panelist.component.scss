@@ -184,11 +184,6 @@
   text-shadow: 0.1px 0px 0px #fff, 0px 0.1px 0px #fff;
 }
 
-.option-button {
-  border: 3px solid transparent;
-  border-color: transparent;
-}
-
 @-webkit-keyframes border-flash {
   0% {
     border-color: transparent;
@@ -213,11 +208,18 @@
   }
 }
 
-.flash-border {
-  -webkit-animation: border-flash 1s infinite;
-  animation: border-flash 1s infinite;
-}
+.option-button {
+  @extend .box-shadow;
+  border: 3px solid transparent;
+  border-color: transparent;
+  border-radius: 4px;
 
-.show-border {
-  border: 3px solid #fff;
+  &.flash-border {
+    -webkit-animation: border-flash 1s infinite;
+    animation: border-flash 1s infinite;
+  }
+
+  &.show-border {
+    border: 3px solid #fff;
+  }
 }

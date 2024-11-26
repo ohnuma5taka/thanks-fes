@@ -1,5 +1,3 @@
-import { QuestionAnswer } from '@/app/core/models/question.model';
-
 export type Answer = {
   panelistId: number;
   questionId: number;
@@ -33,7 +31,7 @@ export type PostAnswerTeamRequest = {
 
 export type UpdateQuestionAnswerRequest = {
   id: number;
-  answer: QuestionAnswer;
+  answer: string;
 };
 
-export type AnswerCount = { [k in QuestionAnswer]: number };
+export type AnswerCount = { [k: string]: number };

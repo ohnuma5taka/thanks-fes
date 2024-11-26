@@ -2,6 +2,7 @@ from typing import List
 
 from sqlalchemy import distinct, func
 
+from app.db.models.answer import Answer
 from app.db.models.panelist import Panelist
 from app.db.session import connect_session
 
@@ -34,6 +35,15 @@ def get_max_team_panelist_count() -> int:
             func.count(Panelist.id).label("count")
         ).group_by(Panelist.team).subquery()
         return db.query(func.max(team_counts.c.count)).scalar()
+
+
+def get_unanswered_list(question_id: int = None) -> list[Panelist]:
+    with connect_session() as db:
+        ids = [x.id for x in db.query(Panelist).all()]
+        return db.query(Panelist) \
+            .join(Answer, Answer.panelist_id == Panelist.id) \
+            .filter(Answer.question_id == question_id, ~Answer.panelist_id.in_(ids)) \
+            .all()
 
 
 def save(item: Panelist) -> Panelist:

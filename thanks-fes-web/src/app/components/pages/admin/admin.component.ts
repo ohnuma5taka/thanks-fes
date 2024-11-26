@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { StepWebsocket } from '@/app/core/ws/step.ws';
 import { PanelistApi } from '@/app/core/api/panelist.api';
 import { RegisteredPanelistCount } from '@/app/core/models/panelist.model';
-import { Question, QuestionAnswer } from '@/app/core/models/question.model';
 import { QuestionApi } from '@/app/core/api/question.api';
 import { createSteps } from '@/app/core/constants/step.constant';
 import { FesStep, Step } from '@/app/core/models/step.model';
@@ -13,8 +12,8 @@ import {
 } from '@/app/core/models/answer.model';
 import { AnswerApi } from '@/app/core/api/answer.api';
 import { PanelistWebsocket } from '@/app/core/ws/panelist.ws';
-import { questionOptions } from '@/app/core/constants/question.constant';
-import { SelectOption } from '@/app/components/atoms/fes-select/fes-select.component';
+import { Period } from '@/app/core/models/period.model';
+import { PeriodApi } from '@/app/core/api/period.api';
 
 @Component({
   selector: 'admin',
@@ -23,32 +22,34 @@ import { SelectOption } from '@/app/components/atoms/fes-select/fes-select.compo
 })
 export class AdminComponent {
   registeredCounts: RegisteredPanelistCount[] = [];
-  period = 0;
+  periodNumber = 0;
   questionNumber = 0;
-  questions: Question[] = [];
+  periods: Period[] = [];
   stepIndex = 0;
   steps: Step[] = [];
   teamAnswers: TeamAnswer[] = [];
   stepHistories: FesStep[] = [];
   teamAnswerSubmitted = false;
   answerSubmitted = false;
-  answer: QuestionAnswer = '1';
-  answerOptions: SelectOption<QuestionAnswer>[] = questionOptions.map(
-    (_, i) => ({ label: `${i + 1}`, value: `${i + 1}` as QuestionAnswer })
-  );
+  answer = '';
 
-  get questionIndex() {
-    return this.questionNumber - 1;
+  get period() {
+    return this.periods.find((x) => x.number === this.periodNumber);
   }
 
-  get periodQuestions() {
-    return this.questions.filter((x) => x.period === this.period);
+  get questions() {
+    return this.period.questions;
   }
 
   get question() {
-    return this.questions.find(
-      (x) => x.period === this.period && x.index === this.questionNumber
-    );
+    return this.questions.find((x) => x.index === this.questionNumber);
+  }
+
+  get answerOptions() {
+    return this.question.options.map((x) => ({
+      label: x.value,
+      value: x.value,
+    }));
   }
 
   get step() {
@@ -68,11 +69,11 @@ export class AdminComponent {
   get periodLabel() {
     return !this.questions.length
       ? ''
-      : this.questions.slice(-1)[0].period < this.period
+      : this.questions.slice(-1)[0].period < this.periodNumber
       ? '終了'
-      : !this.period
+      : !this.periodNumber
       ? '開始前'
-      : this.period;
+      : this.periodNumber;
   }
 
   get questionLabel() {
@@ -85,7 +86,7 @@ export class AdminComponent {
       : !this.questionNumber
       ? '開始前'
       : `Q${this.questionNumber}(${
-          this.question.panelistType
+          this.period.panelistType
         })：${this.question.text.replace(/<br>/g, '')}`;
   }
 
@@ -94,6 +95,7 @@ export class AdminComponent {
   }
 
   constructor(
+    private periodApi: PeriodApi,
     private questionApi: QuestionApi,
     private panelistApi: PanelistApi,
     private answerApi: AnswerApi,
@@ -102,7 +104,7 @@ export class AdminComponent {
   ) {}
 
   ngOnInit() {
-    this.fetchQuestions();
+    this.fetchPeriods();
     this.fetchRegisteredCount();
     this.connectWebsocket();
   }
@@ -121,9 +123,9 @@ export class AdminComponent {
     this.registeredCounts = await this.panelistApi.getRegisteredCount();
   }
 
-  async fetchQuestions() {
-    this.questions = await this.questionApi.getAll();
-    this.steps = createSteps(this.questions);
+  async fetchPeriods() {
+    this.periods = await this.periodApi.getAll();
+    this.steps = createSteps(this.periods);
   }
 
   async fetchTeams() {
@@ -158,8 +160,8 @@ export class AdminComponent {
 
   next() {
     const currentStep: FesStep = {
-      period: this.period,
-      question: this.questionNumber,
+      periodNumber: this.periodNumber,
+      questionNumber: this.questionNumber,
       step: this.step,
       stepIndex: this.stepIndex,
     };
@@ -169,13 +171,13 @@ export class AdminComponent {
       this.step === 'ピリオド開始' ||
       this.step === '総合チームランキングタイトル'
     ) {
-      this.period += 1;
+      this.periodNumber += 1;
       this.questionNumber = 0;
     }
     if (this.step === '問題開始') this.questionNumber += 1;
     const fesStep: FesStep = {
-      period: this.period,
-      question: this.questionNumber,
+      periodNumber: this.periodNumber,
+      questionNumber: this.questionNumber,
       step: this.step,
       stepIndex: this.stepIndex,
     };
@@ -184,14 +186,14 @@ export class AdminComponent {
     if (
       this.question &&
       !this.question.answer &&
-      this.question.panelistType === '個人'
+      this.period.panelistType === '個人'
     )
       this.answerSubmitted = false;
 
     if (
       this.question &&
       !this.question.answer &&
-      this.question.panelistType === 'チーム'
+      this.period.panelistType === 'チーム'
     ) {
       this.teamAnswerSubmitted = false;
       this.fetchTeams();
@@ -200,8 +202,8 @@ export class AdminComponent {
 
   back() {
     const previousStep = this.stepHistories.pop();
-    this.period = previousStep.period;
-    this.questionNumber = previousStep.question;
+    this.periodNumber = previousStep.periodNumber;
+    this.questionNumber = previousStep.questionNumber;
     this.stepIndex = previousStep.stepIndex;
     this.stepWebsocket.send(previousStep);
   }
@@ -209,10 +211,10 @@ export class AdminComponent {
   skip() {
     if (!window.confirm('ピリオド終了までスキップします')) return;
     this.stepIndex += this.steps.slice(this.stepIndex).indexOf('ピリオド終了');
-    this.questionNumber = this.periodQuestions.length + 1;
+    this.questionNumber = this.questions.length + 1;
     const fesStep: FesStep = {
-      period: this.period,
-      question: this.questionNumber,
+      periodNumber: this.periodNumber,
+      questionNumber: this.questionNumber,
       step: 'ピリオド終了',
       stepIndex: this.stepIndex,
     };

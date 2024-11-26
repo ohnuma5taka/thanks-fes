@@ -11,7 +11,7 @@ class Option(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     question_id = Column(Integer, nullable=False, default=0)
-    text = Column(String, nullable=False, default='')
+    value = Column(String, nullable=False, default='')
     image_origin_x = Column(Float, nullable=False, default=0)
     image_origin_y = Column(Float, nullable=False, default=0)
     image_scale = Column(Float, nullable=False, default=0)
