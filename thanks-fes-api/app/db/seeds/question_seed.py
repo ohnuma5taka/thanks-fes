@@ -7,7 +7,7 @@ from app.db.models.question import Question
 def seed_questions(seeds_data_dir: str):
     option_rows = csv.DictReader(open(f'{seeds_data_dir}/options.tsv'), delimiter='\t')
     question_rows = csv.DictReader(open(f'{seeds_data_dir}/questions.tsv'), delimiter='\t')
-    option_rows = sorted([x for x in option_rows], key=lambda x: (x['period'], x['idx']))
+    option_rows = sorted([x for x in option_rows], key=lambda x: x['qid'])
     for question_row in question_rows:
         _option_rows = [x for x in option_rows if x['qid'] == question_row['qid']]
         answer = sum([i + 1 if x['answer'] == '1' else 0 for i, x in enumerate(_option_rows)])

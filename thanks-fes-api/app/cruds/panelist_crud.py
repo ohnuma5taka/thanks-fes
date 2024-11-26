@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import distinct
+from sqlalchemy import distinct, func
 
 from app.db.models.panelist import Panelist
 from app.db.session import connect_session
@@ -25,6 +25,15 @@ def get_all() -> List[Panelist]:
 def get_teams() -> List[str]:
     with connect_session() as db:
         return [x[0] for x in db.query(distinct(Panelist.team)).all()]
+
+
+def get_max_team_panelist_count() -> int:
+    with connect_session() as db:
+        team_counts = db.query(
+            Panelist.team,
+            func.count(Panelist.id).label("count")
+        ).group_by(Panelist.team).subquery()
+        return db.query(func.max(team_counts.c.count)).scalar()
 
 
 def save(item: Panelist) -> Panelist:

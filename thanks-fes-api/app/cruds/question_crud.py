@@ -16,7 +16,9 @@ def get_all() -> List[Question]:
 
 def get_period_list(period: int = None) -> List[Question]:
     with connect_session() as db:
-        return db.query(Question).filter(Question.period == period).order_by(Question.period, Question.idx).all()
+        return db.query(Question) \
+            .filter(Question.period == period) \
+            .order_by(Question.idx).all()
 
 
 def save(item: Question) -> Question:

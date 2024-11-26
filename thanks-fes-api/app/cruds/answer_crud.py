@@ -80,17 +80,14 @@ def get_panelist_results() -> list[tuple[int, int, float]]:
             .all()
 
 
-def get_panelist_period_results(period: int = None) -> list[tuple[int, int]]:
+def get_panelist_period_results(period: int = None) -> list[tuple[int, int, float]]:
     with connect_session() as db:
-        return db.query(
-            Panelist.id,
-            func.sum(Answer.correct).label("total_correct"),
-        ) \
-            .join(Panelist, Panelist.id == Answer.panelist_id) \
-            .join(Question, Question.id == Answer.question_id) \
+        last_question = db.query(Question) \
             .filter(Question.period == period) \
-            .group_by(Panelist.id) \
-            .order_by(desc("total_correct")) \
+            .order_by(desc(Question.idx)).first()
+        return db.query(Answer.panelist_id, Answer.correct, Answer.elapsed_second) \
+            .filter(Answer.question_id == last_question.id, Answer.correct > 0) \
+            .order_by(Answer.elapsed_second) \
             .all()
 
 
