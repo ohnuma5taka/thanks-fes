@@ -19,7 +19,7 @@ def seed():
     question_crud.reset_all([])
     period_crud.reset_all([])
     print(f'{BOS}Seeding data...{EOS}')
-    seed_panelists(seeds_data_dir)
+    # seed_panelists(seeds_data_dir)
     seed_periods(seeds_data_dir)
     seed_questions(seeds_data_dir)
     seed_options(seeds_data_dir)
