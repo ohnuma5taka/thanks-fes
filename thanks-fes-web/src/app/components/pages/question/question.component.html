@@ -8,7 +8,14 @@
   </ng-container>
 
   <ng-container *ngIf="step === 'オープニング'">
-    <span class="large-title">オープニング</span>
+    <div class="period-guide-glass">
+      <div class="period-guide-container">
+        <span class="period-guide-title">家次・たなゆり感謝祭</span>
+        <span class="period-guide"
+          >全員参加型クイズ大会<br />スコアが高い人に豪華賞品！</span
+        >
+      </div>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="step === 'タイトル' || step === 'オープニング'">
@@ -24,7 +31,7 @@
 
   <ng-container *ngIf="step === 'ピリオド説明'">
     <div class="period-guide-glass">
-      <div class="period-guide-container">
+      <div class="period-guide-container red">
         <span class="period-guide-title">{{ period.title }}</span>
         <span class="period-guide">{{ period.description }}</span>
       </div>

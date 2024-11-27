@@ -162,9 +162,9 @@ $yellow-highlight: #fffc4b;
         $shadow-width calc(-1 * $shadow-width) $shadow-blur white,
         calc(-1 * $shadow-width) $shadow-width $shadow-blur white;
       position: absolute;
-      top: 50%;
+      top: 0;
       left: 50%;
-      transform: translate(-50%, -225%);
+      transform: translate(-50%, -55%);
     }
 
     .period-guide {
