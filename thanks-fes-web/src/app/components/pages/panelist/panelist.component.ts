@@ -39,20 +39,26 @@ export class PanelistComponent {
   timer: NodeJS.Timeout;
   questionOptions = questionOptions;
   remainedSecond = 0;
-  panelistPeriodResult: Result;
-  panelistResult: Result;
-  teamResult: Result;
+  result: Result;
 
   get period() {
     return this.periods.find((x) => x.number === this.periodNumber);
   }
 
   get questions() {
-    return this.period.questions;
+    return this.period?.questions || [];
   }
 
   get question() {
     return this.questions.find((x) => x.index === this.questionNumber);
+  }
+
+  get horizontalLayout() {
+    return (
+      this.question.optionFormat === '画像' ||
+      (this.question.questionFormat !== '文字' &&
+        this.question.file?.width > this.question.file?.height)
+    );
   }
 
   constructor(
@@ -163,19 +169,26 @@ export class PanelistComponent {
   }
 
   async fetchPanelistPeriodResult() {
-    this.panelistPeriodResult = await this.resultApi.getPanelistPeriodResult(
-      this.panelist.id,
-      this.periodNumber
-    );
+    this.result = undefined;
+    this.result =
+      this.period.panelistType === '個人'
+        ? await this.resultApi.getPanelistPeriodResult(
+            this.panelist.id,
+            this.periodNumber
+          )
+        : await this.resultApi.getTeamPeriodResult(
+            this.panelist.team,
+            this.periodNumber
+          );
   }
 
   async fetchPanelistResult() {
-    this.panelistResult = await this.resultApi.getPanelistResult(
-      this.panelist.id
-    );
+    this.result = undefined;
+    this.result = await this.resultApi.getPanelistResult(this.panelist.id);
   }
 
   async fetchTeamResult() {
-    this.teamResult = await this.resultApi.getTeamResult(this.panelist.team);
+    this.result = undefined;
+    this.result = await this.resultApi.getTeamResult(this.panelist.team);
   }
 }

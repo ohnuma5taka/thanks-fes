@@ -24,6 +24,6 @@ class PeriodModel(BaseModel):
         self.panelist_type = period.panelist_type
         self.point = period.point
         self.award_count = period.award_count
-        self.questions = [QuestionModel(x) for x in question_crud.get_period_list(period.period)]
+        self.questions = [QuestionModel(x) for x in question_crud.get_period_list(period.number)]
 
     model_config = ConfigDict(from_attributes=True)

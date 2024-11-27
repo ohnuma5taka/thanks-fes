@@ -2,21 +2,13 @@ services:
   thanks-fes-web:
     build:
       context: ./thanks-fes-web
-      args:
-        BACKEND_API_SERVER: ${BACKEND_API_SERVER}
     image: thanks-fes-web
     container_name: thanks-fes-web
-    command: /bin/sh -c "envsubst '$$BACKEND_API_SERVER' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-    # command: /bin/sh -c "envsubst '$$BACKEND_API_SERVER' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && tail -f /dev/null"
-    environment:
-      BACKEND_API_SERVER: ${BACKEND_API_SERVER}
-    env_file:
-      - ./thanks-fes-web/.env
-    extra_hosts:
-      - "gateway.docker.internal:host-gateway"
     ports:
       - 80:80
     tty: true
+    networks:
+      - thanks-fes-network
 
   thanks-fes-api:
     build: ./thanks-fes-api

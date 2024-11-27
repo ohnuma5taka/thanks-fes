@@ -28,6 +28,7 @@ export const createSteps = (periods: Period[]): Step[] => {
     ])
     .reduce((ret, x) => [...ret, ...x], []);
   return [
+    '',
     'タイトル',
     'オープニング',
     ...periodSteps,

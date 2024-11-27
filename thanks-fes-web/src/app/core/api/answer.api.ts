@@ -5,7 +5,7 @@ import {
   GetAnswerCountRequest,
   TeamAnswer,
   GetTeamAnswersRequest,
-  GetCorrectRequest,
+  GetScoreRequest,
 } from '@/app/core/models/answer.model';
 import { ApiService } from '@/app/core/services/api.service';
 import { Injectable } from '@angular/core';
@@ -22,8 +22,8 @@ export class AnswerApi {
     return await this.apiService.get<AnswerCount>(`/answers/count`, body);
   }
 
-  async getCorrect(body: GetCorrectRequest) {
-    return await this.apiService.get<number>(`/answers/correct`, body);
+  async getCorrect(body: GetScoreRequest) {
+    return await this.apiService.get<number>(`/answers/score`, body);
   }
 
   async getTeamAnswers(body: GetTeamAnswersRequest) {

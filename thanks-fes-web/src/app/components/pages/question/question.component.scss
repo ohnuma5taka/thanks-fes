@@ -24,7 +24,9 @@ $yellow-highlight: #fffc4b;
   @extend .gy-9;
 }
 
-#thanks-fes-title {
+#thanks-fes-title,
+#total-team-ranking-title,
+#total-panelist-ranking-title {
   transform: translate(100px, 150px) scale(0);
   transition: transform 1s;
 
@@ -171,6 +173,7 @@ $yellow-highlight: #fffc4b;
       color: #fff6af;
       @extend .text-border-black;
       @extend .text-center;
+      @extend .text-wrap;
     }
   }
 }
@@ -192,7 +195,7 @@ $yellow-highlight: #fffc4b;
 
 .question-additional-info {
   &.vertical-info {
-    min-height: calc(100vh - $question-width - 96px);
+    // min-height: calc(100vh - $question-width - 96px);
 
     img,
     video {
@@ -501,16 +504,16 @@ $text-question-image-height: 640px;
 }
 
 .vertical-question-glass {
-  width: $question-width;
-  height: calc(100% - 96px);
+  min-width: $question-width;
+  max-width: $question-width;
+  // height: calc(100% - 96px);
   .question-wrapper {
     @extend .d-flex-column;
     padding: 10px 10px 78px 10px;
 
     .question-box {
-      span {
-        max-height: 360px;
-      }
+      height: 400px;
+      padding: 20px 0;
     }
     .question-box span {
       -webkit-writing-mode: vertical-rl;
@@ -668,7 +671,6 @@ $text-question-image-height: 640px;
 
   .ranking-title-glass {
     width: $question-width;
-    height: 600px;
     @extend .glass;
 
     .ranking-title-wrapper {
@@ -676,24 +678,28 @@ $text-question-image-height: 640px;
       height: 100%;
       background: linear-gradient(to bottom, #303fc7, #0f59a1);
       border-radius: $border-radius;
-      @extend .d-flex-center;
+      padding: 48px 0;
+      @extend .d-flex-column-center;
 
       .ranking-title-label {
         @extend .label;
-        font-size: 48px;
         font-weight: bold;
         color: $yellow-highlight;
         @extend .text-border-black;
-
+        font-size: 48px;
         -webkit-writing-mode: vertical-rl;
         -ms-writing-mode: tb-rl;
         writing-mode: vertical-rl;
-        span {
-          font-size: 64px;
-          -webkit-writing-mode: lr-tb;
-          -ms-writing-mode: lr-tb;
-          writing-mode: lr-tb;
-        }
+      }
+      .vertical-ranking-title-label {
+        @extend .label;
+        font-weight: bold;
+        color: $yellow-highlight;
+        @extend .text-border-black;
+        font-size: 64px;
+        -webkit-writing-mode: lr-tb;
+        -ms-writing-mode: lr-tb;
+        writing-mode: lr-tb;
       }
     }
   }

@@ -7,7 +7,7 @@ from app.db.models.answer import Answer
 
 class ResultModel(BaseModel):
     name: Optional[str] = None
-    correct: Optional[float] = None
+    score: Optional[int] = None
     elapsed_second: Optional[float] = None
     rank: Optional[int] = None
 

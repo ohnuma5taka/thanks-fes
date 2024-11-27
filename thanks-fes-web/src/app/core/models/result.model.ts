@@ -1,7 +1,6 @@
 export type Result = {
   name: string;
-  correct: number;
-  correctText?: string;
+  score: number;
   elapsedSecond: number;
   rank: number;
   displayed?: boolean;

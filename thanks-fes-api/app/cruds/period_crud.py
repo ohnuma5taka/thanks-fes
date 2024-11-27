@@ -11,7 +11,7 @@ def get(number: int = None) -> Period:
 
 def get_all() -> List[Period]:
     with connect_session() as db:
-        return db.query(Period).order_by(Period.period).all()
+        return db.query(Period).order_by(Period.number).all()
 
 
 def save(item: Period) -> Period:

@@ -14,7 +14,7 @@
   <ng-container *ngIf="step === 'オープニング'">
     <ng-container *ngIf="!panelist.id">
       <div class="flex-column-main">
-        <span class="opening-team-label" [ngClass]="panelist.team"
+        <span class="result-panelist-label" [ngClass]="panelist.team"
           >{{ panelist.team }}チーム</span
         >
         <div class="panelist-register-glass">
@@ -59,12 +59,14 @@
   <ng-container *ngIf="step === 'ピリオド開始' || step === 'ピリオド説明'">
     <div class="flex-column-sub animate__animated animate__fadeIn">
       <span class="period-label">Period</span>
-      <span class="period-number">{{ period }}</span>
+      <span class="period-number">{{ period.number }}</span>
     </div>
   </ng-container>
 
   <ng-container *ngIf="step === '問題開始'">
-    <span class="question-title">問題</span>
+    <span class="question-title">{{
+      question.questionFormat === "動画" ? "動画問題" : "問題"
+    }}</span>
   </ng-container>
 
   <ng-container
@@ -97,9 +99,7 @@
       *ngIf="period.panelistType === '個人'"
       class="w-100"
       [ngClass]="
-        question.questionFormat === '画像'
-          ? 'd-flex-wrap ga-3-3'
-          : 'd-flex-column gy-3'
+        horizontalLayout ? 'edge-option-wrapper' : 'd-flex-column gy-3'
       "
     >
       <fes-button
@@ -113,10 +113,7 @@
         }"
         [colorMode]="questionOptions[i].colorMode"
         [borderWidth]="2"
-        [height]="question.questionFormat === '画像' ? 120 : 60"
-        [style.width]="
-          question.questionFormat === '画像' ? 'calc(50% - 12px)' : '100%'
-        "
+        [height]="horizontalLayout ? 120 : 60"
         (emitClick)="answer(option.value)"
       >
         <div class="wh-100 d-flex-center title position-relative">
@@ -137,67 +134,50 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="step === 'ピリオド成績' && panelistPeriodResult">
-    <span class="period-label-no-shadow">Period {{ period }}</span>
-    <span class="small-title">{{ panelist.name }} さんは</span>
-    <span class="large-title"
-      ><span class="period-label-no-shadow"
-        >第{{ panelistPeriodResult.rank }}位</span
-      ><span class="small-title">でした</span></span
-    >
-    <span class="small-title">正解数：{{ panelistPeriodResult.correct }}</span>
-    <span *ngIf="panelistPeriodResult.elapsedSecond" class="small-title"
-      >最終問題の解答時間：{{
-        panelistPeriodResult.elapsedSecond.toFixed(2)
-      }}秒</span
-    >
-  </ng-container>
-
   <ng-container
     *ngIf="
-      step === '総合チームランキングタイトル' || step === '総合チームランキング'
+      step === '総合チームランキングタイトル' ||
+      step === '総合チームランキング' ||
+      step === '総合個人ランキングタイトル' ||
+      step === '総合個人ランキング'
     "
   >
     <img
       class="ranking-title-image"
-      src="/assets/images/total_team_ranking_title.png"
+      [src]="
+        step === '総合チームランキングタイトル' ||
+        step === '総合チームランキング'
+          ? '/assets/images/total_team_ranking_title.png'
+          : '/assets/images/total_panelist_ranking_title.png'
+      "
     />
-  </ng-container>
-
-  <ng-container *ngIf="step === '総合チーム成績' && teamResult">
-    <span
-      ><span class="opening-team-label" [ngClass]="panelist.team"
-        >{{ panelist.team }}チーム</span
-      >
-      <span class="small-title">は</span></span
-    >
-    <span class="large-title"
-      ><span class="period-label-no-shadow">第{{ teamResult.rank }}位</span
-      ><span class="small-title">でした</span></span
-    >
-    <span class="title"
-      >スコア：{{ (teamResult.correct * 10).toFixed(0) }}</span
-    >
   </ng-container>
 
   <ng-container
     *ngIf="
-      step === '総合個人ランキングタイトル' || step === '総合個人ランキング'
+      (step === 'ピリオド成績' ||
+        step === '総合チーム成績' ||
+        step === '総合個人成績') &&
+      result
     "
   >
-    <img
-      class="ranking-title-image"
-      src="/assets/images/total_panelist_ranking_title.png"
-    />
-  </ng-container>
-
-  <ng-container *ngIf="step === '総合個人成績' && panelistResult">
-    <span class="title">{{ panelist.name }} さんは</span>
-    <span class="large-title"
-      ><span class="period-label-no-shadow">第{{ panelistResult.rank }}位</span
-      ><span class="small-title">でした</span></span
+    <span *ngIf="step === 'ピリオド成績'" class="period-label-no-shadow"
+      >Period {{ period.number }}</span
     >
-    <span class="title">正解数：{{ panelistResult.correct }}</span>
-    <span class="title">総合スコア：{{ panelistResult.correct }}</span>
+    <span *ngIf="period.panelistType === '個人'" class="small-title"
+      ><span class="result-panelist-label">{{ panelist.name }}</span
+      >さん
+    </span>
+    <span *ngIf="period.panelistType === 'チーム'" class="small-title"
+      ><span class="result-panelist-label" [ngClass]="panelist.team">{{
+        panelist.team + "チーム"
+      }}</span>
+    </span>
+    <span class="period-label-no-shadow"
+      >{{ result.score }}<span class="pl-3" style="font-size: 28px">P</span>
+    </span>
+    <span *ngIf="step !== 'ピリオド成績'" class="period-label-no-shadow"
+      >第{{ result.rank }}位</span
+    >
   </ng-container>
 </div>

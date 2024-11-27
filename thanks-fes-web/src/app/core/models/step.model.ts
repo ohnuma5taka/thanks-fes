@@ -1,4 +1,5 @@
 export type Step =
+  | ''
   | 'タイトル'
   | 'オープニング'
   | PeriodStep

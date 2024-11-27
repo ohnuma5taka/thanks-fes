@@ -26,7 +26,7 @@ export class Question {
     this.index = params.index;
     this.questionFormat = params.questionFormat;
     this.optionFormat = params.optionFormat;
-    this.text = params.text.replace(/\\n/g, '<br>');
+    this.text = params.text;
     this.second = params.second;
     this.answer = params.answer;
     this.options = params.options.map((x) => ({

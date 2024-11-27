@@ -1,5 +1,6 @@
 from typing import List
 
+from app.db.models.period import Period
 from app.db.models.question import Question
 from app.db.session import connect_session
 
@@ -19,6 +20,14 @@ def get_period_list(period: int = None) -> List[Question]:
         return db.query(Question) \
             .filter(Question.period == period) \
             .order_by(Question.idx).all()
+
+
+def get_point(_id: int) -> int:
+    with connect_session() as db:
+        question = db.query(Question).get(_id)
+        return db.query(Period.point) \
+            .filter(Period.number == question.period) \
+            .scalar()
 
 
 def save(item: Question) -> Question:

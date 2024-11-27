@@ -15,7 +15,7 @@ export type GetAnswerCountRequest = {
   questionId: number;
 };
 
-export type GetCorrectRequest = {
+export type GetScoreRequest = {
   questionId: number;
   panelistId: number;
 };

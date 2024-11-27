@@ -38,7 +38,7 @@ export class AdminComponent {
   }
 
   get questions() {
-    return this.period.questions;
+    return this.period?.questions || [];
   }
 
   get question() {
@@ -85,9 +85,9 @@ export class AdminComponent {
       ? '終了'
       : !this.questionNumber
       ? '開始前'
-      : `Q${this.questionNumber}(${
-          this.period.panelistType
-        })：${this.question.text.replace(/<br>/g, '')}`;
+      : `Q${this.questionNumber}(${this.period.panelistType})：${
+          this.question?.text || ''
+        }`;
   }
 
   get totalRegisteredCount() {
@@ -210,8 +210,6 @@ export class AdminComponent {
 
   skip() {
     if (!window.confirm('ピリオド終了までスキップします')) return;
-    this.stepIndex += this.steps.slice(this.stepIndex).indexOf('ピリオド終了');
-    this.questionNumber = this.questions.length + 1;
     const fesStep: FesStep = {
       periodNumber: this.periodNumber,
       questionNumber: this.questionNumber,
@@ -219,5 +217,7 @@ export class AdminComponent {
       stepIndex: this.stepIndex,
     };
     this.stepWebsocket.send(fesStep);
+    this.stepIndex += this.steps.slice(this.stepIndex).indexOf('ピリオド終了');
+    this.questionNumber = this.questions.length;
   }
 }

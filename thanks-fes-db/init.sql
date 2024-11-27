@@ -24,8 +24,7 @@ CREATE TABLE questions (
     option_format VARCHAR(100) DEFAULT '',
     text VARCHAR(100) DEFAULT '',
     thinking_second INTEGER DEFAULT 0,
-    answer VARCHAR(100) DEFAULT '',
-    point INTEGER DEFAULT 0
+    answer VARCHAR(100) DEFAULT ''
 );
 
 CREATE TABLE options (
@@ -41,7 +40,8 @@ CREATE TABLE answers (
     id SERIAL PRIMARY KEY,
     panelist_id INTEGER DEFAULT 0,
     question_id INTEGER DEFAULT 0,
-    answer VARCHAR(1) NOT NULL DEFAULT '',
+    answer VARCHAR(100) NOT NULL DEFAULT '',
     correct INTEGER NOT NULL DEFAULT 0,
+    score INTEGER NOT NULL DEFAULT 0,
     elapsed_second DOUBLE PRECISION NOT NULL DEFAULT 0
 );

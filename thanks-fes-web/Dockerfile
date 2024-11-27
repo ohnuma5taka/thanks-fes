@@ -10,10 +10,8 @@ RUN yarn build
 
 FROM nginx:stable
 RUN apt-get update && apt-get install -y gettext-base
-ADD ./default.conf.template /etc/nginx/conf.d/default.conf.template
-ARG BACKEND_API_SERVER
-RUN sed s/BACKEND_API_SERVER/${BACKEND_API_SERVER}/g /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+COPY ./default.conf.template /etc/nginx/conf.d/default.conf
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=node /app/dist/thanks-fes-web /usr/share/nginx/html
 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

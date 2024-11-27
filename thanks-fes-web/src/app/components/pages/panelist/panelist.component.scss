@@ -37,39 +37,46 @@
   }
 }
 
-.opening-team-label {
+.edge-option-wrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  @extend .ga-1-1;
+}
+
+.result-panelist-label {
   font-weight: 900;
   font-size: 48px;
   font-family: "Hiragino Kaku Gothic StdN";
-  -webkit-text-stroke: 2px white;
+  color: white;
 
   &.A {
     color: #ff0000;
-    -webkit-text-stroke-color: white;
+    -webkit-text-stroke: 2px white;
   }
   &.B {
     color: #ff7f00;
-    -webkit-text-stroke-color: white;
+    -webkit-text-stroke: 2px white;
   }
   &.C {
     color: #ffff00;
-    -webkit-text-stroke-color: black;
+    -webkit-text-stroke: 2px black;
   }
   &.D {
     color: #00ff00;
-    -webkit-text-stroke-color: black;
+    -webkit-text-stroke: 2px black;
   }
   &.E {
     color: #00f2ff;
-    -webkit-text-stroke-color: black;
+    -webkit-text-stroke: 2px black;
   }
   &.F {
-    -webkit-text-stroke-color: white;
     color: #7575ff;
+    -webkit-text-stroke: 2px white;
   }
   &.G {
-    -webkit-text-stroke-color: white;
     color: #cc86ff;
+    -webkit-text-stroke: 2px white;
   }
 }
 
@@ -209,7 +216,6 @@
 }
 
 .option-button {
-  @extend .box-shadow;
   border: 3px solid transparent;
   border-color: transparent;
   border-radius: 4px;

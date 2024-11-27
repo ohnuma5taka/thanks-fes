@@ -1,4 +1,8 @@
 <div class="question-page">
+  <ng-container *ngIf="step === ''">
+    <span class="large-title">開始まで少々お待ちください</span>
+  </ng-container>
+
   <ng-container *ngIf="step === 'タイトル'">
     <img id="thanks-fes-title" src="/assets/images/logo.png" />
   </ng-container>
@@ -14,7 +18,7 @@
   <ng-container *ngIf="step === 'ピリオド開始'">
     <div class="flex-column-sub animate__animated animate__fadeIn">
       <span class="period-label">Period</span>
-      <span class="period-number">{{ period }}</span>
+      <span class="period-number">{{ period.number }}</span>
     </div>
   </ng-container>
 
@@ -33,7 +37,7 @@
 
   <ng-container *ngIf="step === '問題開始'">
     <span class="question-title">{{
-      question.questionFormat === "動画" ? "動画" : "問題"
+      question.questionFormat === "動画" ? "動画問題" : "問題"
     }}</span>
     <audio src="/assets/audios/question.mp3" autoplay></audio>
   </ng-container>
@@ -206,11 +210,17 @@
   </ng-container>
 
   <ng-container *ngIf="step === '総合チームランキングタイトル'">
-    <img src="/assets/images/total_team_ranking_title.png" />
+    <img
+      id="total-team-ranking-title"
+      src="/assets/images/total_team_ranking_title.png"
+    />
   </ng-container>
 
   <ng-container *ngIf="step === '総合個人ランキングタイトル'">
-    <img src="/assets/images/total_panelist_ranking_title.png" />
+    <img
+      id="total-panelist-ranking-title"
+      src="/assets/images/total_panelist_ranking_title.png"
+    />
   </ng-container>
 
   <ng-container
@@ -225,10 +235,16 @@
   >
     <div class="ranking-container">
       <div class="ranking-result-wrapper">
-        <div *ngIf="!results.length" style="width: 912px"></div>
+        <div
+          *ngIf="!results || !results.length"
+          class="h-100 d-flex-center"
+          style="width: 912px"
+        >
+          <span *ngIf="results" class="large-title">正解者なし...</span>
+        </div>
         <div
           class="ranking-result"
-          *ngFor="let result of results; index as i"
+          *ngFor="let result of results || []; index as i"
           [ngClass]="{
             'grand-prix': result.rank <= period.awardCount,
             displayed: !!result.displayed
@@ -239,37 +255,54 @@
               <span>{{ result.rank }}</span>
             </div>
           </div>
-          <span class="panelist-name">{{ result.name }}</span>
+          <span class="panelist-name">{{
+            result.name + (period.panelistType === "チーム" ? "チーム" : "")
+          }}</span>
           <div
-            *ngIf="!(step === 'ピリオドランキング' || step === 'ピリオド成績')"
+            *ngIf="!(period && period.panelistType === '個人')"
             class="point-container"
           >
-            <span class="point-label">{{ result.correctText }}</span>
+            <span class="point-label">{{ result.score }}</span>
             <span class="unit-label">P</span>
           </div>
-          <span class="second-label">{{
-            result.elapsedSecond.toFixed(2)
-          }}</span>
+          <span
+            *ngIf="
+              (period && period.panelistType === '個人') ||
+              step === '総合個人ランキング' ||
+              step === '総合個人成績'
+            "
+            class="second-label"
+            >{{ result.elapsedSecond.toFixed(2) }}</span
+          >
         </div>
       </div>
       <div class="ranking-title-glass">
         <div class="ranking-title-wrapper">
-          <span class="ranking-title-label"
-            >{{
-              step === "ピリオドランキング" || step === "ピリオド成績"
+          <span class="ranking-title-label">{{
+            step === "ピリオドランキング" || step === "ピリオド成績"
+              ? period.panelistType === "個人"
                 ? "早押しランキング"
-                : step === "総合チームランキング" || step === "総合チーム成績"
-                ? "総合チームランキング"
-                : "総合個人ランキング"
-            }}<span
-              *ngIf="step === 'ピリオドランキング' || step === 'ピリオド成績'"
-              >10</span
-            ></span
+                : "チームランキング"
+              : step === "総合チームランキング" || step === "総合チーム成績"
+              ? "総合チームランキング"
+              : "総合個人ランキング"
+          }}</span
+          ><span
+            *ngIf="
+              (step === 'ピリオドランキング' || step === 'ピリオド成績') &&
+              period.panelistType === '個人'
+            "
+            class="vertical-ranking-title-label"
+            >10</span
           >
         </div>
       </div>
     </div>
-    <audio src="/assets/audios/ranking.mp3" autoplay></audio>
+    <audio
+      *ngIf="results && results.length"
+      src="/assets/audios/ranking.mp3"
+      autoplay
+    ></audio>
   </ng-container>
 </div>
 
@@ -286,7 +319,7 @@
         <img src="/assets/images/Q.png" />
       </div>
       <div class="question-box">
-        <span [innerHTML]="question.text"></span>
+        <span>{{ question.text }}</span>
       </div>
       <div class="timer-container">
         <video class="timer" autoplay>

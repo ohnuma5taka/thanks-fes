@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import func, desc, and_, asc
+from sqlalchemy import func, desc, and_, asc, distinct, or_
 
 from app.db.models.answer import Answer
 from app.db.models.panelist import Panelist
@@ -33,29 +33,29 @@ def get_panelist_list(panelist_id: int = None) -> List[Answer]:
         return db.query(Answer).filter(Answer.panelist_id == panelist_id).all()
 
 
-def get_question_count(question_id: int = None, answer: str = None) -> int:
+def get_question_count(question_id: int = None, value: str = None) -> int:
     with connect_session() as db:
         return db.query(Answer) \
-            .filter(and_(Answer.question_id == question_id, Answer.answer == answer)) \
+            .filter(and_(Answer.question_id == question_id, Answer.answer == value)) \
             .count()
 
 
-def get_correct(question_id: int = None, panelist_id: int = None) -> int:
+def get_score(question_id: int = None, panelist_id: int = None) -> int:
     with connect_session() as db:
-        return db.query(Answer.correct) \
+        return db.query(Answer.score) \
             .filter(and_(Answer.question_id == question_id, Answer.panelist_id == panelist_id)) \
             .scalar()
 
 
-def count_panelist_correct(panelist_id: int = None) -> int:
+def count_panelist_score(panelist_id: int = None) -> int:
     with connect_session() as db:
-        return db.query(func.sum(Answer.correct)) \
+        return db.query(func.sum(Answer.score)) \
             .filter(Answer.panelist_id == panelist_id).scalar()
 
 
 def get_team_answer_list(question_id: int = None) -> list[str, int]:
     with connect_session() as db:
-        return db.query(Panelist.team, func.avg(Answer.correct)) \
+        return db.query(Panelist.team, func.avg(Answer.correct), func.avg(Answer.score)) \
             .join(Panelist, Panelist.id == Answer.panelist_id) \
             .filter(Answer.question_id == question_id) \
             .group_by(Panelist.team) \
@@ -66,36 +66,48 @@ def get_panelist_results() -> list[tuple[int, int, float]]:
     with connect_session() as db:
         return db.query(
             Panelist.id,
-            func.sum(Answer.correct).label("total_correct"),
+            func.sum(Answer.score).label("total_score"),
             func.sum(Answer.elapsed_second).label("total_elapsed_second"),
         ) \
             .join(Panelist, Panelist.id == Answer.panelist_id) \
-            .group_by(Panelist.id, Panelist.name) \
-            .order_by(desc("total_correct"), asc("total_elapsed_second")) \
+            .group_by(Panelist.id) \
+            .order_by(desc("total_score"), asc("total_elapsed_second")) \
             .all()
 
 
 def get_panelist_period_results(period: int = None) -> list[tuple[int, int, float]]:
     with connect_session() as db:
+        answered_question_ids = db.query(distinct(Answer.question_id)).all()
+        answered_question_ids = [x[0] for x in answered_question_ids]
         last_question = db.query(Question) \
-            .filter(Question.period == period) \
+            .filter(Question.period == period, Question.id.in_(answered_question_ids)) \
             .order_by(desc(Question.idx)).first()
-        return db.query(Answer.panelist_id, Answer.correct, Answer.elapsed_second) \
-            .filter(Answer.question_id == last_question.id, Answer.correct > 0) \
-            .order_by(Answer.elapsed_second) \
+        last_corrected_panelist_ids = db.query(Panelist.id) \
+            .join(Answer, Answer.panelist_id == Panelist.id) \
+            .filter(Answer.question_id == last_question.id, Answer.score > 0) \
             .all()
+        last_corrected_panelist_ids = [x[0] for x in last_corrected_panelist_ids]
+        return [(
+            panelist_id,
+            db.query(func.sum(Answer.score)) \
+                .join(Question, Question.id == Answer.question_id) \
+                .filter(Question.period == period and Answer.panelist_id == panelist_id).scalar(),
+            db.query(Answer.elapsed_second).filter(Answer.question_id == last_question.id).scalar()
+        ) for panelist_id in last_corrected_panelist_ids]
 
 
-def get_team_results() -> List[tuple[str, float, float]]:
+def get_team_results(period: int = None) -> List[tuple[str, float, float]]:
     with connect_session() as db:
         return db.query(
             Panelist.team,
-            func.avg(Answer.correct).label("avg_correct"),
+            func.avg(Answer.score).label("avg_score"),
             func.sum(Answer.elapsed_second).label("total_elapsed_second"),
         ) \
             .join(Panelist, Panelist.id == Answer.panelist_id) \
+            .join(Question, Question.id == Answer.question_id) \
+            .filter(or_(period is None, Question.period == period)) \
             .group_by(Panelist.team) \
-            .order_by(desc("avg_correct"), asc("total_elapsed_second")) \
+            .order_by(desc("avg_score"), asc("total_elapsed_second"), asc(Panelist.team)) \
             .all()
 
 

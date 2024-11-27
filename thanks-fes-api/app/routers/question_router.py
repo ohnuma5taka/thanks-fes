@@ -20,10 +20,11 @@ async def get_question_answer(_id: int):
 
 @router.put('/{_id}/answer', summary='解答変更API', response_model=None)
 async def put_question_answer(_id: int, body: PutQuestionAnswerRequest):
+    point = question_crud.get_point(_id)
     question = question_crud.get(_id)
     question.answer = body.answer
     question_crud.save(question)
     answers = answer_crud.get_question_list(_id)
     for answer in answers:
-        answer.correct = int(answer.answer == body.answer)
+        answer.score = int(answer.answer == body.answer) * point
     answer_crud.bulk_save(answers)

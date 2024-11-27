@@ -25,7 +25,7 @@ def get_all() -> List[Panelist]:
 
 def get_teams() -> List[str]:
     with connect_session() as db:
-        return [x[0] for x in db.query(distinct(Panelist.team)).all()]
+        return sorted([x[0] for x in db.query(distinct(Panelist.team)).all()])
 
 
 def get_max_team_panelist_count() -> int:

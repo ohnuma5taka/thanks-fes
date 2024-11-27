@@ -19,7 +19,6 @@
       [height]="100"
       colorMode="success"
       [disabled]="
-        !step ||
         step === steps.slice(-1)[0] ||
         (question &&
           !question.answer &&
@@ -37,20 +36,14 @@
     <fes-button
       class="admin-button"
       [height]="50"
-      [disabled]="
-        !step ||
-        periodLabel === '開始前' ||
-        step === 'ピリオドランキング' ||
-        step === 'ピリオド成績' ||
-        periodLabel === '終了'
-      "
+      [disabled]="step !== '解答開示'"
       (emitClick)="skip()"
     >
       ピリオドスキップ
     </fes-button>
   </div>
   <div
-    *ngIf="step === 'タイトル' || step === 'オープニング'"
+    *ngIf="step === '' || step === 'タイトル' || step === 'オープニング'"
     class="step-status"
   >
     <p>登録済み解答者（現在：{{ totalRegisteredCount }}名）</p>

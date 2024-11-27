@@ -15,6 +15,7 @@ import { Result } from '@/app/core/models/result.model';
 import { PanelistApi } from '@/app/core/api/panelist.api';
 import { Period } from '@/app/core/models/period.model';
 import { PeriodApi } from '@/app/core/api/period.api';
+import { last } from 'lodash';
 
 @Component({
   selector: 'question',
@@ -26,18 +27,18 @@ export class QuestionComponent {
   periodNumber = 1;
   periods: Period[] = [];
   questionNumber = 1;
-  step: Step = 'タイトル';
+  step: Step = '';
   questionStarted = false;
   questionAnswer = '';
   answerCount: AnswerCount = {} as AnswerCount;
-  results: Result[] = [];
+  results: Result[];
 
   get period() {
     return this.periods.find((x) => x.number === this.periodNumber);
   }
 
   get questions() {
-    return this.period.questions;
+    return this.period?.questions || [];
   }
 
   get question() {
@@ -74,16 +75,11 @@ export class QuestionComponent {
     this.connectWebsocket();
   }
 
-  async ngAfterViewInit() {
-    await sleep(1);
-    const titleLogoImage = document.getElementById('thanks-fes-title');
-    if (titleLogoImage) titleLogoImage.classList.add('display');
-  }
-
   async stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {
     this.step = res.data.step;
     this.periodNumber = res.data.periodNumber;
     this.questionNumber = res.data.questionNumber;
+    if (this.step === 'タイトル') this.displayTitle('thanks-fes-title');
     if (this.step === '問題開始') {
       this.questionAnswer = '';
       this.answerCount = {} as AnswerCount;
@@ -96,9 +92,19 @@ export class QuestionComponent {
     }
     if (this.step === '解答結果') this.getAnswerCount();
     if (this.step === '解答開示') this.getAnswer();
-    if (this.step === 'ピリオドランキング') this.fetchPanelistPeriodResults();
+    if (this.step === 'ピリオドランキング') this.fetchPeriodResults();
+    if (this.step === '総合チームランキングタイトル')
+      this.displayTitle('total-team-ranking-title');
     if (this.step === '総合チームランキング') this.fetchTeamResults();
+    if (this.step === '総合個人ランキングタイトル')
+      this.displayTitle('total-panelist-ranking-title');
     if (this.step === '総合個人ランキング') this.fetchPanelistResults();
+  }
+
+  async displayTitle(id: string) {
+    await sleep(1);
+    const titleImage = document.getElementById(id);
+    if (titleImage) titleImage.classList.add('display');
   }
 
   connectWebsocket() {
@@ -129,11 +135,11 @@ export class QuestionComponent {
   }
 
   async getAnswerCount() {
-    if (!this.question.answer && this.period.panelistType === 'チーム') {
+    if (this.period.panelistType === 'チーム') {
       const body = { questionId: this.question.id };
       const teamAnswers = await this.answerApi.getTeamAnswers(body);
       this.answerCount = teamAnswers.reduce(
-        (ret, x) => ({ ...ret, [x.team]: x.correct }),
+        (ret, x) => ({ ...ret, [`${x.team}チーム`]: x.correct }),
         {} as AnswerCount
       );
     } else {
@@ -154,6 +160,7 @@ export class QuestionComponent {
     const sleepSeconds = _seconds.map(
       (x) => (x / total) * (totalSecond - lastSecond)
     );
+    if (count === 1) await sleep(totalSecond - lastSecond);
     for (let i = 0; i < count - 1; i++) {
       await sleep(sleepSeconds[i]);
       const index = this.results.length - i - 1;
@@ -163,35 +170,31 @@ export class QuestionComponent {
     this.results[0].displayed = true;
   }
 
-  async fetchPanelistPeriodResults() {
-    this.results = [];
-    const results = await this.resultApi.getPanelistPeriodResults(
-      this.periodNumber
-    );
-    this.results = results.slice(0, 10).map((x) => ({
-      ...x,
-      correctText: x.correct.toFixed(0),
-    }));
+  async fetchPeriodResults() {
+    this.results = undefined;
+    if (this.period.panelistType === '個人') {
+      const results = await this.resultApi.getPanelistPeriodResults(
+        this.periodNumber
+      );
+      this.results = results.slice(0, 10);
+    } else {
+      this.results = await this.resultApi.getTeamPeriodResults(
+        this.periodNumber
+      );
+    }
     this.displayResults();
   }
 
   async fetchTeamResults() {
-    this.results = [];
-    const results = await this.resultApi.getTeamResults();
-    this.results = results.map((x) => ({
-      ...x,
-      correctText: x.correct.toFixed(0),
-    }));
+    this.results = undefined;
+    this.results = await this.resultApi.getTeamResults();
     this.displayResults();
   }
 
   async fetchPanelistResults() {
-    this.results = [];
+    this.results = undefined;
     const results = await this.resultApi.getPanelistResults();
-    this.results = results.slice(0, 10).map((x) => ({
-      ...x,
-      correctText: x.correct.toFixed(0),
-    }));
+    this.results = results.slice(0, 10);
     this.displayResults();
   }
 }

@@ -14,4 +14,5 @@ class Answer(Base):
     question_id = Column(Integer, nullable=False, default=0)
     answer = Column(String, unique=True, default='')
     correct = Column(Integer, nullable=False, default=0)
+    score = Column(Integer, nullable=False, default=0)
     elapsed_second = Column(Float, nullable=False, default=0)

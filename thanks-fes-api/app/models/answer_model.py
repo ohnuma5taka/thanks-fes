@@ -9,6 +9,7 @@ class AnswerModel(BaseModel):
     question_id: Optional[int] = None
     answer: Optional[str] = None
     correct: Optional[int] = None
+    score: Optional[int] = None
     elapsed_second: Optional[float] = None
 
     model_config = ConfigDict(from_attributes=True)
@@ -43,3 +44,9 @@ class PostTeamAnswerModel(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class TeamScoreModel(BaseModel):
+    team: Optional[str] = None
+    correct: Optional[int] = None
+    score: Optional[int] = None
+
+    model_config = ConfigDict(from_attributes=True)

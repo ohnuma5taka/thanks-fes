@@ -26,6 +26,18 @@ export class ResultApi {
     );
   }
 
+  async getTeamPeriodResults(period: number) {
+    return await this.apiService.get<Result[]>(
+      `/result/teams/periods/${period}`
+    );
+  }
+
+  async getTeamPeriodResult(team: string, period: number) {
+    return await this.apiService.get<Result>(
+      `/result/teams/${team}/periods/${period}`
+    );
+  }
+
   async getTeamResults() {
     return await this.apiService.get<Result[]>('/result/teams');
   }
