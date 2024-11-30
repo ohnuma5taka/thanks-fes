@@ -70,18 +70,28 @@ export class PanelistComponent {
     private stepWebsocket: StepWebsocket
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const panelist = this.store.getters.panelist();
-    if (panelist.id) {
+    if (panelist.name) {
       this.panelist = new Panelist(panelist);
-      this.step = 'オープニング';
-    } else {
-      const urlQuery = locationUtil.urlQuery() as PanelistQueryParam;
-      this.panelist.name = urlQuery.name;
-      this.panelist.team = urlQuery.team;
-    }
+      try {
+        const body = { name: this.panelist.name };
+        this.panelist.id = await this.panelistApi.getId(body);
+        this.step = 'オープニング';
+      } catch {
+        this.store.clear('panelist');
+        this.setUrlQuery();
+      }
+    } else this.setUrlQuery();
     this.fetchPeriods();
     this.connectWebsocket();
+  }
+
+  setUrlQuery() {
+    this.panelist = new Panelist();
+    const urlQuery = locationUtil.urlQuery() as PanelistQueryParam;
+    this.panelist.name = urlQuery.name;
+    this.panelist.team = urlQuery.team;
   }
 
   keepScreenAlive() {

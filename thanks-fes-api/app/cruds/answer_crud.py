@@ -89,17 +89,36 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
             .all()
 
 
-def get_team_results(period: int = None, max_panelist_count: int = 0) -> List[tuple[str, float]]:
+def get_team_results() -> List[tuple[str, float]]:
+    with connect_session() as db:
+        team_counts = db.query(
+            Panelist.team,
+            func.count(Panelist.id).label("team_count")
+        ).group_by(Panelist.team).subquery()
+        max_panelist_count = db.query(func.max(team_counts.c.team_count)).scalar()
+        return db.query(
+            Panelist.team,
+            func.round(func.sum(Answer.score) / team_counts.c.team_count * max_panelist_count, 0).label("actual_score")
+        ) \
+            .join(Answer, Panelist.id == Answer.panelist_id) \
+            .join(Question, Question.id == Answer.question_id) \
+            .join(team_counts, team_counts.c.team == Panelist.team) \
+            .group_by(Panelist.team, team_counts.c.team_count) \
+            .order_by(desc("actual_score"), asc(Panelist.team)) \
+            .all()
+
+
+def get_team_period_results(period: int = None) -> List[tuple[str, float]]:
     with connect_session() as db:
         return db.query(
             Panelist.team,
-            func.round(func.avg(Answer.score) * max_panelist_count, 0).label("actual_score")
+            func.sum(Answer.score).label("total_score"),
         ) \
             .join(Panelist, Panelist.id == Answer.panelist_id) \
             .join(Question, Question.id == Answer.question_id) \
-            .filter(or_(period is None, Question.period == period)) \
+            .filter(Question.period == period) \
             .group_by(Panelist.team) \
-            .order_by(desc("actual_score"), asc(Panelist.team)) \
+            .order_by(desc("total_score"), asc(Panelist.team)) \
             .all()
 
 

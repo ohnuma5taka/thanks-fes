@@ -48,7 +48,7 @@
         question.questionFormat === "動画"
           ? "動画"
           : period.number === 3 && question.index === 1
-          ? "家継"
+          ? "家次"
           : period.number === 3 && question.index === 2
           ? "たなゆり"
           : period.number === 3 && question.index === 3
@@ -274,10 +274,15 @@
             </div>
           </div>
           <span class="panelist-name">{{
-            result.name + (period.panelistType === "チーム" ? "チーム" : "")
+            result.name +
+              (step === "総合チームランキング" ||
+              step === "総合チーム成績" ||
+              period?.panelistType === "チーム"
+                ? "チーム"
+                : "")
           }}</span>
           <div
-            *ngIf="!(period && period.panelistType === '個人')"
+            *ngIf="!(period?.panelistType === '個人')"
             class="point-container"
           >
             <span class="point-label">{{ result.score }}</span>
@@ -285,17 +290,12 @@
           </div>
           <span
             *ngIf="
-              (period && period.panelistType === '個人') ||
+              period?.panelistType === '個人' ||
               step === '総合個人ランキング' ||
               step === '総合個人成績'
             "
             class="second-label"
             >{{ result.elapsedSecond.toFixed(2) }}秒</span
-          >
-          <span
-            *ngIf="period && period.panelistType === 'チーム'"
-            class="second-label"
-            >{{ result.elapsedSecond.toFixed(0) }}人</span
           >
         </div>
       </div>

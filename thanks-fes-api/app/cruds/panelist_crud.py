@@ -18,6 +18,11 @@ def get_name(_id: int = None) -> str:
         return db.query(Panelist).get(_id).name
 
 
+def get_by_name(name: str = None) -> Panelist:
+    with connect_session() as db:
+        return db.query(Panelist).filter(Panelist.name == name).first()
+
+
 def get_all() -> List[Panelist]:
     with connect_session() as db:
         return db.query(Panelist).all()
@@ -26,15 +31,6 @@ def get_all() -> List[Panelist]:
 def get_teams() -> List[str]:
     with connect_session() as db:
         return sorted([x[0] for x in db.query(distinct(Panelist.team)).all()])
-
-
-def get_max_team_panelist_count() -> int:
-    with connect_session() as db:
-        team_counts = db.query(
-            Panelist.team,
-            func.count(Panelist.id).label("count")
-        ).group_by(Panelist.team).subquery()
-        return db.query(func.max(team_counts.c.count)).scalar()
 
 
 def get_unanswered_list(question_id: int = None) -> list[Panelist]:

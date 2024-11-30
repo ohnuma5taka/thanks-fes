@@ -132,6 +132,7 @@ $yellow-highlight: #fffc4b;
 }
 
 .period-guide-glass {
+  max-width: 90vw;
   margin-top: 5vh;
   @extend .glass;
   padding: 8px;

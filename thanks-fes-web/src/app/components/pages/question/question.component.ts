@@ -153,15 +153,17 @@ export class QuestionComponent {
     const count = this.results.length;
     if (!count) return;
     const totalSecond = 11700;
+    const initialSecond = 1000;
     const lastSecond = 2500;
     const _seconds = [...Array(count - 1)].map(
       (_, i) => Math.log(i + 1) / Math.log(count + 1)
     );
     const total = _seconds.reduce((ret, x) => ret + x, 0);
     const sleepSeconds = _seconds.map(
-      (x) => (x / total) * (totalSecond - lastSecond)
+      (x) => (x / total) * (totalSecond - initialSecond - lastSecond)
     );
-    if (count === 1) await sleep(totalSecond - lastSecond);
+    await sleep(initialSecond);
+    if (count === 1) await sleep(totalSecond - initialSecond - lastSecond);
     for (let i = 0; i < count - 1; i++) {
       await sleep(sleepSeconds[i]);
       const index = this.results.length - i - 1;

@@ -11,6 +11,14 @@ from app.ws_client import ws_client
 router = APIRouter()
 
 
+@router.get('/id', summary='参加者ID取得API', response_model=int)
+async def get_id(name: str):
+    panelist = panelist_crud.get_by_name(name)
+    if panelist is None:
+        raise_http_exception(404, 'item not found')
+    return panelist.id
+
+
 @router.get('', summary='参加者リスト取得API', response_model=list[PanelistModel])
 async def get_all():
     return [PanelistModel(**x.dict()) for x in panelist_crud.get_all()]

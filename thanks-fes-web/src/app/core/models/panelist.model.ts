@@ -10,6 +10,10 @@ export class Panelist {
   }
 }
 
+export class GetPanelistIdRequest {
+  name: string;
+}
+
 export class CreatePanelistRequest {
   name: string;
   team: string;
