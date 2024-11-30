@@ -82,6 +82,8 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
         last_question = db.query(Question) \
             .filter(Question.period == period, Question.id.in_(answered_question_ids)) \
             .order_by(desc(Question.idx)).first()
+        if last_question is None:
+            return []
         last_corrected_panelist_ids = db.query(Panelist.id) \
             .join(Answer, Answer.panelist_id == Panelist.id) \
             .filter(Answer.question_id == last_question.id, Answer.score > 0) \
