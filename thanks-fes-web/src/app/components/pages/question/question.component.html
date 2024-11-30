@@ -99,31 +99,16 @@
             [src]="
               step === '解答開始' || step === '解答結果'
                 ? question.file.questionPath
-                : question.file.answerPath
+                : question.file.answerPath || question.file.questionPath
             "
           />
           <video
-            *ngIf="
-              question.questionFormat === '動画' &&
-              (step === '解答開始' ||
-                (!question.file.answerPath &&
-                  (step === '解答結果' ||
-                    step === '解答開示' ||
-                    step === 'ピリオド終了')))
+            *ngIf="question.questionFormat === '動画'"
+            [src]="
+              step === '解答開始'
+                ? question.file.questionPath
+                : question.file.answerPath || question.file.questionPath
             "
-            [src]="question.file.questionPath"
-            autoplay
-            muted
-          ></video>
-          <video
-            *ngIf="
-              question.questionFormat === '動画' &&
-              question.file.answerPath &&
-              (step === '解答結果' ||
-                step === '解答開示' ||
-                step === 'ピリオド終了')
-            "
-            [src]="question.file.answerPath"
             autoplay
           ></video>
         </div>
