@@ -292,6 +292,11 @@
             class="second-label"
             >{{ result.elapsedSecond.toFixed(2) }}秒</span
           >
+          <span
+            *ngIf="period && period.panelistType === 'チーム'"
+            class="second-label"
+            >{{ result.elapsedSecond.toFixed(0) }}人</span
+          >
         </div>
       </div>
       <div class="ranking-title-glass">

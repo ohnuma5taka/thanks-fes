@@ -89,18 +89,17 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
             .all()
 
 
-def get_team_results(period: int = None) -> List[tuple[str, float, float]]:
+def get_team_results(period: int = None, max_panelist_count: int = 0) -> List[tuple[str, float]]:
     with connect_session() as db:
         return db.query(
             Panelist.team,
-            func.avg(Answer.score).label("avg_score"),
-            func.sum(Answer.elapsed_second).label("total_elapsed_second"),
+            func.round(func.avg(Answer.score) * max_panelist_count, 0).label("actual_score")
         ) \
             .join(Panelist, Panelist.id == Answer.panelist_id) \
             .join(Question, Question.id == Answer.question_id) \
             .filter(or_(period is None, Question.period == period)) \
             .group_by(Panelist.team) \
-            .order_by(desc("avg_score"), asc("total_elapsed_second"), asc(Panelist.team)) \
+            .order_by(desc("actual_score"), asc(Panelist.team)) \
             .all()
 
 

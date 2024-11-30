@@ -27,16 +27,17 @@ def fetch_panelist_results(period: int = None) -> list[ResultModel]:
 
 def fetch_team_results(period: int = None) -> list[ResultModel]:
     results = []
-    rank = _avg_score = _elapsed_second = 0
+    rank = _avg_score = 0
     max_panelist_count = panelist_crud.get_max_team_panelist_count()
-    for _team, avg_score, elapsed_second in answer_crud.get_team_results(period):
-        if _avg_score != avg_score or _elapsed_second != elapsed_second:
+    for _team, score in answer_crud.get_team_results(period, max_panelist_count):
+        score = round(score)
+        if _avg_score != score:
             rank += 1
-            _avg_score, _elapsed_second = avg_score, elapsed_second
+            _avg_score = score
         result = ResultModel(
             name=_team,
-            score=round(avg_score * max_panelist_count),
-            elapsed_second=elapsed_second,
+            score=score,
+            elapsed_second=0,
             rank=rank
         )
         results.append(result)
