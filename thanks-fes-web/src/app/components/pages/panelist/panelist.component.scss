@@ -75,7 +75,11 @@
     -webkit-text-stroke: 2px white;
   }
   &.G {
-    color: #cc86ff;
+    color: #b34bff;
+    -webkit-text-stroke: 2px white;
+  }
+  &.H {
+    color: #ff6aff;
     -webkit-text-stroke: 2px white;
   }
 }
@@ -115,7 +119,11 @@
     color: white;
   }
   &.G {
-    background-color: #cc86ff;
+    background-color: #b34bff;
+    color: white;
+  }
+  &.H {
+    background-color: #ff6aff;
     color: white;
   }
 }
