@@ -2,7 +2,6 @@ import os
 
 from app.cruds import answer_crud, panelist_crud, question_crud, option_crud, period_crud
 from app.db.seeds.option_seed import seed_options
-from app.db.seeds.panelist_seed import seed_panelists
 from app.db.seeds.period_seed import seed_periods
 from app.db.seeds.question_seed import seed_questions
 

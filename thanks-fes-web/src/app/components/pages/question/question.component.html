@@ -43,9 +43,19 @@
   </ng-container>
 
   <ng-container *ngIf="step === '問題開始'">
-    <span class="question-title">{{
-      question.questionFormat === "動画" ? "動画問題" : "問題"
-    }}</span>
+    <span class="question-title"
+      >{{
+        question.questionFormat === "動画"
+          ? "動画"
+          : period.number === 3 && question.index === 1
+          ? "家継"
+          : period.number === 3 && question.index === 2
+          ? "たなゆり"
+          : period.number === 3 && question.index === 3
+          ? "2次会"
+          : ""
+      }}問題</span
+    >
     <audio src="/assets/audios/question.mp3" autoplay></audio>
   </ng-container>
 
@@ -201,19 +211,35 @@
     ></audio>
   </ng-container>
 
-  <ng-container *ngIf="step === '総合チームランキングタイトル'">
-    <img
-      id="total-team-ranking-title"
-      src="/assets/images/total_team_ranking_title.png"
-    />
-  </ng-container>
+  <img
+    *ngIf="step === '総合チームランキングタイトル'"
+    id="total-team-ranking-title"
+    src="/assets/images/total-team-ranking-title.png"
+  />
 
-  <ng-container *ngIf="step === '総合個人ランキングタイトル'">
-    <img
-      id="total-panelist-ranking-title"
-      src="/assets/images/total_panelist_ranking_title.png"
-    />
-  </ng-container>
+  <img
+    *ngIf="step === '総合個人ランキングタイトル'"
+    id="total-panelist-ranking-title"
+    src="/assets/images/total-panelist-ranking-title.png"
+  />
+
+  <img
+    *ngIf="step === '景品発表'"
+    id="award-prize-title"
+    src="/assets/images/award-prize-title.png"
+  />
+
+  <img
+    *ngIf="step === '提供'"
+    id="sponsor-title"
+    src="/assets/images/sponsor-title.png"
+  />
+
+  <img
+    *ngIf="step === 'エンディング'"
+    id="ending-title"
+    src="/assets/images/sponsor-title.png"
+  />
 
   <ng-container
     *ngIf="
@@ -238,7 +264,7 @@
           class="ranking-result"
           *ngFor="let result of results || []; index as i"
           [ngClass]="{
-            'grand-prix': result.rank <= period.awardCount,
+            'grand-prix': period && result && result.rank <= period.awardCount,
             displayed: !!result.displayed
           }"
         >

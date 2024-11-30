@@ -99,6 +99,7 @@ export class QuestionComponent {
     if (this.step === '総合個人ランキングタイトル')
       this.displayTitle('total-panelist-ranking-title');
     if (this.step === '総合個人ランキング') this.fetchPanelistResults();
+    if (this.step === '景品発表') this.displayTitle('award-prize-title');
   }
 
   async displayTitle(id: string) {

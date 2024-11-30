@@ -13,7 +13,6 @@ import { Answer } from '@/app/core/models/answer.model';
 import { questionOptions } from '@/app/core/constants/question.constant';
 import { ResultApi } from '@/app/core/api/result.api';
 import { Result } from '@/app/core/models/result.model';
-import { sleep } from '@/app/core/utils/time.util';
 import { Period } from '@/app/core/models/period.model';
 import { PeriodApi } from '@/app/core/api/period.api';
 
@@ -157,15 +156,14 @@ export class PanelistComponent {
 
   async fetchAnswer() {
     this.questionAnswer = await this.questionApi.getAnswer(this.question.id);
-    if (!this.questionAnswer) {
-      const body = {
-        questionId: this.question.id,
-        panelistId: this.panelist.id,
-      };
-      const correct = await this.answerApi.getCorrect(body);
-      this.questionAnswer = `${correct}`;
-      if (correct) this.selectedAnswer = `${correct}`;
-    }
+    if (!!this.questionAnswer) return;
+    const body = {
+      questionId: this.question.id,
+      panelistId: this.panelist.id,
+    };
+    const correct = await this.answerApi.getCorrect(body);
+    this.questionAnswer = `${correct}`;
+    if (correct) this.selectedAnswer = `${correct}`;
   }
 
   async fetchPanelistPeriodResult() {

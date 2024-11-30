@@ -139,16 +139,26 @@
       step === '総合チームランキングタイトル' ||
       step === '総合チームランキング' ||
       step === '総合個人ランキングタイトル' ||
-      step === '総合個人ランキング'
+      step === '総合個人ランキング' ||
+      step === '景品発表' ||
+      step === '提供' ||
+      step === 'エンディング'
     "
   >
     <img
-      class="ranking-title-image"
+      class="title-image"
       [src]="
         step === '総合チームランキングタイトル' ||
         step === '総合チームランキング'
-          ? '/assets/images/total_team_ranking_title.png'
-          : '/assets/images/total_panelist_ranking_title.png'
+          ? '/assets/images/total-team-ranking-title.png'
+          : step === '総合個人ランキングタイトル' ||
+            step === '総合個人ランキング'
+          ? '/assets/images/total-panelist-ranking-title.png'
+          : step === '景品発表'
+          ? 'award-prize.png'
+          : step === '提供'
+          ? 'sponsor.png'
+          : 'ending.png'
       "
     />
   </ng-container>

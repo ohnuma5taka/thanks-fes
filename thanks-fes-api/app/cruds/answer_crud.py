@@ -84,18 +84,9 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
             .order_by(desc(Question.idx)).first()
         if last_question is None:
             return []
-        last_corrected_panelist_ids = db.query(Panelist.id) \
-            .join(Answer, Answer.panelist_id == Panelist.id) \
+        return db.query(Answer.panelist_id, Answer.score, Answer.elapsed_second) \
             .filter(Answer.question_id == last_question.id, Answer.score > 0) \
             .all()
-        last_corrected_panelist_ids = [x[0] for x in last_corrected_panelist_ids]
-        return [(
-            panelist_id,
-            db.query(func.sum(Answer.score)) \
-                .join(Question, Question.id == Answer.question_id) \
-                .filter(Question.period == period and Answer.panelist_id == panelist_id).scalar(),
-            db.query(Answer.elapsed_second).filter(Answer.question_id == last_question.id).scalar()
-        ) for panelist_id in last_corrected_panelist_ids]
 
 
 def get_team_results(period: int = None) -> List[tuple[str, float, float]]:
