@@ -18,16 +18,16 @@ export class PeriodApi {
             .map((x) => new Question(x))
             .map(async (x) => {
               if (x.file) {
-                const dimension = await assetUtil.getAssetDimension(
+                const questionDimension = await assetUtil.getAssetDimension(
                   x.file.questionPath
                 );
-                const answerFileExist = await assetUtil.isExist(
+                const answerDimension = await assetUtil.getAssetDimension(
                   x.file.answerPath
                 );
                 x.file = {
                   ...x.file,
-                  ...dimension,
-                  answerPath: answerFileExist ? x.file.answerPath : '',
+                  ...questionDimension,
+                  answerPath: answerDimension ? x.file.answerPath : '',
                 };
               }
               return x;

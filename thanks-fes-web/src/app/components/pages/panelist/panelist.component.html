@@ -174,19 +174,25 @@
     <span *ngIf="step === 'ピリオド成績'" class="period-label-no-shadow"
       >Period {{ period.number }}</span
     >
-    <span *ngIf="period.panelistType === '個人'" class="small-title"
+    <span
+      *ngIf="step === '総合個人成績' || period?.panelistType === '個人'"
+      class="small-title"
       ><span class="result-panelist-label">{{ panelist.name }}</span
       >さん
     </span>
-    <span *ngIf="period.panelistType === 'チーム'" class="small-title"
-      ><span class="result-panelist-label" [ngClass]="panelist.team">{{
-        panelist.team + "チーム"
-      }}</span>
+    <span
+      *ngIf="step === '総合チーム成績' || period?.panelistType === 'チーム'"
+      class="small-title"
+      ><span class="result-panelist-label" [ngClass]="panelist.team"
+        >{{ panelist.team }}チーム</span
+      >
     </span>
-    <span class="period-label-no-shadow"
+    <span *ngIf="result" class="period-label-no-shadow"
       >{{ result.score }}<span class="pl-3" style="font-size: 28px">P</span>
     </span>
-    <span *ngIf="step !== 'ピリオド成績'" class="period-label-no-shadow"
+    <span
+      *ngIf="result && step !== 'ピリオド成績'"
+      class="period-label-no-shadow"
       >第{{ result.rank }}位</span
     >
   </ng-container>

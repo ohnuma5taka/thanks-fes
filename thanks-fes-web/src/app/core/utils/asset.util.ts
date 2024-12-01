@@ -14,9 +14,7 @@ const getAssetDimension = (
     const isVideo = /\.(mp4|webm|ogg)$/i.test(path);
     const element = document.createElement(isVideo ? 'video' : 'img');
     element.src = path;
-    element.onerror = (error) => {
-      reject(new Error(`Failed to load asset at path: ${path}`));
-    };
+    element.onerror = () => resolve(undefined);
     if (isVideo) {
       const _element = element as HTMLVideoElement;
       element.onloadedmetadata = () => {

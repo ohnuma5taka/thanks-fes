@@ -264,7 +264,7 @@
           class="ranking-result"
           *ngFor="let result of results || []; index as i"
           [ngClass]="{
-            'grand-prix': period && result && result.rank <= period.awardCount,
+            'grand-prix': result.rank <= (period?.awardCount || 1),
             displayed: !!result.displayed
           }"
         >

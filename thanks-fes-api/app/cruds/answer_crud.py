@@ -84,7 +84,16 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
             .order_by(desc(Question.idx)).first()
         if last_question is None:
             return []
-        return db.query(Answer.panelist_id, Answer.score, Answer.elapsed_second) \
+        score_map = {x[0]: x[1] for x in db.query(Answer.panelist_id, func.sum(Answer.score)) \
+            .join(Question, Question.id == Answer.question_id) \
+            .filter(Question.period == period) \
+            .group_by(Answer.panelist_id) \
+            .all()}
+        return db.query(
+            Answer.panelist_id,
+            score_map[Answer.panelist_id],
+            Answer.elapsed_second
+        ) \
             .filter(Answer.question_id == last_question.id, Answer.score > 0) \
             .all()
 
