@@ -155,8 +155,8 @@ export class QuestionComponent {
     const totalSecond = 11700;
     const initialSecond = 1000;
     const lastSecond = 2500;
-    const _seconds = [...Array(count - 1)].map(
-      (_, i) => Math.log(i + 1) / Math.log(count + 1)
+    const _seconds = [...Array(count - 1)].map((_, i) =>
+      count < 5 ? (i + 1) / (count - 1) : Math.log(i + 1) / Math.log(count)
     );
     const total = _seconds.reduce((ret, x) => ret + x, 0);
     const sleepSeconds = _seconds.map(
