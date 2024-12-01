@@ -89,13 +89,13 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
             .filter(Question.period == period) \
             .group_by(Answer.panelist_id) \
             .all()}
-        return db.query(
+        return [(x[0], score_map[x[1]], x[1]) for x in db.query(
             Answer.panelist_id,
             score_map[Answer.panelist_id],
             Answer.elapsed_second
         ) \
             .filter(Answer.question_id == last_question.id, Answer.score > 0) \
-            .all()
+            .all()]
 
 
 def get_team_results() -> List[tuple[str, float]]:
