@@ -70,7 +70,7 @@ export class QuestionComponent {
   ) {}
 
   async ngOnInit() {
-    this.clearAnswers();
+    // this.clearAnswers();
     this.fetchPeriods();
     this.connectWebsocket();
   }
