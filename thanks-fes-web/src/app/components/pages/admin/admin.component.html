@@ -32,7 +32,14 @@
     </fes-button>
   </div>
   <div class="w-100 d-flex justify-end gx-3">
-    <div class="w-100"></div>
+    <fes-button
+      class="admin-button"
+      [height]="50"
+      [disabled]="!step"
+      (emitClick)="clearAnswers()"
+    >
+      回答を全てクリア
+    </fes-button>
     <fes-button
       class="admin-button"
       [height]="50"
@@ -90,6 +97,6 @@
         (emitInput)="teamAnswer.correctText = $event"
       ></fes-input>
     </div>
-    <fes-button [height]="32" (emitClick)="answerTeam()">登録</fes-button>
+    <fes-button [height]="40" (emitClick)="answerTeam()">登録</fes-button>
   </div>
 </div>
