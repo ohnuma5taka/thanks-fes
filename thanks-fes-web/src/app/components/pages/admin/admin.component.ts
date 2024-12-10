@@ -208,6 +208,10 @@ export class AdminComponent {
     this.stepWebsocket.send(previousStep);
   }
 
+  async clearAnswers() {
+    this.answerApi.clearAll();
+  }
+
   skip() {
     if (!window.confirm('ピリオド終了までスキップします')) return;
     const fesStep: FesStep = {
