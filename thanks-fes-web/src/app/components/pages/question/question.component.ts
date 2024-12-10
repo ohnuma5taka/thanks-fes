@@ -70,7 +70,6 @@ export class QuestionComponent {
   ) {}
 
   async ngOnInit() {
-    // this.clearAnswers();
     this.fetchPeriods();
     this.connectWebsocket();
   }
@@ -111,10 +110,6 @@ export class QuestionComponent {
   connectWebsocket() {
     this.stepWebsocket.callback = this.stepWebsocketCallback.bind(this);
     this.stepWebsocket.connect();
-  }
-
-  async clearAnswers() {
-    this.answerApi.clearAll();
   }
 
   async fetchPeriods() {
