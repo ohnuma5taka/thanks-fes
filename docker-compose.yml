@@ -30,7 +30,7 @@ services:
     env_file:
       - .env
     ports:
-      - 50000:50000
+      - 5432:5432
     networks:
       - thanks-fes-network
 
