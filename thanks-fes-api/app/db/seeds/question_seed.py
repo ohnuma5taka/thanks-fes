@@ -6,7 +6,7 @@ from app.db.models.question import Question
 def seed_questions(seeds_data_dir: str):
     questions = [
         Question(
-            id=int(row['id'] or 0),
+            id=row['id'],
             period=int(row['period'] or 0),
             idx=int(row['idx'] or 0),
             question_format=row['question_format'],

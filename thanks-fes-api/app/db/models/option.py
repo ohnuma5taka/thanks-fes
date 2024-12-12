@@ -10,7 +10,7 @@ class Option(Base):
     __table_args__ = {'schema': env.db_schema}
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    question_id = Column(Integer, nullable=False, default=0)
+    question_id = Column(String, nullable=False)
     value = Column(String, nullable=False, default='')
     image_origin_x = Column(Float, nullable=False, default=0)
     image_origin_y = Column(Float, nullable=False, default=0)

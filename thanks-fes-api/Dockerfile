@@ -11,6 +11,7 @@ RUN echo "setuptools<72" > pip_constraints.txt
 ENV PIP_CONSTRAINT=pip_constraints.txt
 RUN pip3 install -r requirements.txt
 ARG APP_MODE
+RUN cp .env.${APP_MODE} .env
 
 EXPOSE 8888
 

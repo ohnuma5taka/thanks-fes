@@ -14,7 +14,7 @@ def get_all() -> List[Option]:
         return db.query(Option).all()
 
 
-def get_question_list(question_id: int = None) -> List[Option]:
+def get_question_list(question_id: str = None) -> List[Option]:
     with connect_session() as db:
         return db.query(Option).filter(Option.question_id == question_id).all()
 

@@ -64,11 +64,12 @@ $fes-theme: mat.define-light-theme(
   }
 }
 
-$form-height: 36px;
+$form-height: 48px;
 .mat-mdc-text-field-wrapper:not(.mdc-text-field--invalid) {
   .mdc-notched-outline {
     & > * {
-      border: 1px solid map-get(color.$gray-color-map, 200) !important;
+      border: none !important;
+      // border: 1px solid map-get(color.$gray-color-map, 200) !important;
     }
     .mdc-notched-outline__leading {
       border-right: none !important;
@@ -83,7 +84,8 @@ $form-height: 36px;
 
   &.mdc-text-field--focused .mdc-notched-outline {
     & > * {
-      border: 1px solid map-get(color.$gray-color-map, 800) !important;
+      border: none !important;
+      // border: 1px solid map-get(color.$gray-color-map, 800) !important;
     }
     .mdc-notched-outline__leading {
       border-right: none !important;
@@ -118,9 +120,24 @@ $form-height: 36px;
   .mat-mdc-form-field-infix {
     padding: 6px 0 !important;
     min-height: unset !important;
+    height: $form-height;
+
+    .mat-mdc-input-element {
+      height: calc($form-height * 0.75) !important;
+      font-size: calc($form-height * 0.75 / 2);
+    }
 
     .mat-mdc-select-trigger {
       --mat-select-focused-arrow-color: color.$text-primary-color !important;
+
+      .mat-mdc-select-value {
+        height: calc($form-height * 0.75) !important;
+        .mat-mdc-select-value-text,
+        .mat-mdc-select-placeholder {
+          height: calc($form-height * 0.75) !important;
+          line-height: calc($form-height * 0.75) !important;
+        }
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 import { Panelist } from '@/app/core/models/panelist.model';
 import { FesStep } from '@/app/core/models/step.model';
+import { jsonUtil } from '@/app/core/utils/json.util';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { share } from 'rxjs/operators';
@@ -30,13 +31,15 @@ export class StoreService implements OnDestroy {
 
   private get<T>(key: StoreKey): T {
     const value = localStorage.getItem(key) || '';
-    return !!value && value !== 'undefined'
-      ? JSON.parse(value)
-      : objectKeys.includes(key)
-      ? {}
-      : arrayKeys.includes(key)
-      ? []
-      : '';
+    return (
+      !!value && value !== 'undefined'
+        ? jsonUtil.toCamelCase(JSON.parse(value))
+        : objectKeys.includes(key)
+        ? {}
+        : arrayKeys.includes(key)
+        ? []
+        : ''
+    ) as T;
   }
 
   clear(key: StoreKey) {

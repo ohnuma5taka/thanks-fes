@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict
 class AnswerModel(BaseModel):
     id: Optional[int] = None
     panelist_id: Optional[int] = None
-    question_id: Optional[int] = None
+    question_id: Optional[str] = None
     answer: Optional[str] = None
     correct: Optional[int] = None
     score: Optional[int] = None
@@ -17,7 +17,7 @@ class AnswerModel(BaseModel):
 
 class PostAnswerModel(BaseModel):
     panelist_id: Optional[int] = None
-    question_id: Optional[int] = None
+    question_id: Optional[str] = None
     answer: Optional[str] = None
     elapsed_second: Optional[float] = None
 
@@ -25,7 +25,7 @@ class PostAnswerModel(BaseModel):
 
 
 class GetAnswerCountsModel(BaseModel):
-    question_id: Optional[int] = None
+    question_id: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -38,7 +38,7 @@ class TeamAnswerModel(BaseModel):
 
 
 class PostTeamAnswerModel(BaseModel):
-    question_id: Optional[int] = None
+    question_id: Optional[str] = None
     team_answers: Optional[list[TeamAnswerModel]] = None
 
     model_config = ConfigDict(from_attributes=True)

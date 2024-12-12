@@ -33,7 +33,7 @@ def get_teams() -> List[str]:
         return sorted([x[0] for x in db.query(distinct(Panelist.team)).all()])
 
 
-def get_unanswered_list(question_id: int = None) -> list[Panelist]:
+def get_unanswered_list(question_id: str = None) -> list[Panelist]:
     with connect_session() as db:
         ids = [x.id for x in db.query(Panelist).all()]
         return db.query(Panelist) \

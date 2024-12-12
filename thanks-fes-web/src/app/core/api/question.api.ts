@@ -6,13 +6,13 @@ import { Injectable } from '@angular/core';
 export class QuestionApi {
   constructor(private apiService: ApiService) {}
 
-  async getAnswer(id: number) {
-    return await this.apiService.get<string>(`/questions/${id}/answer`);
+  async getAnswer(questionId: string) {
+    return await this.apiService.get<string>(`/questions/${questionId}/answer`);
   }
 
-  async updateAnswer(id: number, body: UpdateQuestionAnswerRequest) {
+  async updateAnswer(questionId: string, body: UpdateQuestionAnswerRequest) {
     return await this.apiService.put<undefined>(
-      `/questions/${id}/answer`,
+      `/questions/${questionId}/answer`,
       body
     );
   }

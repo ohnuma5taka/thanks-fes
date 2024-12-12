@@ -13,7 +13,7 @@ async def get_all():
 
 
 @router.get('/count', summary='解答数リスト取得API', response_model=dict[str, int])
-async def get_counts(question_id: int):
+async def get_counts(question_id: str):
     options = option_crud.get_question_list(question_id)
     return {
         option.value: answer_crud.get_question_count(question_id, value=option.value)
@@ -22,12 +22,12 @@ async def get_counts(question_id: int):
 
 
 @router.get('/score', summary='スコア取得API', response_model=int)
-async def get_counts(question_id: int, panelist_id: int):
+async def get_counts(question_id: str, panelist_id: int):
     return answer_crud.get_score(question_id, panelist_id)
 
 
 @router.post('/questions/{question_id}/dummy', summary='無解答者用ダミー解答API', response_model=None)
-async def create_question_dummy(question_id: int):
+async def create_question_dummy(question_id: str):
     question = question_crud.get(question_id)
     answers = [Answer(
         panelist_id=panelist.id,
@@ -57,7 +57,7 @@ async def create_teams(body: PostTeamAnswerModel):
 
 
 @router.get('/teams', summary='チーム解答リスト取得API', response_model=list[TeamScoreModel])
-async def get_team_answers(question_id: int):
+async def get_team_answers(question_id: str):
     return [TeamScoreModel(
         team=team,
         correct=round(avg_correct),

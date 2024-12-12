@@ -16,6 +16,8 @@ import { Period } from '@/app/core/models/period.model';
 import { PeriodApi } from '@/app/core/api/period.api';
 import { env } from '@/environments/env';
 import { StoreService } from '@/app/core/services/store.service';
+import { Question } from '@/app/core/models/question.model';
+import { SelectOption } from '@/app/components/atoms/fes-select/fes-select.component';
 
 @Component({
   selector: 'admin',
@@ -24,6 +26,10 @@ import { StoreService } from '@/app/core/services/store.service';
 })
 export class AdminComponent {
   registeredCounts: RegisteredPanelistCount[] = [];
+  period: Period;
+  questions: Question[] = [];
+  question: Question;
+  options: SelectOption<string>[] = [];
   periodNumber = 0;
   questionNumber = 0;
   periods: Period[] = [];
@@ -31,28 +37,7 @@ export class AdminComponent {
   steps: Step[] = [];
   teamAnswers: TeamAnswer[] = [];
   stepHistories: FesStep[] = [];
-  teamAnswerSubmitted = false;
-  answerSubmitted = false;
   answer = '';
-
-  get period() {
-    return this.periods.find((x) => x.number === this.periodNumber);
-  }
-
-  get questions() {
-    return this.period?.questions || [];
-  }
-
-  get question() {
-    return this.questions.find((x) => x.index === this.questionNumber);
-  }
-
-  get answerOptions() {
-    return this.question.options.map((x) => ({
-      label: x.value,
-      value: x.value,
-    }));
-  }
 
   get step() {
     return this.steps[this.stepIndex];
@@ -96,6 +81,24 @@ export class AdminComponent {
     return this.registeredCounts.reduce((ret, x) => ret + x.count, 0);
   }
 
+  get noPanelistAnswer() {
+    return (
+      this.question &&
+      !this.question.answer &&
+      this.period.panelistType === '個人' &&
+      this.step === '解答結果'
+    );
+  }
+
+  get noTeamAnswer() {
+    return (
+      this.question &&
+      !this.question.answer &&
+      this.period.panelistType === 'チーム' &&
+      this.step === '解答開始'
+    );
+  }
+
   constructor(
     private store: StoreService,
     private periodApi: PeriodApi,
@@ -112,12 +115,9 @@ export class AdminComponent {
       this.fetchRegisteredCount(),
       this.connectWebsocket(),
     ]);
-    const fesStep = this.store.getters.fesStep();
-    if (fesStep.step) {
-      this.stepIndex = fesStep.stepIndex;
-      this.periodNumber = fesStep.periodNumber;
-      this.questionNumber = fesStep.questionNumber;
-    }
+    const fesStep = await this.store.getters.fesStep();
+    [...Array(fesStep.stepIndex || 0)].forEach((_) => this.next());
+    this.sendStep();
   }
 
   panelistWebsocketCallback(data: RegisteredPanelistCount[]) {
@@ -149,12 +149,12 @@ export class AdminComponent {
   }
 
   async registerAnswer() {
-    this.answerSubmitted = true;
     const body: UpdateQuestionAnswerRequest = {
-      id: this.question.id,
+      questionId: this.question.id,
       answer: this.answer,
     };
     await this.questionApi.updateAnswer(this.question.id, body);
+    this.question.answer = '1';
   }
 
   async answerTeam() {
@@ -166,7 +166,7 @@ export class AdminComponent {
       })),
     };
     await this.answerApi.answerTeams(body);
-    this.teamAnswerSubmitted = true;
+    this.question.answer = '1';
   }
 
   next() {
@@ -186,23 +186,6 @@ export class AdminComponent {
       this.questionNumber = 0;
     }
     if (this.step === '問題開始') this.questionNumber += 1;
-    this.sendStep();
-
-    if (
-      this.question &&
-      !this.question.answer &&
-      this.period.panelistType === '個人'
-    )
-      this.answerSubmitted = false;
-
-    if (
-      this.question &&
-      !this.question.answer &&
-      this.period.panelistType === 'チーム'
-    ) {
-      this.teamAnswerSubmitted = false;
-      this.fetchTeams();
-    }
   }
 
   back() {
@@ -233,6 +216,21 @@ export class AdminComponent {
   }
 
   sendStep() {
+    this.period = this.periods.find((x) => x.number === this.periodNumber);
+    this.questions = this.period?.questions || [];
+    this.question = this.questions.find((x) => x.index === this.questionNumber);
+    this.options =
+      this.question?.options.map((x) => ({
+        label: x.value,
+        value: x.value,
+      })) || [];
+    if (
+      this.question &&
+      !this.question.answer &&
+      this.period.panelistType === 'チーム'
+    ) {
+      this.fetchTeams();
+    }
     const fesStep: FesStep = {
       periodNumber: this.periodNumber,
       questionNumber: this.questionNumber,

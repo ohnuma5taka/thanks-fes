@@ -12,9 +12,16 @@
   @extend .gy-9;
 }
 
-#thanks-fes-title {
+#title-image {
   width: 75vw;
+  transform: translate(100px, 150px) scale(0);
+  transition: transform 1s;
+
+  &.display {
+    transform: translate(0) scale(1);
+  }
 }
+
 .title-image {
   width: 75vw;
 }

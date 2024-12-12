@@ -3,7 +3,7 @@ import { Option } from '@/app/core/models/option.model';
 export type QuestionFormat = '' | '文字' | '画像' | '動画';
 
 export class Question {
-  id: number;
+  id: string;
   period: number;
   index: number;
   questionFormat: QuestionFormat;

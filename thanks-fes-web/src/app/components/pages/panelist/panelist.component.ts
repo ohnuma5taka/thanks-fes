@@ -15,6 +15,7 @@ import { ResultApi } from '@/app/core/api/result.api';
 import { Result } from '@/app/core/models/result.model';
 import { Period } from '@/app/core/models/period.model';
 import { PeriodApi } from '@/app/core/api/period.api';
+import { sleep } from '@/app/core/utils/time.util';
 
 export type PanelistQueryParam = {
   name: string;
@@ -29,12 +30,13 @@ export type PanelistQueryParam = {
 export class PanelistComponent {
   panelist: Panelist = new Panelist();
   panelistNameError = false;
+  panelistRegisteredByStore = false;
   periodNumber = 0;
   questionNumber = 0;
   periods: Period[] = [];
   selectedAnswer = '';
   questionAnswer = '';
-  step: Step = 'タイトル';
+  step: Step = '';
   timer: NodeJS.Timeout;
   questionOptions = questionOptions;
   remainedSecond = 0;
@@ -71,21 +73,36 @@ export class PanelistComponent {
   ) {}
 
   async ngOnInit() {
+    await Promise.all([this.fetchPeriods(), this.connectWebsocket()]);
+    const fesStep = this.store.getters.fesStep();
+    if (fesStep.step) this.stepWebsocketCallback({ data: fesStep });
+    this.displayTitle();
+  }
+
+  async displayTitle() {
+    await sleep(1);
+    const titleImage = document.getElementById('title-image');
+    if (titleImage) titleImage.classList.add('display');
+  }
+
+  async keepScreenAlive() {
+    const noSleep = new NoSleep();
+    noSleep.enable();
+    document.getElementById('wake-lock-overlay').remove();
     const panelist = this.store.getters.panelist();
     if (panelist.name) {
       this.panelist = new Panelist(panelist);
       try {
         const body = { name: this.panelist.name };
         this.panelist.id = await this.panelistApi.getId(body);
-        this.step = 'オープニング';
+        this.store.setters.panelist(this.panelist);
+        this.step = '登録完了';
+        this.panelistRegisteredByStore = true;
       } catch {
         this.store.clear('panelist');
         this.setUrlQuery();
       }
     } else this.setUrlQuery();
-    await Promise.all([this.fetchPeriods(), this.connectWebsocket()]);
-    const fesStep = this.store.getters.fesStep();
-    if (fesStep.step) this.stepWebsocketCallback({ data: fesStep });
   }
 
   setUrlQuery() {
@@ -93,21 +110,17 @@ export class PanelistComponent {
     const urlQuery = locationUtil.urlQuery() as PanelistQueryParam;
     this.panelist.name = urlQuery.name || '';
     this.panelist.team = urlQuery.team || '';
-  }
-
-  keepScreenAlive() {
-    const noSleep = new NoSleep();
-    noSleep.enable();
-    document.getElementById('wake-lock-overlay').remove();
-    this.step = 'オープニング';
+    this.store.setters.panelist(this.panelist);
+    this.step = '名前登録';
   }
 
   stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {
     if (!this.panelist.id) return;
-    this.step = res.data.step;
+    this.step = res.data.step || 'タイトル';
     this.periodNumber = res.data.periodNumber;
     this.questionNumber = res.data.questionNumber;
     this.store.setters.fesStep(res.data);
+    if (this.step === 'タイトル') this.displayTitle();
     if (this.step === '解答開始') {
       this.questionAnswer = '';
       this.selectedAnswer = '';
@@ -126,8 +139,11 @@ export class PanelistComponent {
       this.submit();
     if (this.step === '解答開示') this.fetchAnswer();
     if (this.step === 'ピリオド成績') this.fetchPanelistPeriodResult();
+    if (this.step === '総合チームランキングタイトル') this.displayTitle();
     if (this.step === '総合チーム成績') this.fetchTeamResult();
-    if (this.step === '総合個人成績') this.fetchPanelistResult();
+    if (this.step === '総合ランキングタイトル') this.displayTitle();
+    if (this.step === '総合成績') this.fetchPanelistResult();
+    if (this.step === '景品発表') this.displayTitle();
   }
 
   connectWebsocket() {
@@ -144,6 +160,7 @@ export class PanelistComponent {
       const panelist = await this.panelistApi.create(this.panelist);
       this.store.setters.panelist(panelist);
       this.panelist = panelist;
+      this.step = '登録完了';
     } catch (e) {
       this.panelistNameError = true;
     }

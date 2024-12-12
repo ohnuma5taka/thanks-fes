@@ -41,9 +41,9 @@ export const createSteps = (periods: Period[]): Step[] => {
     ...(periods.some((x) => x.panelistType === 'チーム' && x.awardCount)
       ? teamRankingSteps
       : []),
-    '総合個人ランキングタイトル',
-    '総合個人ランキング',
-    '総合個人成績',
+    '総合ランキングタイトル',
+    '総合ランキング',
+    '総合成績',
     '景品発表',
     '提供',
     'エンディング',

@@ -24,10 +24,7 @@ $yellow-highlight: #fffc4b;
   @extend .gy-9;
 }
 
-#thanks-fes-title,
-#total-team-ranking-title,
-#total-panelist-ranking-title,
-#award-prize-title {
+#title-image {
   transform: translate(100px, 150px) scale(0);
   transition: transform 1s;
 
@@ -197,24 +194,25 @@ $yellow-highlight: #fffc4b;
 }
 
 .question-additional-info {
+  $info-height: calc(100vh - $question-width - 96px);
   &.vertical-info {
-    // min-height: calc(100vh - $question-width - 96px);
-
-    img,
-    video {
-      height: 100%;
-    }
-  }
-  &.horizontal-info {
-    $horizontal-info-height: calc(100vh - $question-width - 96px * 2);
-    @extend .d-flex-center;
-    width: 100%;
-    min-height: $horizontal-info-height;
-    max-height: $horizontal-info-height;
     img,
     video {
       width: auto;
-      height: $horizontal-info-height;
+      min-height: $info-height;
+      max-height: $info-height;
+    }
+  }
+  &.horizontal-info {
+    @extend .d-flex-center;
+    width: 100%;
+    min-height: $info-height;
+    max-height: $info-height;
+    img,
+    video {
+      width: auto;
+      min-height: $info-height;
+      max-height: $info-height;
     }
   }
 }

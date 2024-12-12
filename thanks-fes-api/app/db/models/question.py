@@ -9,7 +9,7 @@ class Question(Base):
     __tablename__ = 'questions'
     __table_args__ = {'schema': env.db_schema}
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     period = Column(Integer, nullable=False, default=0)
     idx = Column(Integer, nullable=False, default=0)
     question_format = Column(String, nullable=False, default='')

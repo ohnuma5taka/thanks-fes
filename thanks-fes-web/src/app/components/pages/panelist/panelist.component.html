@@ -1,202 +1,214 @@
 <div class="panelist-page">
   <div
     id="wake-lock-overlay"
-    [ngClass]="{ 'title-page': step === 'タイトル' }"
+    [ngClass]="{ 'title-page': step === '' }"
     (click)="keepScreenAlive()"
   >
     <span class="fs-36 blinking text-white">タップしてスタート</span>
   </div>
 
+  <ng-container
+    *ngIf="step === '' || step === '名前登録' || step === '登録完了'"
+  >
+    <img id="title-image" src="/assets/images/logo.png" />
+  </ng-container>
+
   <ng-container *ngIf="step === 'タイトル' || step === 'オープニング'">
-    <img id="thanks-fes-title" src="/assets/images/logo.png" />
+    <img id="title-image" src="/assets/images/logo.png" />
   </ng-container>
 
-  <ng-container *ngIf="step === 'オープニング'">
-    <ng-container *ngIf="!panelist.id">
-      <div class="flex-column-main">
-        <span
-          *ngIf="panelist.team"
-          class="result-panelist-label"
-          [ngClass]="panelist.team"
-          >{{ panelist.team }}チーム</span
-        >
-        <div class="panelist-register-glass">
-          <span class="text-white text-center"
-            >▼ 好きな名前を自由に入力してください ▼</span
-          >
-          <span
-            *ngIf="panelistNameError"
-            class="alert-color text-center text-border-white-thin"
-            >既に同じ名前が使用されています。<br />違う名前を設定して下さい。</span
-          >
-          <fes-input
-            class="w-100"
-            [value]="panelist.name"
-            placeholder="好きな名前を記入"
-            [clearable]="true"
-            style="background-color: white"
-            (emitInput)="panelist.name = $event.slice(0, 12)"
-          ></fes-input>
-          <fes-button
-            class="w-100"
-            colorMode="primary"
-            [height]="48"
-            [outlined]="true"
-            [disabled]="!panelist.name"
-            (emitClick)="createPanelist()"
-            ><div class="register-button" [ngClass]="panelist.team">
-              この名前で参加する！
-            </div></fes-button
-          >
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="panelist.id">
-      <div class="flex-column-sub text-white">
-        <span class="small-title">登録が完了しました。</span>
-        <span class="small-title">開始までしばらくお待ちください。</span>
-      </div>
-    </ng-container>
-  </ng-container>
-
-  <ng-container *ngIf="step === 'ピリオド開始' || step === 'ピリオド説明'">
-    <div class="flex-column-sub animate__animated animate__fadeIn">
-      <span class="period-label">Period</span>
-      <span class="period-number">{{ period.number }}</span>
-    </div>
-  </ng-container>
-
-  <ng-container *ngIf="step === '問題開始'">
-    <span class="question-title">{{
-      question.questionFormat === "動画" ? "動画問題" : "問題"
-    }}</span>
-  </ng-container>
-
-  <ng-container
-    *ngIf="
-      step === '解答開始' ||
-      step === '解答結果' ||
-      step === '解答開示' ||
-      step === 'ピリオド終了'
-    "
-  >
-    <div class="answer-container">
-      <span *ngIf="step === '解答開始' || step === '解答結果'" class="title">{{
-        remainedSecond
-          ? "残り時間：" + remainedSecond.toFixed(2) + "秒"
-          : "TIME UP"
-      }}</span>
-      <img
-        *ngIf="
-          (step === '解答開示' || step === 'ピリオド終了') && questionAnswer
-        "
-        [src]="
-          '/assets/images/' +
-          (selectedAnswer === questionAnswer ? 'correct' : 'incorrect') +
-          '.png'
-        "
-      />
-    </div>
-
-    <div
-      *ngIf="period.panelistType === '個人'"
-      class="w-100"
-      [ngClass]="
-        horizontalLayout ? 'edge-option-wrapper' : 'd-flex-column gy-3'
-      "
-    >
-      <fes-button
-        *ngFor="let option of question.options; index as i"
-        class="option-button"
-        [ngClass]="{
-          'show-border': option.value === selectedAnswer,
-          'flash-border':
-            (step === '解答開示' || step === 'ピリオド終了') &&
-            option.value === questionAnswer
-        }"
-        [colorMode]="questionOptions[i].colorMode"
-        [borderWidth]="2"
-        [height]="horizontalLayout ? 120 : 60"
-        (emitClick)="answer(option.value)"
-      >
-        <div class="wh-100 d-flex-center title position-relative">
-          {{ i + 1 }}
-          <div
-            *ngIf="
-              !(
-                (step === '解答開示' || step === 'ピリオド終了') &&
-                option.value === questionAnswer
-              ) &&
-              ((!remainedSecond && !selectedAnswer) ||
-                (selectedAnswer && selectedAnswer !== option.value))
-            "
-            class="dark-overlay"
-          ></div>
-        </div>
-      </fes-button>
-    </div>
-  </ng-container>
-
-  <ng-container
-    *ngIf="
-      step === '総合チームランキングタイトル' ||
-      step === '総合チームランキング' ||
-      step === '総合個人ランキングタイトル' ||
-      step === '総合個人ランキング' ||
-      step === '景品発表' ||
-      step === '提供' ||
-      step === 'エンディング'
-    "
-  >
-    <img
-      class="title-image"
-      [src]="
-        step === '総合チームランキングタイトル' ||
-        step === '総合チームランキング'
-          ? '/assets/images/total-team-ranking-title.png'
-          : step === '総合個人ランキングタイトル' ||
-            step === '総合個人ランキング'
-          ? '/assets/images/total-panelist-ranking-title.png'
-          : step === '景品発表'
-          ? '/assets/images/award-prize-title.png'
-          : step === '提供'
-          ? '/assets/images/sponsor.png'
-          : '/assets/images/ending.png'
-      "
-    />
-  </ng-container>
-
-  <ng-container
-    *ngIf="
-      (step === 'ピリオド成績' ||
-        step === '総合チーム成績' ||
-        step === '総合個人成績') &&
-      result
-    "
-  >
-    <span *ngIf="step === 'ピリオド成績'" class="period-label-no-shadow"
-      >Period {{ period.number }}</span
-    >
-    <span
-      *ngIf="step === '総合個人成績' || period?.panelistType === '個人'"
-      class="small-title"
-      ><span class="result-panelist-label">{{ panelist.name }}</span
-      >さん
-    </span>
-    <span
-      *ngIf="step === '総合チーム成績' || period?.panelistType === 'チーム'"
-      class="small-title"
-      ><span class="result-panelist-label" [ngClass]="panelist.team"
+  <ng-container *ngIf="step === '名前登録'">
+    <div class="flex-column-main">
+      <span
+        *ngIf="panelist.team"
+        class="result-panelist-label"
+        [ngClass]="panelist.team"
         >{{ panelist.team }}チーム</span
       >
-    </span>
-    <span *ngIf="result" class="period-label-no-shadow"
-      >{{ result.score }}<span class="pl-3" style="font-size: 28px">P</span>
-    </span>
-    <span
-      *ngIf="result && step !== 'ピリオド成績'"
-      class="period-label-no-shadow"
-      >第{{ result.rank }}位</span
+      <div class="panelist-register-glass">
+        <span class="text-white text-center"
+          >▼ 好きな名前を自由に入力してください ▼</span
+        >
+        <span
+          *ngIf="panelistNameError"
+          class="alert-color text-center text-border-white-thin"
+          >既に同じ名前が使用されています。<br />違う名前を設定して下さい。</span
+        >
+        <fes-input
+          class="w-100"
+          [value]="panelist.name"
+          placeholder="好きな名前を記入"
+          [clearable]="true"
+          style="background-color: white"
+          (emitInput)="panelist.name = $event.slice(0, 12)"
+        ></fes-input>
+        <fes-button
+          class="w-100"
+          colorMode="primary"
+          [height]="48"
+          [outlined]="true"
+          [disabled]="!panelist.name"
+          (emitClick)="createPanelist()"
+          ><div class="register-button" [ngClass]="panelist.team">
+            この名前で参加する！
+          </div></fes-button
+        >
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="step === '登録完了'">
+    <div class="flex-column-sub text-white">
+      <span class="small-title">{{
+        panelistRegisteredByStore ? "登録は完了済みです" : "登録が完了しました"
+      }}</span>
+      <span class="small-title">開始までしばらくお待ちください</span>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="panelist.id">
+    <ng-container *ngIf="step === 'ピリオド開始' || step === 'ピリオド説明'">
+      <div class="flex-column-sub animate__animated animate__fadeIn">
+        <span class="period-label">Period</span>
+        <span class="period-number">{{ period.number }}</span>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="step === '問題開始'">
+      <span class="question-title">{{
+        question.questionFormat === "動画" ? "動画問題" : "問題"
+      }}</span>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        step === '解答開始' ||
+        step === '解答結果' ||
+        step === '解答開示' ||
+        step === 'ピリオド終了'
+      "
     >
+      <div class="answer-container">
+        <span
+          *ngIf="step === '解答開始' || step === '解答結果'"
+          class="title"
+          >{{
+            remainedSecond
+              ? "残り時間：" + remainedSecond.toFixed(2) + "秒"
+              : "TIME UP"
+          }}</span
+        >
+        <img
+          *ngIf="
+            (step === '解答開示' || step === 'ピリオド終了') && questionAnswer
+          "
+          [src]="
+            '/assets/images/' +
+            (selectedAnswer === questionAnswer ? 'correct' : 'incorrect') +
+            '.png'
+          "
+        />
+      </div>
+
+      <div
+        *ngIf="period.panelistType === '個人'"
+        class="w-100"
+        [ngClass]="
+          horizontalLayout ? 'edge-option-wrapper' : 'd-flex-column gy-3'
+        "
+      >
+        <fes-button
+          *ngFor="let option of question.options; index as i"
+          class="option-button"
+          [ngClass]="{
+            'show-border': option.value === selectedAnswer,
+            'flash-border':
+              (step === '解答開示' || step === 'ピリオド終了') &&
+              option.value === questionAnswer
+          }"
+          [colorMode]="questionOptions[i].colorMode"
+          [borderWidth]="2"
+          [height]="horizontalLayout ? 120 : 60"
+          (emitClick)="answer(option.value)"
+        >
+          <div class="wh-100 d-flex-center title position-relative">
+            {{ i + 1 }}
+            <div
+              *ngIf="
+                !(
+                  (step === '解答開示' || step === 'ピリオド終了') &&
+                  option.value === questionAnswer
+                ) &&
+                ((!remainedSecond && !selectedAnswer) ||
+                  (selectedAnswer && selectedAnswer !== option.value))
+              "
+              class="dark-overlay"
+            ></div>
+          </div>
+        </fes-button>
+      </div>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        step === '総合チームランキングタイトル' ||
+        step === '総合チームランキング' ||
+        step === '総合ランキングタイトル' ||
+        step === '総合ランキング' ||
+        step === '景品発表' ||
+        step === '提供' ||
+        step === 'エンディング'
+      "
+    >
+      <img
+        id="title-image"
+        class="title-image"
+        [src]="
+          step === '総合チームランキングタイトル' ||
+          step === '総合チームランキング'
+            ? '/assets/images/total-team-ranking-title.png'
+            : step === '総合ランキングタイトル' || step === '総合ランキング'
+            ? '/assets/images/total-panelist-ranking-title.png'
+            : step === '景品発表'
+            ? '/assets/images/award-prize-title.png'
+            : step === '提供'
+            ? '/assets/images/sponsor.png'
+            : '/assets/images/ending.png'
+        "
+      />
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        (step === 'ピリオド成績' ||
+          step === '総合チーム成績' ||
+          step === '総合成績') &&
+        result
+      "
+    >
+      <span *ngIf="step === 'ピリオド成績'" class="period-label-no-shadow"
+        >Period {{ period.number }}</span
+      >
+      <span
+        *ngIf="step === '総合成績' || period?.panelistType === '個人'"
+        class="small-title"
+        ><span class="result-panelist-label">{{ panelist.name }}</span
+        >さん
+      </span>
+      <span
+        *ngIf="step === '総合チーム成績' || period?.panelistType === 'チーム'"
+        class="small-title"
+        ><span class="result-panelist-label" [ngClass]="panelist.team"
+          >{{ panelist.team }}チーム</span
+        >
+      </span>
+      <span *ngIf="result" class="period-label-no-shadow"
+        >{{ result.score }}<span class="pl-3" style="font-size: 28px">P</span>
+      </span>
+      <span
+        *ngIf="result && step !== 'ピリオド成績'"
+        class="period-label-no-shadow"
+        >第{{ result.rank }}位</span
+      >
+    </ng-container>
   </ng-container>
 </div>

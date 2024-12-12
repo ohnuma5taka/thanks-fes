@@ -31,10 +31,19 @@
   width: 100%;
 }
 
+.answer-form {
+  @extend .d-flex-column;
+  @extend .gy-3;
+  width: 100%;
+  max-width: 400px;
+}
+
 .team-answer-form {
   @extend .d-flex;
   @extend .align-center;
   @extend .gx-1;
+  width: 100%;
+  max-width: 400px;
   $label-width: 120px;
 
   .team-answer-form-label {

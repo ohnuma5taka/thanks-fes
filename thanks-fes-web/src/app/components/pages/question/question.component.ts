@@ -81,7 +81,7 @@ export class QuestionComponent {
     this.periodNumber = res.data.periodNumber;
     this.questionNumber = res.data.questionNumber;
     this.store.setters.fesStep(res.data);
-    if (this.step === 'タイトル') this.displayTitle('thanks-fes-title');
+    if (this.step === 'タイトル') this.displayTitle();
     if (this.step === '問題開始') {
       this.questionAnswer = '';
       this.answerCount = {} as AnswerCount;
@@ -95,18 +95,16 @@ export class QuestionComponent {
     if (this.step === '解答結果') this.getAnswerCount();
     if (this.step === '解答開示') this.getAnswer();
     if (this.step === 'ピリオドランキング') this.fetchPeriodResults();
-    if (this.step === '総合チームランキングタイトル')
-      this.displayTitle('total-team-ranking-title');
+    if (this.step === '総合チームランキングタイトル') this.displayTitle();
     if (this.step === '総合チームランキング') this.fetchTeamResults();
-    if (this.step === '総合個人ランキングタイトル')
-      this.displayTitle('total-panelist-ranking-title');
-    if (this.step === '総合個人ランキング') this.fetchPanelistResults();
-    if (this.step === '景品発表') this.displayTitle('award-prize-title');
+    if (this.step === '総合ランキングタイトル') this.displayTitle();
+    if (this.step === '総合ランキング') this.fetchPanelistResults();
+    if (this.step === '景品発表') this.displayTitle();
   }
 
-  async displayTitle(id: string) {
+  async displayTitle() {
     await sleep(1);
-    const titleImage = document.getElementById(id);
+    const titleImage = document.getElementById('title-image');
     if (titleImage) titleImage.classList.add('display');
   }
 

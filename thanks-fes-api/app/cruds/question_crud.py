@@ -1,11 +1,10 @@
 from typing import List
 
-from app.db.models.period import Period
 from app.db.models.question import Question
 from app.db.session import connect_session
 
 
-def get(_id: int = None) -> Question:
+def get(_id: str = None) -> Question:
     with connect_session() as db:
         return db.query(Question).get(_id)
 
@@ -30,7 +29,7 @@ def save(item: Question) -> Question:
         return item
 
 
-def delete(_id: int) -> Question:
+def delete(_id: str) -> Question:
     with connect_session() as db:
         item = db.query(Question).get(_id)
         db.delete(item)

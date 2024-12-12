@@ -11,7 +11,7 @@ class Answer(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     panelist_id = Column(Integer, nullable=False, default=0)
-    question_id = Column(Integer, nullable=False, default=0)
+    question_id = Column(String, nullable=False)
     answer = Column(String, unique=True, default='')
     correct = Column(Integer, nullable=False, default=0)
     score = Column(Integer, nullable=False, default=0)

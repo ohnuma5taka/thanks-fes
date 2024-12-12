@@ -1,6 +1,6 @@
 export type Answer = {
   panelistId: number;
-  questionId: number;
+  questionId: string;
   answer: string;
   elapsedSecond: number;
 };
@@ -12,25 +12,25 @@ export type TeamAnswer = {
 };
 
 export type GetAnswerCountRequest = {
-  questionId: number;
+  questionId: string;
 };
 
 export type GetScoreRequest = {
-  questionId: number;
+  questionId: string;
   panelistId: number;
 };
 
 export type GetTeamAnswersRequest = {
-  questionId: number;
+  questionId: string;
 };
 
 export type PostAnswerTeamRequest = {
-  questionId: number;
+  questionId: string;
   teamAnswers: TeamAnswer[];
 };
 
 export type UpdateQuestionAnswerRequest = {
-  id: number;
+  questionId: string;
   answer: string;
 };
 

@@ -23,7 +23,7 @@ def get_questions_list(question_ids: list[int] = None):
         return db.query(Answer).filter(Answer.question_id.in_(question_ids)).all()
 
 
-def get_question_list(question_id: int = None):
+def get_question_list(question_id: str = None):
     with connect_session() as db:
         return db.query(Answer).filter(Answer.question_id == question_id).all()
 
@@ -33,14 +33,14 @@ def get_panelist_list(panelist_id: int = None) -> List[Answer]:
         return db.query(Answer).filter(Answer.panelist_id == panelist_id).all()
 
 
-def get_question_count(question_id: int = None, value: str = None) -> int:
+def get_question_count(question_id: str = None, value: str = None) -> int:
     with connect_session() as db:
         return db.query(Answer) \
             .filter(and_(Answer.question_id == question_id, Answer.answer == value)) \
             .count()
 
 
-def get_score(question_id: int = None, panelist_id: int = None) -> int:
+def get_score(question_id: str = None, panelist_id: int = None) -> int:
     with connect_session() as db:
         return db.query(Answer.score) \
             .filter(and_(Answer.question_id == question_id, Answer.panelist_id == panelist_id)) \
@@ -53,7 +53,7 @@ def count_panelist_score(panelist_id: int = None) -> int:
             .filter(Answer.panelist_id == panelist_id).scalar()
 
 
-def get_team_answer_list(question_id: int = None) -> list[str, int]:
+def get_team_answer_list(question_id: str = None) -> list[str, int]:
     with connect_session() as db:
         return db.query(Panelist.team, func.avg(Answer.correct), func.avg(Answer.score)) \
             .join(Panelist, Panelist.id == Answer.panelist_id) \

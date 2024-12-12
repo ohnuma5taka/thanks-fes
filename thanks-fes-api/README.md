@@ -3,7 +3,7 @@
 ## For Production
 
 ```
-docker build -t thanks-fes-api .
+docker build --build-arg APP_MODE=prod -t thanks-fes-api .
 docker network create thanks-fes-network
 docker run --name thanks-fes-api -itd -p 8888:8888 --network thanks-fes-network --volume ./app:/src/app --tty thanks-fes-api
 ```
@@ -26,5 +26,5 @@ python main.py
 ### Seed
 
 ```
-python seed.py dev
+python seed.py --mode dev
 ```

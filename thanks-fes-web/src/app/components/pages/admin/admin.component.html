@@ -19,14 +19,9 @@
       [height]="100"
       colorMode="success"
       [disabled]="
-        step === steps.slice(-1)[0] ||
-        (question &&
-          !question.answer &&
-          step === '解答開始' &&
-          !answerSubmitted &&
-          !teamAnswerSubmitted)
+        step === steps.slice(-1)[0] || noPanelistAnswer || noTeamAnswer
       "
-      (emitClick)="next()"
+      (emitClick)="next(); sendStep()"
     >
       <span class="fs-24">次：{{ nextStep }}</span>
     </fes-button>
@@ -58,45 +53,45 @@
       {{ registeredCount.team }}チーム：{{ registeredCount.count }}名
     </p>
   </div>
-  <div
-    *ngIf="
-      question &&
-      !question.answer &&
-      period.panelistType === '個人' &&
-      step === '解答開始' &&
-      !answerSubmitted
-    "
-    class="d-flex-column gy-3"
-  >
-    <fes-select
-      class="form"
-      [value]="answer"
-      [options]="answerOptions"
-      (select)="answer = $event"
-    ></fes-select>
-    <fes-button [height]="32" (emitClick)="registerAnswer()">登録</fes-button>
+  <div *ngIf="noPanelistAnswer" class="w-100 d-flex-center">
+    <div class="answer-form">
+      <span class="small-title">解答を入力</span>
+      <fes-select
+        class="form"
+        placeholder="正解を選択"
+        [value]="answer"
+        [options]="options"
+        (select)="answer = $event"
+      ></fes-select>
+      <fes-button
+        class="w-100"
+        colorMode="success"
+        [height]="48"
+        [disabled]="!answer"
+        (emitClick)="registerAnswer()"
+        >登録</fes-button
+      >
+    </div>
   </div>
-  <div
-    *ngIf="
-      question &&
-      !question.answer &&
-      period.panelistType === 'チーム' &&
-      step === '解答開始' &&
-      !teamAnswerSubmitted
-    "
-    class="d-flex-column gy-3"
-  >
+  <div *ngIf="noTeamAnswer" class="w-100 d-flex-column align-center gy-3">
+    <span class="small-title">スコアを入力</span>
     <div *ngFor="let teamAnswer of teamAnswers" class="team-answer-form">
       <span class="team-answer-form-label">{{ teamAnswer.team }}チーム：</span>
       <fes-input
         class="form team-answer-form"
         [value]="teamAnswer.correctText"
         type="number"
-        placeholder="正解数"
+        placeholder="スコア"
         [clearable]="true"
         (emitInput)="teamAnswer.correctText = $event"
       ></fes-input>
     </div>
-    <fes-button [height]="40" (emitClick)="answerTeam()">登録</fes-button>
+    <fes-button
+      class="team-answer-form"
+      colorMode="success"
+      [height]="48"
+      (emitClick)="answerTeam()"
+      >登録</fes-button
+    >
   </div>
 </div>
