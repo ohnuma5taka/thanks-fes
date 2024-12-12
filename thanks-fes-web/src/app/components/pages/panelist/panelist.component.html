@@ -201,14 +201,15 @@
           >{{ panelist.team }}チーム</span
         >
       </span>
-      <span *ngIf="result" class="period-label-no-shadow"
-        >{{ result.score }}<span class="pl-3" style="font-size: 28px">P</span>
-      </span>
       <span
         *ngIf="result && step !== 'ピリオド成績'"
         class="period-label-no-shadow"
         >第{{ result.rank }}位</span
       >
+      <span *ngIf="result && result.score" class="period-label-no-shadow"
+        >{{ result.score }}<span class="pl-3" style="font-size: 28px">P</span>
+      </span>
+      <span *ngIf="result && !result.score" class="small-title">落選... </span>
     </ng-container>
   </ng-container>
 </div>

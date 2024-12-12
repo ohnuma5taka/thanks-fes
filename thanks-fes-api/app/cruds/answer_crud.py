@@ -94,6 +94,7 @@ def get_panelist_period_results(period: int = None) -> list[tuple[int, int, floa
             Answer.elapsed_second
         ) \
             .filter(Answer.question_id == last_question.id, Answer.score > 0) \
+            .order_by(Answer.elapsed_second) \
             .all()]
 
 
