@@ -11,6 +11,7 @@ export class Question {
   text: string;
   second: number;
   answer: string;
+  point: number;
   options: Option[];
   timerFilePath?: string;
   file?: {
@@ -29,6 +30,7 @@ export class Question {
     this.text = params.text;
     this.second = params.second;
     this.answer = params.answer;
+    this.point = params.point;
     this.options = params.options.map((x) => ({
       ...x,
       transform: `translate(${x.imageOriginX * 100 - 50}%, ${

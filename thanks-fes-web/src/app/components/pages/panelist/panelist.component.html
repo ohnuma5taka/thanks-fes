@@ -14,7 +14,10 @@
   <ng-container *ngIf="step === 'オープニング'">
     <ng-container *ngIf="!panelist.id">
       <div class="flex-column-main">
-        <span class="result-panelist-label" [ngClass]="panelist.team"
+        <span
+          *ngIf="panelist.team"
+          class="result-panelist-label"
+          [ngClass]="panelist.team"
           >{{ panelist.team }}チーム</span
         >
         <div class="panelist-register-glass">

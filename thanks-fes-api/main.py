@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -62,3 +63,14 @@ async def health_check():
 @app.post('/seed', summary='DB初期化API', response_model=None)
 async def init_db():
     seed()
+
+
+if __name__ == '__main__':
+    uvicorn.run(
+        "main:app",
+        workers=1,
+        host='0.0.0.0',
+        port=8888,
+        ws_ping_interval=25,
+        reload=True
+    )

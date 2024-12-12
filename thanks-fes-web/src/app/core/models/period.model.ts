@@ -7,7 +7,6 @@ export class Period {
   title: string;
   description: string;
   panelistType: PanelistType;
-  point: number;
   awardCount: number;
   questions: Question[];
 }

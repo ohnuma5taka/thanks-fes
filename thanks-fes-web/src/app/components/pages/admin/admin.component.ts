@@ -14,6 +14,8 @@ import { AnswerApi } from '@/app/core/api/answer.api';
 import { PanelistWebsocket } from '@/app/core/ws/panelist.ws';
 import { Period } from '@/app/core/models/period.model';
 import { PeriodApi } from '@/app/core/api/period.api';
+import { env } from '@/environments/env';
+import { StoreService } from '@/app/core/services/store.service';
 
 @Component({
   selector: 'admin',
@@ -95,6 +97,7 @@ export class AdminComponent {
   }
 
   constructor(
+    private store: StoreService,
     private periodApi: PeriodApi,
     private questionApi: QuestionApi,
     private panelistApi: PanelistApi,
@@ -103,10 +106,18 @@ export class AdminComponent {
     private panelistWebsocket: PanelistWebsocket
   ) {}
 
-  ngOnInit() {
-    this.fetchPeriods();
-    this.fetchRegisteredCount();
-    this.connectWebsocket();
+  async ngOnInit() {
+    await Promise.all([
+      this.fetchPeriods(),
+      this.fetchRegisteredCount(),
+      this.connectWebsocket(),
+    ]);
+    const fesStep = this.store.getters.fesStep();
+    if (fesStep.step) {
+      this.stepIndex = fesStep.stepIndex;
+      this.periodNumber = fesStep.periodNumber;
+      this.questionNumber = fesStep.questionNumber;
+    }
   }
 
   panelistWebsocketCallback(data: RegisteredPanelistCount[]) {
@@ -175,13 +186,7 @@ export class AdminComponent {
       this.questionNumber = 0;
     }
     if (this.step === '問題開始') this.questionNumber += 1;
-    const fesStep: FesStep = {
-      periodNumber: this.periodNumber,
-      questionNumber: this.questionNumber,
-      step: this.step,
-      stepIndex: this.stepIndex,
-    };
-    this.stepWebsocket.send(fesStep);
+    this.sendStep();
 
     if (
       this.question &&
@@ -205,23 +210,36 @@ export class AdminComponent {
     this.periodNumber = previousStep.periodNumber;
     this.questionNumber = previousStep.questionNumber;
     this.stepIndex = previousStep.stepIndex;
-    this.stepWebsocket.send(previousStep);
+    this.sendStep();
   }
 
-  async clearAnswers() {
-    this.answerApi.clearAll();
+  backToInit() {
+    if (env.mode === 'prod') {
+      if (!window.confirm('最初に戻ります')) return;
+    } else {
+      this.answerApi.clearAll();
+    }
+    this.stepIndex = 0;
+    this.periodNumber = 0;
+    this.questionNumber = 0;
+    this.sendStep();
   }
 
   skip() {
     if (!window.confirm('ピリオド終了までスキップします')) return;
+    this.stepIndex += this.steps.slice(this.stepIndex).indexOf('ピリオド終了');
+    this.questionNumber = this.questions.length;
+    this.sendStep();
+  }
+
+  sendStep() {
     const fesStep: FesStep = {
       periodNumber: this.periodNumber,
       questionNumber: this.questionNumber,
-      step: 'ピリオド終了',
+      step: this.step,
       stepIndex: this.stepIndex,
     };
     this.stepWebsocket.send(fesStep);
-    this.stepIndex += this.steps.slice(this.stepIndex).indexOf('ピリオド終了');
-    this.questionNumber = this.questions.length;
+    this.store.setters.fesStep(fesStep);
   }
 }

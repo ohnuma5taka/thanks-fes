@@ -17,3 +17,4 @@ class Question(Base):
     text = Column(String, nullable=False, default='')
     thinking_second = Column(Integer, nullable=False, default=0)
     answer = Column(String, nullable=False, default='')
+    point = Column(Integer, nullable=False, default=0)

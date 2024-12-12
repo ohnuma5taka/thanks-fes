@@ -83,15 +83,16 @@ export class PanelistComponent {
         this.setUrlQuery();
       }
     } else this.setUrlQuery();
-    this.fetchPeriods();
-    this.connectWebsocket();
+    await Promise.all([this.fetchPeriods(), this.connectWebsocket()]);
+    const fesStep = this.store.getters.fesStep();
+    if (fesStep.step) this.stepWebsocketCallback({ data: fesStep });
   }
 
   setUrlQuery() {
     this.panelist = new Panelist();
     const urlQuery = locationUtil.urlQuery() as PanelistQueryParam;
-    this.panelist.name = urlQuery.name;
-    this.panelist.team = urlQuery.team;
+    this.panelist.name = urlQuery.name || '';
+    this.panelist.team = urlQuery.team || '';
   }
 
   keepScreenAlive() {
@@ -106,6 +107,7 @@ export class PanelistComponent {
     this.step = res.data.step;
     this.periodNumber = res.data.periodNumber;
     this.questionNumber = res.data.questionNumber;
+    this.store.setters.fesStep(res.data);
     if (this.step === '解答開始') {
       this.questionAnswer = '';
       this.selectedAnswer = '';

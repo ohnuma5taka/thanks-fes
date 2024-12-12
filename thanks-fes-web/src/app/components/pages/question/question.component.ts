@@ -15,7 +15,7 @@ import { Result } from '@/app/core/models/result.model';
 import { PanelistApi } from '@/app/core/api/panelist.api';
 import { Period } from '@/app/core/models/period.model';
 import { PeriodApi } from '@/app/core/api/period.api';
-import { last } from 'lodash';
+import { StoreService } from '@/app/core/services/store.service';
 
 @Component({
   selector: 'question',
@@ -61,6 +61,7 @@ export class QuestionComponent {
   }
 
   constructor(
+    private store: StoreService,
     private periodApi: PeriodApi,
     private questionApi: QuestionApi,
     private answerApi: AnswerApi,
@@ -70,14 +71,16 @@ export class QuestionComponent {
   ) {}
 
   async ngOnInit() {
-    this.fetchPeriods();
-    this.connectWebsocket();
+    await Promise.all([this.fetchPeriods(), this.connectWebsocket()]);
+    const fesStep = this.store.getters.fesStep();
+    if (fesStep.step) this.stepWebsocketCallback({ data: fesStep });
   }
 
   async stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {
     this.step = res.data.step;
     this.periodNumber = res.data.periodNumber;
     this.questionNumber = res.data.questionNumber;
+    this.store.setters.fesStep(res.data);
     if (this.step === 'タイトル') this.displayTitle('thanks-fes-title');
     if (this.step === '問題開始') {
       this.questionAnswer = '';

@@ -1,11 +1,12 @@
 import { Panelist } from '@/app/core/models/panelist.model';
+import { FesStep } from '@/app/core/models/step.model';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { share } from 'rxjs/operators';
 
-type StoreKey = 'panelist';
+type StoreKey = 'panelist' | 'fesStep';
 
-const objectKeys: StoreKey[] = ['panelist'];
+const objectKeys: StoreKey[] = ['panelist', 'fesStep'];
 const arrayKeys: StoreKey[] = [];
 
 @Injectable()
@@ -49,10 +50,12 @@ export class StoreService implements OnDestroy {
 
   public setters = {
     panelist: (value: Panelist) => this.set<Panelist>('panelist', value),
+    fesStep: (value: FesStep) => this.set<FesStep>('fesStep', value),
   };
 
   public getters = {
     panelist: () => this.get<Panelist>('panelist'),
+    fesStep: () => this.get<FesStep>('fesStep'),
   };
 
   private initialize() {

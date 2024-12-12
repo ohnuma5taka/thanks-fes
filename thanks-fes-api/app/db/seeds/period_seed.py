@@ -10,7 +10,6 @@ def seed_periods(seeds_data_dir: str):
             title=row['title'],
             description=row['description'],
             panelist_type=row['panelist_type'],
-            point=int(row['point'] or 0),
             award_count=int(row['award_count'] or 0),
         ) for row in csv.DictReader(open(f'{seeds_data_dir}/periods.tsv'), delimiter='\t')
     ]

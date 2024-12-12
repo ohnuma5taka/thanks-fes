@@ -13,5 +13,4 @@ class Period(Base):
     title = Column(String, nullable=False, default='')
     description = Column(String, nullable=False, default='')
     panelist_type = Column(String, nullable=False, default='')
-    point = Column(Integer, nullable=False, default=0)
     award_count = Column(Integer, nullable=False, default=0)

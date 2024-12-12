@@ -12,8 +12,9 @@ def seed_questions(seeds_data_dir: str):
             question_format=row['question_format'],
             option_format=row['option_format'],
             text=row['text'],
-            thinking_second=int(row['thinking_second'] or 0),
             answer=row['answer'],
+            point=int(row['point'] or 0),
+            thinking_second=int(row['thinking_second'] or 0),
         ) for row in csv.DictReader(open(f'{seeds_data_dir}/questions.tsv'), delimiter='\t')
     ]
     question_crud.reset_all(questions)

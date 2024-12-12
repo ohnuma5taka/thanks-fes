@@ -16,6 +16,7 @@ class QuestionModel(BaseModel):
     text: Optional[str] = None
     second: Optional[int] = None
     answer: Optional[str] = None
+    point: Optional[int] = None
     options: Optional[list[OptionModel]] = None
 
     def __init__(self, question: Question):
@@ -28,6 +29,7 @@ class QuestionModel(BaseModel):
         self.text = question.text
         self.second = question.thinking_second
         self.answer = question.answer
+        self.point = question.point
         self.options = [OptionModel(
             value=x.value,
             image_origin_x=x.image_origin_x,

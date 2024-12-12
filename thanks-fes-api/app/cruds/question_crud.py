@@ -22,14 +22,6 @@ def get_period_list(period: int = None) -> List[Question]:
             .order_by(Question.idx).all()
 
 
-def get_point(_id: int) -> int:
-    with connect_session() as db:
-        question = db.query(Question).get(_id)
-        return db.query(Period.point) \
-            .filter(Period.number == question.period) \
-            .scalar()
-
-
 def save(item: Question) -> Question:
     with connect_session() as db:
         db.add(item)

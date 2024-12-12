@@ -12,7 +12,6 @@ class PeriodModel(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     panelist_type: Optional[str] = None
-    point: Optional[int] = None
     award_count: Optional[int] = None
     questions: Optional[list[QuestionModel]] = None
 
@@ -22,7 +21,6 @@ class PeriodModel(BaseModel):
         self.title = period.title
         self.description = period.description
         self.panelist_type = period.panelist_type
-        self.point = period.point
         self.award_count = period.award_count
         self.questions = [QuestionModel(x) for x in question_crud.get_period_list(period.number)]
 

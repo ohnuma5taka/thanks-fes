@@ -17,4 +17,4 @@ EXPOSE 8888
 COPY redis.conf /usr/local/etc/redis/redis.conf
 RUN mkdir -p /usr/local/etc/redis/logs
 
-CMD service redis-server start && uvicorn main:app --host 0.0.0.0 --port 8888 --workers 8 --ws-ping-interval 30
+CMD service redis-server start && uvicorn main:app --host 0.0.0.0 --port 8888 --workers 8 --ws-ping-interval 25

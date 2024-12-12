@@ -42,7 +42,7 @@ async def create_question_dummy(question_id: int):
 
 @router.post('/teams', summary='チーム解答API', response_model=None)
 async def create_teams(body: PostTeamAnswerModel):
-    point = question_crud.get_point(body.question_id)
+    question = question_crud.get(body.question_id)
     panelists = panelist_crud.get_all()
     correct_map = {x.team: x.correct for x in body.team_answers}
     answers = [Answer(
@@ -50,7 +50,7 @@ async def create_teams(body: PostTeamAnswerModel):
         question_id=body.question_id,
         answer='',
         correct=correct_map[panelist.team],
-        score=correct_map[panelist.team] * point,
+        score=correct_map[panelist.team] * question.point,
         elapsed_second=0
     ) for panelist in panelists]
     answer_crud.bulk_save(answers)
@@ -68,14 +68,13 @@ async def get_team_answers(question_id: int):
 @router.post('/new', summary='解答API', response_model=None)
 async def create(body: PostAnswerModel):
     question = question_crud.get(body.question_id)
-    point = question_crud.get_point(question.id)
     correct = int(body.answer == question.answer) if question.answer else 0
     answer = Answer(
         panelist_id=body.panelist_id,
         question_id=body.question_id,
         answer=body.answer,
         correct=correct,
-        score=correct * point,
+        score=correct * question.point,
         elapsed_second=body.elapsed_second,
     )
     answer_crud.save(answer)
