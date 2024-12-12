@@ -12,3 +12,4 @@ tenacity~=8.4.1
 broadcaster[redis]~=0.2.0
 asyncio-redis~=0.16.0
 kanjize
+redis~=5.2.1

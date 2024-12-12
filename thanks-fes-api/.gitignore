@@ -6,7 +6,7 @@ ssl/*
 **/.DS_Store
 **/.dockervenv
 **/.idea
-**/.venv
+**/venv
 **/.vscode
 **/.history
 **/__pycache__

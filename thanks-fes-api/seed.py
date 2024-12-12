@@ -1,12 +1,16 @@
 import os
+import argparse
 
 from app.cruds import answer_crud, panelist_crud, question_crud, option_crud, period_crud
 from app.db.seeds.option_seed import seed_options
+from app.db.seeds.panelist_seed import seed_panelists
 from app.db.seeds.period_seed import seed_periods
 from app.db.seeds.question_seed import seed_questions
 
+parser = argparse.ArgumentParser()
+parser.add_argument("mode")
 
-def seed():
+def seed(mode: str):
     root_dir = os.path.dirname(__file__)
     seeds_data_dir = os.path.join(root_dir, 'app', 'db', 'seeds', 'data')
     BOS = '\033[92m'
@@ -18,7 +22,8 @@ def seed():
     question_crud.reset_all([])
     period_crud.reset_all([])
     print(f'{BOS}Seeding data...{EOS}')
-    # seed_panelists(seeds_data_dir)
+    if mode == 'local':
+        seed_panelists(seeds_data_dir)
     seed_periods(seeds_data_dir)
     seed_questions(seeds_data_dir)
     seed_options(seeds_data_dir)
@@ -26,4 +31,5 @@ def seed():
 
 
 if __name__ == '__main__':
-    seed()
+    args = parser.parse_args()
+    seed(mode=args.mode)
