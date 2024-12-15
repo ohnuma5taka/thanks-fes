@@ -11,7 +11,10 @@ services:
       - thanks-fes-network
 
   thanks-fes-api:
-    build: ./thanks-fes-api
+    build:
+      context: ./thanks-fes-api
+      args:
+        - APP_MODE=prod
     image: thanks-fes-api
     container_name: thanks-fes-api
     volumes:
