@@ -1,8 +1,5 @@
-id	period	idx	question_format	option_format	text	answer	point	thinking_second
-1-1	1	1	文字	文字	2019年の流行語大賞は？	ONE TEAM	1	10
-1-2	1	2	文字	画像	ピーナッツは？	ピーナッツ	1	10
-1-3	1	3	画像	文字	金額を高い順に並べよ	C→A→B→D	1	20
-1-4	1	4	動画	文字	入る？入らない？	入る	1	10
-1-5	1	5	文字	文字	できる？できない？		1	10
-2-1	2	1	文字	文字	"「あ」から始まる
-テレビ番組といえば？"		2	60
+id	period	idx	question_format	option_format	text	answer	thinking_second
+1	1	1	画像	文字	正しいIBMのロゴはどれ?	C	180
+2	1	2	文字	文字	2023年のIBM就職希望企業ランキングは何位？	21〜30位	10
+3	1	3	文字	文字	浅野さんが最高に美味しいと思った食事は何？	五右衛門うどん(千葉)	10
+4	1	4	文字	文字	ALLHandsでの高橋さんの修行とは？	町内会への参加	10

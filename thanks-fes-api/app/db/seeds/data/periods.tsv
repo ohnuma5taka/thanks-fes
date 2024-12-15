@@ -1,5 +1,3 @@
-number	title	description	panelist_type	award_count
-1	連続早押し！一問一答クイズ	"今年の出来事や一般常識に関するクイズ
-シンキングタイムは10秒"	個人	1
-2	チームで解答！朝までそれ正解クイズ	"指定された文字から始まる言葉をチームで解答
-シンキングタイムは60秒"	チーム	1
+number	title	description	panelist_type	point	award_count
+1	チームで解答！一問一答クイズ！	"IBMやリーダーに関するクイズ
+シンキングタイムは10秒"	個人	1	1
