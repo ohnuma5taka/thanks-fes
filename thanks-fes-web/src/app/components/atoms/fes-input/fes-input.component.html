@@ -10,6 +10,7 @@
     [type]="passwordShowing ? 'text' : type"
     [placeholder]="placeholder"
     [disabled]="disabled"
+    [maxLength]="maxLength"
     (focus)="imeComposing = false"
     (input)="_input(inputRef.value)"
     (keyup.enter)="_submit(inputRef.value)"

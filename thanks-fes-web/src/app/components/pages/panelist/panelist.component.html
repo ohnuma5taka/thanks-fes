@@ -39,6 +39,7 @@
           [value]="panelist.name"
           placeholder="好きな名前を記入"
           [clearable]="true"
+          [maxLength]="10"
           style="background-color: white"
           (emitInput)="panelist.name = $event.slice(0, 12)"
         ></fes-input>

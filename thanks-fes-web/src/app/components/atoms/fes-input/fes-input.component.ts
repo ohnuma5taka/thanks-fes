@@ -25,6 +25,7 @@ export class FesInputComponent {
   @Input() tooltip = '';
   @Input() clearable = false;
   @Input() disabled = false;
+  @Input() maxLength;
   @Output() emitInput = new EventEmitter<string>();
   @Output() submit = new EventEmitter<string>();
   @ViewChild('inputRef') inputRef: ElementRef;
