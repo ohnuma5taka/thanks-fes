@@ -180,7 +180,8 @@ export class AdminComponent {
     this.stepIndex += 1;
     if (
       this.step === 'ピリオド開始' ||
-      this.step === '総合チームランキングタイトル'
+      this.step === '総合チームランキングタイトル' ||
+      this.step === '総合ランキングタイトル'
     ) {
       this.periodNumber += 1;
       this.questionNumber = 0;
