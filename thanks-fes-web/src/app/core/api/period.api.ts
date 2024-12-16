@@ -18,16 +18,35 @@ export class PeriodApi {
             .map((x) => new Question(x))
             .map(async (x) => {
               if (x.file) {
-                const questionDimension = await assetUtil.getAssetDimension(
+                const dimension = await assetUtil.getAssetDimension(
                   x.file.questionPath
                 );
-                const answerDimension = await assetUtil.getAssetDimension(
+                const answerFound = !!(await assetUtil.getAssetDimension(
                   x.file.answerPath
-                );
+                ));
+                const aspect = dimension.width / dimension.height;
+                const padding = (12 + 96) * 2;
+                const offset = padding + 150;
+                if (dimension.height < dimension.width) {
+                  const maxWidth = window.innerWidth - offset;
+                  const maxHeight = window.innerHeight - padding - 104 * 2;
+                  const scaledWidth =
+                    dimension.width * (maxHeight / dimension.height);
+                  if (scaledWidth > maxWidth) {
+                    dimension.width = maxWidth;
+                    dimension.height = dimension.width / aspect;
+                  } else {
+                    dimension.height = maxHeight;
+                    dimension.width = dimension.height * aspect;
+                  }
+                } else {
+                  dimension.height = window.innerHeight - offset;
+                  dimension.width = dimension.height * aspect;
+                }
                 x.file = {
                   ...x.file,
-                  ...questionDimension,
-                  answerPath: answerDimension ? x.file.answerPath : '',
+                  ...dimension,
+                  answerPath: answerFound ? x.file.answerPath : '',
                 };
               }
               return x;

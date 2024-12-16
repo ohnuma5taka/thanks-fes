@@ -9,7 +9,7 @@ const isExist = async (path: string) => {
 
 const getAssetDimension = (
   path: string
-): Promise<{ width: number; height: number }> => {
+): Promise<{ width: number; height: number } | undefined> => {
   return new Promise((resolve, reject) => {
     const isVideo = /\.(mp4|webm|ogg)$/i.test(path);
     const element = document.createElement(isVideo ? 'video' : 'img');
