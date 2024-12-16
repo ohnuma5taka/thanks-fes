@@ -25,7 +25,6 @@ $yellow-highlight: #fffc4b;
 }
 
 #title-image {
-  width: 65vw;
   transform: translate(100px, 150px) scale(0);
   transition: transform 1s;
 
@@ -192,6 +191,30 @@ $yellow-highlight: #fffc4b;
   font-size: 148px;
   color: #f76875;
   text-shadow: -4px -4px 1px #ffa3ae;
+}
+
+.question-additional-info {
+  $info-height: calc(100vh - $question-width - 96px);
+  &.vertical-info {
+    img,
+    video {
+      width: auto;
+      min-height: $info-height;
+      max-height: $info-height;
+    }
+  }
+  &.horizontal-info {
+    @extend .d-flex-center;
+    width: 100%;
+    min-height: $info-height;
+    max-height: $info-height;
+    img,
+    video {
+      width: auto;
+      min-height: $info-height;
+      max-height: $info-height;
+    }
+  }
 }
 
 @-webkit-keyframes opacity-flash {

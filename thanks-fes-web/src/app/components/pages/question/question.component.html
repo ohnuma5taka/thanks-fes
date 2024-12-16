@@ -88,7 +88,11 @@
       >
         <div
           *ngIf="question.file"
-          [ngClass]="{ 'd-flex-center': horizontalLayout }"
+          class="question-additional-info"
+          [ngClass]="{
+            'vertical-info': !horizontalLayout,
+            'horizontal-info': horizontalLayout
+          }"
         >
           <img
             *ngIf="question.questionFormat === '画像'"
@@ -97,8 +101,6 @@
                 ? question.file.questionPath
                 : question.file.answerPath || question.file.questionPath
             "
-            [style.width]="question.file.width + 'px'"
-            [style.height]="question.file.height + 'px'"
           />
           <video
             *ngIf="question.questionFormat === '動画'"
@@ -108,8 +110,6 @@
                 : question.file.answerPath || question.file.questionPath
             "
             autoplay
-            [style.width]="question.file.width + 'px'"
-            [style.height]="question.file.height + 'px'"
           ></video>
         </div>
         <div
@@ -226,8 +226,8 @@
   />
 
   <div *ngIf="step === 'エンディング'" class="d-flex-column-center gy-9">
-    <img class="w-65" src="/assets/images/logo.png" /><img
-      class="w-90"
+    <img class="w-60" src="/assets/images/logo.png" /><img
+      class="w-80"
       src="/assets/images/thanks.png"
     />
   </div>

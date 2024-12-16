@@ -156,7 +156,8 @@
         step === '総合ランキングタイトル' ||
         step === '総合ランキング' ||
         step === '景品発表' ||
-        step === '提供'
+        step === '提供' ||
+        step === 'エンディング'
       "
     >
       <img
@@ -170,17 +171,12 @@
             ? '/assets/images/total-panelist-ranking-title.png'
             : step === '景品発表'
             ? '/assets/images/award-prize-title.png'
-            : '/assets/images/sponsor.png'
+            : step === '提供'
+            ? '/assets/images/sponsor.png'
+            : '/assets/images/ending.png'
         "
       />
     </ng-container>
-
-    <div *ngIf="step === 'エンディング'" class="d-flex-column-center gy-3">
-      <img class="w-75" src="/assets/images/logo.png" /><img
-        class="w-95"
-        src="/assets/images/thanks.png"
-      />
-    </div>
 
     <ng-container
       *ngIf="
