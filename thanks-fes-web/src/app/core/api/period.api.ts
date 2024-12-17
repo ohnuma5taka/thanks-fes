@@ -22,10 +22,10 @@ export class PeriodApi {
                 const dimension = await assetUtil.getAssetDimension(
                   x.file.questionPath
                 );
-                const answerFound = !!(await assetUtil.getAssetDimension(
-                  x.file.answerPath
-                ));
-                if (dimension) {
+                const answerFound = !!(
+                  await assetUtil.getAssetDimension(x.file.answerPath)
+                ).width;
+                if (dimension.width) {
                   const aspect = dimension.width / dimension.height;
                   const padding = (12 + 96) * 2;
                   const offset = padding + 150;
@@ -45,9 +45,6 @@ export class PeriodApi {
                     dimension.height = window.innerHeight - offset;
                     dimension.width = dimension.height * aspect;
                   }
-                } else {
-                  dimension.width = 0;
-                  dimension.height = 0;
                 }
                 x.file = {
                   ...x.file,
