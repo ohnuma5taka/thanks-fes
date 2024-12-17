@@ -9,12 +9,12 @@ const isExist = async (path: string) => {
 
 const getAssetDimension = (
   path: string
-): Promise<{ width: number; height: number } | undefined> => {
+): Promise<{ width: number; height: number }> => {
   return new Promise((resolve, reject) => {
     const isVideo = /\.(mp4|webm|ogg)$/i.test(path);
     const element = document.createElement(isVideo ? 'video' : 'img');
     element.src = path;
-    element.onerror = () => resolve(undefined);
+    element.onerror = () => resolve({ width: 0, height: 0 });
     if (isVideo) {
       const _element = element as HTMLVideoElement;
       element.onloadedmetadata = () => {

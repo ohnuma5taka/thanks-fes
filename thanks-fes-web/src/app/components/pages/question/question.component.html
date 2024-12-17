@@ -97,8 +97,12 @@
                 ? question.file.questionPath
                 : question.file.answerPath || question.file.questionPath
             "
-            [style.width]="question.file.width + 'px'"
-            [style.height]="question.file.height + 'px'"
+            [style.width]="
+              question.file.width ? question.file.width + 'px' : '100%'
+            "
+            [style.height]="
+              question.file.height ? question.file.height + 'px' : 'auto'
+            "
           />
           <video
             *ngIf="question.questionFormat === '動画'"
@@ -108,8 +112,12 @@
                 : question.file.answerPath || question.file.questionPath
             "
             autoplay
-            [style.width]="question.file.width + 'px'"
-            [style.height]="question.file.height + 'px'"
+            [style.width]="
+              question.file.width ? question.file.width + 'px' : '100%'
+            "
+            [style.height]="
+              question.file.height ? question.file.height + 'px' : 'auto'
+            "
           ></video>
         </div>
         <div
