@@ -3,6 +3,7 @@ import { Question } from '@/app/core/models/question.model';
 import { ApiService } from '@/app/core/services/api.service';
 import { assetUtil } from '@/app/core/utils/asset.util';
 import { Injectable } from '@angular/core';
+import { head } from 'lodash';
 
 @Injectable()
 export class PeriodApi {
@@ -24,24 +25,29 @@ export class PeriodApi {
                 const answerFound = !!(await assetUtil.getAssetDimension(
                   x.file.answerPath
                 ));
-                const aspect = dimension.width / dimension.height;
-                const padding = (12 + 96) * 2;
-                const offset = padding + 150;
-                if (dimension.height < dimension.width) {
-                  const maxWidth = window.innerWidth - offset;
-                  const maxHeight = window.innerHeight - padding - 104 * 2;
-                  const scaledWidth =
-                    dimension.width * (maxHeight / dimension.height);
-                  if (scaledWidth > maxWidth) {
-                    dimension.width = maxWidth;
-                    dimension.height = dimension.width / aspect;
+                if (dimension) {
+                  const aspect = dimension.width / dimension.height;
+                  const padding = (12 + 96) * 2;
+                  const offset = padding + 150;
+                  if (dimension.height < dimension.width) {
+                    const maxWidth = window.innerWidth - offset;
+                    const maxHeight = window.innerHeight - padding - 104 * 2;
+                    const scaledWidth =
+                      dimension.width * (maxHeight / dimension.height);
+                    if (scaledWidth > maxWidth) {
+                      dimension.width = maxWidth;
+                      dimension.height = dimension.width / aspect;
+                    } else {
+                      dimension.height = maxHeight;
+                      dimension.width = dimension.height * aspect;
+                    }
                   } else {
-                    dimension.height = maxHeight;
+                    dimension.height = window.innerHeight - offset;
                     dimension.width = dimension.height * aspect;
                   }
                 } else {
-                  dimension.height = window.innerHeight - offset;
-                  dimension.width = dimension.height * aspect;
+                  dimension.width = 0;
+                  dimension.height = 0;
                 }
                 x.file = {
                   ...x.file,
