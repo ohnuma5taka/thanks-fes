@@ -34,7 +34,13 @@ export class AnswerApi {
     return await this.apiService.post<undefined>('/answers/teams', body);
   }
 
-  async clearAll() {
+  async deleteQuestionAnswer(questionId: string) {
+    return await this.apiService.delete<undefined>(
+      `/answers/questions/${questionId}`
+    );
+  }
+
+  async deleteAll() {
     return await this.apiService.delete<undefined>('/answers');
   }
 }

@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import func, desc, and_, asc, distinct, or_
+from sqlalchemy import func, desc, and_, asc, distinct
 
 from app.db.models.answer import Answer
 from app.db.models.panelist import Panelist
@@ -8,19 +8,18 @@ from app.db.models.question import Question
 from app.db.session import connect_session
 
 
-def get(_id: int = None) -> Answer:
+def get(panelist_id: int = None, question_id: str = None) -> Answer:
     with connect_session() as db:
-        return db.query(Answer).get(_id)
+        return db.query(Answer) \
+            .filter(
+            Answer.panelist_id == panelist_id,
+            Answer.question_id == question_id
+        ).first()
 
 
 def get_all() -> List[Answer]:
     with connect_session() as db:
         return db.query(Answer).all()
-
-
-def get_questions_list(question_ids: list[int] = None):
-    with connect_session() as db:
-        return db.query(Answer).filter(Answer.question_id.in_(question_ids)).all()
 
 
 def get_question_list(question_id: str = None):
@@ -157,6 +156,12 @@ def delete(_id: int) -> Answer:
 def delete_all() -> None:
     with connect_session() as db:
         db.query(Answer).delete()
+        db.commit()
+
+
+def delete_question_list(question_id: str = None):
+    with connect_session() as db:
+        db.query(Answer).filter(Answer.question_id == question_id).delete()
         db.commit()
 
 

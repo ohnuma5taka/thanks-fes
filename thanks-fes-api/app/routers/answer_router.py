@@ -5,6 +5,28 @@ from app.models.answer_model import PostAnswerModel, AnswerModel, PostTeamAnswer
 
 router = APIRouter()
 
+def create_answer(
+panelist_id: int,
+question_id: str,
+        answer: str = '', correct: int = 0, score: int = 0, elapsed_second: float = 0):
+    _answer = answer_crud.get(panelist_id, question_id)
+    if _answer is None:
+        _answer = Answer(
+            panelist_id=panelist_id,
+            question_id=question_id,
+            answer=answer,
+            correct=correct,
+            score=score,
+            elapsed_second=elapsed_second
+        )
+    else:
+        _answer.answer = answer
+        _answer.correct = correct
+        _answer.score = score
+        _answer.elapsed_second = elapsed_second
+    return _answer
+
+
 
 @router.get('', summary='解答リスト取得API', response_model=list[AnswerModel])
 async def get_all():
@@ -29,7 +51,7 @@ async def get_counts(question_id: str, panelist_id: int):
 @router.post('/questions/{question_id}/dummy', summary='無解答者用ダミー解答API', response_model=None)
 async def create_question_dummy(question_id: str):
     question = question_crud.get(question_id)
-    answers = [Answer(
+    answers = [create_answer(
         panelist_id=panelist.id,
         question_id=question_id,
         answer='',
@@ -45,7 +67,7 @@ async def create_teams(body: PostTeamAnswerModel):
     question = question_crud.get(body.question_id)
     panelists = panelist_crud.get_all()
     correct_map = {x.team: x.correct for x in body.team_answers}
-    answers = [Answer(
+    answers = [create_answer(
         panelist_id=panelist.id,
         question_id=body.question_id,
         answer='',
@@ -69,7 +91,7 @@ async def get_team_answers(question_id: str):
 async def create(body: PostAnswerModel):
     question = question_crud.get(body.question_id)
     correct = int(body.answer == question.answer) if question.answer else 0
-    answer = Answer(
+    answer = create_answer(
         panelist_id=body.panelist_id,
         question_id=body.question_id,
         answer=body.answer,
@@ -78,6 +100,11 @@ async def create(body: PostAnswerModel):
         elapsed_second=body.elapsed_second,
     )
     answer_crud.save(answer)
+
+
+@router.delete('/questions/{question_id}', summary='問題解答リスト削除API', response_model=None)
+async def delete_question_answer(question_id: str):
+    answer_crud.delete_question_list(question_id)
 
 
 @router.delete('', summary='解答リスト削除API', response_model=None)

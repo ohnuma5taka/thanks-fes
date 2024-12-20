@@ -195,13 +195,15 @@ export class AdminComponent {
     this.questionNumber = previousStep.questionNumber;
     this.stepIndex = previousStep.stepIndex;
     this.sendStep();
+    if (this.step === '問題開始')
+      this.answerApi.deleteQuestionAnswer(this.question.id);
   }
 
   backToInit() {
     if (env.mode === 'prod') {
       if (!window.confirm('最初に戻ります')) return;
     } else {
-      this.answerApi.clearAll();
+      this.answerApi.deleteAll();
     }
     this.stepIndex = 0;
     this.periodNumber = 0;
