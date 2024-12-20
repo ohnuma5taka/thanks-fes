@@ -7,13 +7,11 @@
     <img id="title-image" src="/assets/images/logo.png" />
   </ng-container>
 
-  <ng-container *ngIf="step === 'オープニング'">
+  <ng-container *ngIf="step === 'オープニング' && openingPeriod">
     <div class="period-guide-glass">
       <div class="period-guide-container">
-        <span class="period-guide-title">オールスター感謝祭</span>
-        <span class="period-guide"
-          >全員参加型クイズ大会<br />スコアが高い人に豪華賞品！</span
-        >
+        <span class="period-guide-title">{{ openingPeriod.title }}</span>
+        <span class="period-guide">{{ openingPeriod.description }}</span>
       </div>
     </div>
   </ng-container>

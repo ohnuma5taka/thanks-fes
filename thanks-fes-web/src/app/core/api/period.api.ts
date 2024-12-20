@@ -8,6 +8,10 @@ import { Injectable } from '@angular/core';
 export class PeriodApi {
   constructor(private apiService: ApiService) {}
 
+  async getOpeningPeriod() {
+    return await this.apiService.get<Period>('/periods/0');
+  }
+
   async getAll() {
     const periods = await this.apiService.get<Period[]>('/periods');
     return await Promise.all(

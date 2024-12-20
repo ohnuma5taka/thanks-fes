@@ -32,6 +32,7 @@ export class QuestionComponent {
   questionAnswer = '';
   answerCount: AnswerCount = {} as AnswerCount;
   results: Result[];
+  openingPeriod: Period;
 
   get period() {
     return this.periods.find((x) => x.number === this.periodNumber);
@@ -71,7 +72,11 @@ export class QuestionComponent {
   ) {}
 
   async ngOnInit() {
-    await Promise.all([this.fetchPeriods(), this.connectWebsocket()]);
+    await Promise.all([
+      this.fetchOpeningPeriod(),
+      this.fetchPeriods(),
+      this.connectWebsocket(),
+    ]);
     const fesStep = this.store.getters.fesStep();
     if (fesStep.step) this.stepWebsocketCallback({ data: fesStep });
   }
@@ -111,6 +116,10 @@ export class QuestionComponent {
   connectWebsocket() {
     this.stepWebsocket.callback = this.stepWebsocketCallback.bind(this);
     this.stepWebsocket.connect();
+  }
+
+  async fetchOpeningPeriod() {
+    this.openingPeriod = await this.periodApi.getOpeningPeriod();
   }
 
   async fetchPeriods() {
