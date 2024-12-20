@@ -33,9 +33,11 @@ export class Question {
     this.point = params.point;
     this.options = params.options.map((x) => ({
       ...x,
-      transform: `translate(${x.imageOriginX * 100 - 50}%, ${
-        x.imageOriginY * 100 - 50
-      }%) scale(${x.imageScale})`,
+      transform: x.imageScale
+        ? `translate(${(x.imageOriginX - 0.5) * 100}%, ${
+            (x.imageOriginY - 0.5) * 100
+          }%) scale(${x.imageScale})`
+        : '',
     }));
     this.timerFilePath = `/assets/videos/timer/${this.second}.mp4`;
     if (this.questionFormat !== '文字') {
