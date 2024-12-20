@@ -1,4 +1,7 @@
 <div class="question-page">
+  <div id="wake-lock-overlay" (click)="activateAutoplay()">
+    <span class="fs-48 blinking text-white">クリックして始める</span>
+  </div>
   <ng-container *ngIf="step === ''">
     <span class="large-title">開始までしばらくお待ちください</span>
   </ng-container>
@@ -17,7 +20,7 @@
   </ng-container>
 
   <ng-container *ngIf="step === 'タイトル' || step === 'オープニング'">
-    <audio src="/assets/audios/opening.mp3" autoplay loop></audio>
+    <audio id="opening" src="/assets/audios/opening.mp3" autoplay loop></audio>
   </ng-container>
 
   <ng-container *ngIf="step === 'ピリオド開始'">
@@ -37,21 +40,33 @@
   </ng-container>
 
   <ng-container *ngIf="step === 'ピリオド開始' || step === 'ピリオド説明'">
-    <audio src="/assets/audios/period_start.mp3" autoplay></audio>
+    <audio
+      id="period-start"
+      src="/assets/audios/period_start.mp3"
+      autoplay
+      (ended)="autoplayEnded('period-start')"
+    ></audio>
   </ng-container>
 
   <ng-container *ngIf="step === '問題開始'">
     <span class="question-title"
       >{{ question.questionFormat === "動画" ? "動画" : "" }}問題</span
     >
-    <audio src="/assets/audios/question.mp3" autoplay></audio>
+    <audio
+      id="question"
+      src="/assets/audios/question.mp3"
+      autoplay
+      (ended)="autoplayEnded('question')"
+    ></audio>
   </ng-container>
 
   <ng-container *ngIf="step === '動画再生'">
     <video
+      id="question-video-preview"
       [ngClass]="question.file.height < question.file.width ? 'w-100' : 'h-100'"
       [src]="question.file.questionPath"
       autoplay
+      (ended)="autoplayEnded('question-video-preview')"
     ></video>
   </ng-container>
 
@@ -104,6 +119,7 @@
           />
           <video
             *ngIf="question.questionFormat === '動画'"
+            id="question-video"
             [src]="
               step === '解答開始'
                 ? question.file.questionPath
@@ -116,6 +132,7 @@
             [style.height]="
               question.file.height ? question.file.height + 'px' : 'auto'
             "
+            (ended)="autoplayEnded('question-video')"
           ></video>
         </div>
         <div
@@ -192,18 +209,24 @@
 
     <audio
       *ngIf="step === '解答結果'"
+      id="answer-check"
       src="/assets/audios/answer_check.mp3"
       autoplay
+      (ended)="autoplayEnded('answer-check')"
     ></audio>
     <audio
       *ngIf="step === '解答開示'"
+      id="answer-open"
       src="/assets/audios/answer_open.mp3"
       autoplay
+      (ended)="autoplayEnded('answer-open')"
     ></audio>
     <audio
       *ngIf="step === 'ピリオド終了'"
+      id="period-end"
       src="/assets/audios/period_end.mp3"
       autoplay
+      (ended)="autoplayEnded('period-end')"
     ></audio>
   </ng-container>
 
@@ -320,8 +343,10 @@
     </div>
     <audio
       *ngIf="results && results.length"
+      id="ranking"
       src="/assets/audios/ranking.mp3"
       autoplay
+      (ended)="autoplayEnded('ranking')"
     ></audio>
   </ng-container>
 </div>
@@ -342,7 +367,12 @@
         <span>{{ question.text }}</span>
       </div>
       <div class="timer-container">
-        <video class="timer" autoplay>
+        <video
+          id="timer"
+          class="timer"
+          autoplay
+          (ended)="autoplayEnded('timer')"
+        >
           <source [src]="question.timerFilePath" type="video/mp4" />
         </video>
       </div>

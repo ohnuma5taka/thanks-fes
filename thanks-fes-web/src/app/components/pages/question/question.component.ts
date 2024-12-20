@@ -33,6 +33,7 @@ export class QuestionComponent {
   answerCount: AnswerCount = {} as AnswerCount;
   results: Result[];
   openingPeriod: Period;
+  autoplayEndedElementIds: string[] = [];
 
   get period() {
     return this.periods.find((x) => x.number === this.periodNumber);
@@ -79,6 +80,24 @@ export class QuestionComponent {
     ]);
     const fesStep = this.store.getters.fesStep();
     if (fesStep.step) this.stepWebsocketCallback({ data: fesStep });
+    document.addEventListener('click', (_) => {
+      const videos = document.querySelectorAll('video') || [];
+      videos.forEach((x: HTMLVideoElement) => {
+        if (!this.autoplayEndedElementIds.includes(x.id)) x.play();
+      });
+      const audios = document.querySelectorAll('audio') || [];
+      audios.forEach((x: HTMLAudioElement) => {
+        if (!this.autoplayEndedElementIds.includes(x.id)) x.play();
+      });
+    });
+  }
+
+  async activateAutoplay() {
+    document.getElementById('wake-lock-overlay').remove();
+  }
+
+  autoplayEnded(elementId: string) {
+    this.autoplayEndedElementIds.push(elementId);
   }
 
   async stepWebsocketCallback(res: WebsocketResponseData<FesStep>) {

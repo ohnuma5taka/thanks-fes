@@ -22,24 +22,6 @@
   }
 }
 
-#wake-lock-overlay {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  @extend .d-flex-column-center;
-  @extend .gy-9;
-  @extend .text-primary;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-
-  &.title-page {
-    background-color: rgba(0, 0, 0, 0);
-    padding-top: 240px;
-  }
-}
-
 .edge-option-wrapper {
   width: 100%;
   display: grid;
