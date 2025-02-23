@@ -45,7 +45,6 @@ export const createSteps = (periods: Period[]): Step[] => {
     '総合ランキングタイトル',
     '総合ランキング',
     '総合成績',
-    '景品発表',
     '提供',
     'エンディング',
   ];
