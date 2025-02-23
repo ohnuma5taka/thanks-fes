@@ -112,6 +112,17 @@ const periodEndTeamItems: ReadItem[] = [
   },
 ];
 
+const periodEndNoAwardItems: ReadItem[] = [
+  {
+    tag: 'lady',
+    text: 'ここでピリオド終了の鐘が鳴りました',
+  },
+  {
+    tag: 'lady',
+    text: 'ここでピリオド終了となります',
+  },
+];
+
 export const readConstant = {
   periodFirstItems,
   periodContinueItems,
@@ -125,4 +136,5 @@ export const readConstant = {
   questionVideoWaitItems,
   periodEndPersonalItems,
   periodEndTeamItems,
+  periodEndNoAwardItems,
 };
