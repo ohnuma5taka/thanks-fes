@@ -134,7 +134,9 @@ export class AdminComponent {
       : this.step === '解答開示'
       ? readConstant.questionAnswerItems
       : this.step === 'ピリオド終了'
-      ? this.period.panelistType === '個人'
+      ? !this.period.awardCount
+        ? readConstant.periodEndNoAwardItems
+        : this.period.panelistType === '個人'
         ? readConstant.periodEndPersonalItems
         : readConstant.periodEndTeamItems
       : [];
