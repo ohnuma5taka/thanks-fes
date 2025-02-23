@@ -27,6 +27,79 @@
   }
 }
 
+.read-wrapper {
+  width: 100%;
+  @extend .d-flex-column;
+  @extend .gy-1;
+
+  .read-row {
+    width: 100%;
+    @extend .d-flex;
+    @extend .align-center;
+    @extend .gx-1;
+
+    .read-image {
+      width: 10%;
+      height: auto;
+      &.sp {
+        width: 12.5%;
+      }
+    }
+
+    .balloon {
+      $edge-size: 12px;
+      border-radius: $edge-size;
+      @extend .d-flex;
+      position: relative;
+      margin-left: 2%;
+      padding: 8px 16px;
+      @extend .fs-20;
+
+      &:after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: calc($edge-size * -2 + 1px);
+        transform: translateY(-50%);
+        border: $edge-size solid transparent;
+      }
+
+      &.two {
+        $color: rgba(white, 0.87);
+        background-color: $color;
+        &:after {
+          border-right: $edge-size solid $color;
+        }
+      }
+      &.man {
+        $color: rgba(#d7ebfe, 0.87);
+        background-color: $color;
+        &:after {
+          border-right: $edge-size solid $color;
+        }
+      }
+      &.lady {
+        $color: rgba(#fce8ef, 0.87);
+        background-color: $color;
+        &:after {
+          border-right: $edge-size solid $color;
+        }
+      }
+
+      &.sp {
+        $edge-size: 8px;
+        border-radius: $edge-size;
+        padding: 4px 8px;
+        &:after {
+          left: calc($edge-size * -2 + 1px);
+          border-width: $edge-size;
+        }
+      }
+    }
+  }
+}
+
 .admin-button {
   width: 100%;
 }

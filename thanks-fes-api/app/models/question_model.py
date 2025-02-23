@@ -14,6 +14,7 @@ class QuestionModel(BaseModel):
     question_format: Optional[str] = None
     option_format: Optional[str] = None
     text: Optional[str] = None
+    read_text: Optional[str] = None
     second: Optional[int] = None
     answer: Optional[str] = None
     point: Optional[int] = None
@@ -27,15 +28,19 @@ class QuestionModel(BaseModel):
         self.question_format = question.question_format
         self.option_format = question.option_format
         self.text = question.text
+        self.read_text = question.read_text
         self.second = question.thinking_second
         self.answer = question.answer
         self.point = question.point
-        self.options = [OptionModel(
-            value=x.value,
-            image_origin_x=x.image_origin_x,
-            image_origin_y=x.image_origin_y,
-            image_scale=x.image_scale,
-        ) for x in option_crud.get_question_list(question.id)]
+        self.options = [
+            OptionModel(
+                value=x.value,
+                image_origin_x=x.image_origin_x,
+                image_origin_y=x.image_origin_y,
+                image_scale=x.image_scale,
+            )
+            for x in option_crud.get_question_list(question.id)
+        ]
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -17,6 +17,7 @@ const teamRankingSteps: Step[] = [
 
 export const createSteps = (periods: Period[]): Step[] => {
   const periodSteps: PeriodStep[] = periods
+    .filter((x) => x.number)
     .map((period, i) => [
       'ピリオド開始',
       'ピリオド説明',

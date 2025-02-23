@@ -18,6 +18,8 @@ import { env } from '@/environments/env';
 import { StoreService } from '@/app/core/services/store.service';
 import { Question } from '@/app/core/models/question.model';
 import { SelectOption } from '@/app/components/atoms/fes-select/fes-select.component';
+import { readConstant } from '@/app/core/constants/read.constant';
+import { mediaUtil } from '@/app/core/utils/media.util';
 
 @Component({
   selector: 'admin',
@@ -38,6 +40,7 @@ export class AdminComponent {
   teamAnswers: TeamAnswer[] = [];
   stepHistories: FesStep[] = [];
   answer = '';
+  isSp = mediaUtil.isSp;
 
   get step() {
     return this.steps[this.stepIndex];
@@ -97,6 +100,44 @@ export class AdminComponent {
       this.period.panelistType === 'チーム' &&
       this.step === '解答開始'
     );
+  }
+
+  get readItems() {
+    if (!this.period) return [];
+    return this.step === 'オープニング' ||
+      this.step === 'ピリオド開始' ||
+      this.step === 'ピリオド説明'
+      ? [
+          ...(this.periodNumber === 1
+            ? readConstant.periodFirstItems
+            : readConstant.periodContinueItems),
+          ...this.period.readItems,
+        ]
+      : this.step === '問題開始'
+      ? [
+          ...(this.questionNumber === 1
+            ? readConstant.questionFirstItems
+            : readConstant.questionContinueItems),
+          ...(this.question.questionFormat === '動画'
+            ? readConstant.questionVideoLeadItems
+            : [
+                ...this.question.readItems,
+                ...readConstant.questionReadyGoItems,
+              ]),
+        ]
+      : this.step === '動画再生'
+      ? [...readConstant.questionVideoWaitItems, ...this.question.readItems]
+      : this.step === '解答開始'
+      ? readConstant.questionAnswerCheckItems
+      : this.step === '解答結果'
+      ? readConstant.questionOpenAnswerItems
+      : this.step === '解答開示'
+      ? readConstant.questionAnswerItems
+      : this.step === 'ピリオド終了'
+      ? this.period.panelistType === '個人'
+        ? readConstant.periodEndPersonalItems
+        : readConstant.periodEndTeamItems
+      : [];
   }
 
   constructor(

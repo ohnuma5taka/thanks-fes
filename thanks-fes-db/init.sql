@@ -3,34 +3,36 @@ CREATE SCHEMA public;
 
 CREATE TABLE panelists (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL DEFAULT '',
-    team VARCHAR(100) NOT NULL DEFAULT ''
+    name TEXT UNIQUE NOT NULL DEFAULT '',
+    team TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE periods (
-    number INTEGER PRIMARY KEY,
-    title VARCHAR(100) DEFAULT '',
-    description VARCHAR(1000) DEFAULT '',
-    panelist_type VARCHAR(100) DEFAULT '',
+    number INTEGER PRIMARY KEY DEFAULT 0,
+    title TEXT DEFAULT '',
+    description TEXT DEFAULT '',
+    read_text TEXT DEFAULT '',
+    panelist_type TEXT DEFAULT '',
     award_count INTEGER DEFAULT 0
 );
 
 CREATE TABLE questions (
-    id VARCHAR(100) PRIMARY KEY,
+    id TEXT PRIMARY KEY DEFAULT '',
     period INTEGER NOT NULL DEFAULT 0,
     idx INTEGER DEFAULT 0,
-    question_format VARCHAR(100) DEFAULT '',
-    option_format VARCHAR(100) DEFAULT '',
-    text VARCHAR(100) DEFAULT '',
+    question_format TEXT DEFAULT '',
+    option_format TEXT DEFAULT '',
+    text TEXT DEFAULT '',
+    read_text TEXT DEFAULT '',
     thinking_second INTEGER DEFAULT 0,
-    answer VARCHAR(100) DEFAULT '',
+    answer TEXT DEFAULT '',
     point INTEGER DEFAULT 0
 );
 
 CREATE TABLE options (
     id SERIAL PRIMARY KEY,
-    question_id VARCHAR(100) NOT NULL,
-    value VARCHAR(100) DEFAULT '',
+    question_id TEXT NOT NULL,
+    value TEXT DEFAULT '',
     image_origin_x DOUBLE PRECISION NOT NULL DEFAULT 0,
     image_origin_y DOUBLE PRECISION NOT NULL DEFAULT 0,
     image_scale DOUBLE PRECISION NOT NULL DEFAULT 0
@@ -39,8 +41,8 @@ CREATE TABLE options (
 CREATE TABLE answers (
     id SERIAL PRIMARY KEY,
     panelist_id INTEGER NOT NULL,
-    question_id VARCHAR(100) NOT NULL,
-    answer VARCHAR(100) NOT NULL DEFAULT '',
+    question_id TEXT NOT NULL,
+    answer TEXT NOT NULL DEFAULT '',
     correct INTEGER NOT NULL DEFAULT 0,
     score INTEGER NOT NULL DEFAULT 0,
     elapsed_second DOUBLE PRECISION NOT NULL DEFAULT 0

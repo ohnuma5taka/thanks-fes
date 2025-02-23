@@ -5,6 +5,7 @@ const deviceType: Device = navigator.userAgent.includes('iPhone')
   : navigator.userAgent.includes('Android')
   ? 'android'
   : 'desktop';
+
 const isSp = deviceType === 'iphone' || deviceType === 'android';
 const isIphone = deviceType === 'iphone';
 const isAndroid = deviceType === 'android';

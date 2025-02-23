@@ -94,4 +94,23 @@
       >登録</fes-button
     >
   </div>
+  <div *ngIf="!noPanelistAnswer && !noTeamAnswer" class="read-wrapper">
+    <div *ngFor="let item of readItems; index as index" class="read-row">
+      <img
+        class="read-image"
+        [src]="'/assets/images/mc-' + item.tag + '.png'"
+        [ngClass]="{ sp: isSp }"
+        [style.opacity]="+(!index || readItems[index - 1].tag !== item.tag)"
+      />
+      <div class="balloon" [ngClass]="item.tag + (isSp ? ' sp' : '')">
+        <span
+          [ngClass]="{
+            'text-disabled':
+              item.text.startsWith('(') && item.text.startsWith('(')
+          }"
+          >{{ item.text }}</span
+        >
+      </div>
+    </div>
+  </div>
 </div>

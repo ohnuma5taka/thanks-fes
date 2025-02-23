@@ -6,11 +6,12 @@ from app.db.base import Base
 
 class Period(Base):
 
-    __tablename__ = 'periods'
-    __table_args__ = {'schema': env.db_schema}
+    __tablename__ = "periods"
+    __table_args__ = {"schema": env.db_schema}
 
-    number = Column(Integer, primary_key=True)
-    title = Column(String, nullable=False, default='')
-    description = Column(String, nullable=False, default='')
-    panelist_type = Column(String, nullable=False, default='')
+    number = Column(Integer, primary_key=True, default=0)
+    title = Column(String, nullable=False, default="")
+    description = Column(String, nullable=False, default="")
+    read_text = Column(String, nullable=False, default="")
+    panelist_type = Column(String, nullable=False, default="")
     award_count = Column(Integer, nullable=False, default=0)
