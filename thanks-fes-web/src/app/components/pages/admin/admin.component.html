@@ -49,9 +49,11 @@
     class="step-status"
   >
     <p>登録済み解答者（現在：{{ totalRegisteredCount }}名）</p>
-    <p *ngFor="let registeredCount of registeredCounts">
-      {{ registeredCount.team }}チーム：{{ registeredCount.count }}名
-    </p>
+    <ng-container *ngFor="let registeredCount of registeredCounts">
+      <p *ngIf="registeredCount.team">
+        {{ registeredCount.team }}チーム：{{ registeredCount.count }}名
+      </p>
+    </ng-container>
   </div>
   <div *ngIf="noPanelistAnswer" class="w-100 d-flex-center">
     <div class="answer-form">

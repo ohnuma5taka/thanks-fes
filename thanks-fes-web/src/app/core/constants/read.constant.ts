@@ -1,5 +1,23 @@
 import { ReadItem } from '@/app/core/models/read-item.model';
 
+const titleItems: ReadItem[] = [
+  {
+    tag: 'two',
+    text: '〇〇感謝祭を開催します！',
+  },
+];
+
+const openingItems: ReadItem[] = [
+  {
+    tag: 'two',
+    text: '(参加登録が完了するまで待機)',
+  },
+  {
+    tag: 'two',
+    text: '(途中参加も可能なのである程度集まったら進めてもok)',
+  },
+];
+
 const periodFirstItems: ReadItem[] = [
   {
     tag: 'lady',
@@ -124,6 +142,8 @@ const periodEndNoAwardItems: ReadItem[] = [
 ];
 
 export const readConstant = {
+  titleItems,
+  openingItems,
   periodFirstItems,
   periodContinueItems,
   questionFirstItems,
