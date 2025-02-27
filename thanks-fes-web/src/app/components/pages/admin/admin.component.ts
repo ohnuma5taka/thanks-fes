@@ -104,9 +104,11 @@ export class AdminComponent {
 
   get readItems() {
     if (!this.period) return [];
-    return this.step === 'オープニング' ||
-      this.step === 'ピリオド開始' ||
-      this.step === 'ピリオド説明'
+    return this.step === 'タイトル'
+      ? readConstant.titleItems
+      : this.step === 'オープニング'
+      ? [...this.period.readItems, ...readConstant.openingItems]
+      : this.step === 'ピリオド開始' || this.step === 'ピリオド説明'
       ? [
           ...(this.periodNumber === 1
             ? readConstant.periodFirstItems
