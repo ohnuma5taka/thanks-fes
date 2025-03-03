@@ -10,20 +10,20 @@
 - キー設定：
 - セキュリティタイプ：
 
-### Git 秘密鍵を転送
+### モジュールを転送
 
 ```
-scp -i ~/ohnuma5taka.pem ~/.ssh/my_git_id_rsa ec2-user@__PUBLIC_IP__:~/.ssh/my_git_id_rsa
+scp -i ~/.ssh/ohnuma5taka.pem thanks-fes.tar.gz ec2-user@__PUBLIC_IP__:~
 ```
 
 ### ssh で入る
 
 ```
-ssh -i ~/ohnuma5taka.pem ec2-user@__PUBLIC_IP__
+ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@__PUBLIC_IP__
 ```
 
-### git pull
+### 解凍 → 移動 → 起動
 
 ```
-ssh -i ~/ohnuma5taka.pem ec2-user@__PUBLIC_IP__
+tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash install_docker.sh && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
 ```

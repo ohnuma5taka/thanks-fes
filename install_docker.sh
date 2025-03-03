@@ -1,6 +1,6 @@
 #! /bin/bash
-sudo dnf update
-sudo dnf install -y docker
+sudo yum update
+sudo yum install -y docker
 sudo systemctl start docker
 sudo gpasswd -a $(whoami) docker
 sudo chgrp docker /var/run/docker.sock
