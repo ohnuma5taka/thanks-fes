@@ -16,16 +16,22 @@ Elastic IP を割り振る
 
 起動中インスタンスに関連付け
 
+### IP アドレスをセット
+
+```
+PUBLIC_IP=xxx.xxx.xxx.xxx
+```
+
 ### モジュールを転送
 
 ```
-scp -i ~/.ssh/ohnuma5taka.pem thanks-fes.tar.gz ec2-user@__PUBLIC_IP__:~
+scp -i ~/.ssh/ohnuma5taka.pem thanks-fes.tar.gz ec2-user@${PUBLIC_IP}:~
 ```
 
 ### ssh で入る
 
 ```
-ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@__PUBLIC_IP__
+ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${PUBLIC_IP}
 ```
 
 ### 解凍 → 移動 → 起動
