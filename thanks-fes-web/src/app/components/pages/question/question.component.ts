@@ -220,6 +220,7 @@ export class QuestionComponent {
 
   async fetchPanelistResults() {
     this.results = undefined;
+    await this.fetchOpeningPeriod();
     const results = await this.resultApi.getPanelistResults();
     this.results = results.slice(0, 10);
     this.displayResults();
