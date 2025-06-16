@@ -11,3 +11,5 @@ ssl/*
 **/.history
 **/__pycache__
 **/.pytest_cache
+
+/appendonlydir
