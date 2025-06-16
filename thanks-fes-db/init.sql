@@ -1,5 +1,19 @@
-DROP SCHEMA public cascade;
-CREATE SCHEMA public;
+drop schema if exists public cascade;
+
+create schema public;
+
+SET
+    search_path TO public;
+
+SET
+    TIME ZONE 'Asia/Tokyo';
+
+$$ LANGUAGE plpgsql;
+
+CREATE TABLE teams (
+    name TEXT PRIMARY KEY,
+    color TEXT NOT NULL DEFAULT ''
+);
 
 CREATE TABLE panelists (
     id SERIAL PRIMARY KEY,
