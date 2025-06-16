@@ -7,6 +7,7 @@ from app.db.seeds.option_seed import seed_options
 from app.db.seeds.panelist_seed import seed_panelists
 from app.db.seeds.period_seed import seed_periods
 from app.db.seeds.question_seed import seed_questions
+from app.db.seeds.team_seed import seed_teams
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", default="")
@@ -23,6 +24,7 @@ def seed(mode: str=None):
     question_crud.reset_all([])
     period_crud.reset_all([])
     print(f'{BOS}Seeding data...{EOS}')
+    seed_teams(seeds_data_dir)
     seed_periods(seeds_data_dir)
     seed_questions(seeds_data_dir)
     seed_options(seeds_data_dir)
