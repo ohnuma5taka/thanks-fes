@@ -37,6 +37,7 @@ export class PeriodApi {
               const ext = question.questionFormat === '動画' ? '.mp4' : '.png';
               const file = {
                 questionPath: `/assets/questions/${question.id}/question${ext}`,
+                questionPreviewPath: `/assets/questions/${question.id}/question_preview${ext}`,
                 answerPath: `/assets/questions/${question.id}/answer${ext}`,
                 width: 0,
                 height: 0,

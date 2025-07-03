@@ -122,8 +122,8 @@
             id="question-video"
             [src]="
               step === '解答開始'
-                ? question.file.questionPath
-                : question.file.answerPath || question.file.questionPath
+                ? question.file.questionPreviewPath
+                : question.file.answerPath
             "
             autoplay
             [style.width]="
