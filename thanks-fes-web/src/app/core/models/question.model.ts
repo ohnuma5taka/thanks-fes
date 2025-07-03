@@ -21,7 +21,7 @@ export type Question = {
     width: number;
     height: number;
     questionPath: string;
-    questionPreviewPath: string;
+    fullQuestionPath: string;
     answerPath: string;
   };
 };
