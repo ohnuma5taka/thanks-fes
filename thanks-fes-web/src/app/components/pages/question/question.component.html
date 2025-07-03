@@ -7,7 +7,7 @@
   </ng-container>
 
   <ng-container *ngIf="step === 'タイトル'">
-    <img id="title-image" src="/assets/images/logo.png" />
+    <img class="title-image" src="/assets/images/logo.png" />
   </ng-container>
 
   <ng-container *ngIf="step === 'オープニング' && openingPeriod">
@@ -232,19 +232,19 @@
 
   <img
     *ngIf="step === '総合チームランキングタイトル'"
-    id="title-image"
+    class="title-image"
     src="/assets/images/total-team-ranking-title.png"
   />
 
   <img
     *ngIf="step === '総合ランキングタイトル'"
-    id="title-image"
+    class="title-image"
     src="/assets/images/total-panelist-ranking-title.png"
   />
 
   <img
     *ngIf="step === '景品発表'"
-    id="title-image"
+    class="title-image"
     src="/assets/images/award-prize-title.png"
   />
 

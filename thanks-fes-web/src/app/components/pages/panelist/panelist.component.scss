@@ -12,7 +12,7 @@
   @extend .gy-9;
 }
 
-#title-image {
+.title-image {
   width: 75vw;
   transform: translate(100px, 150px) scale(0);
   transition: transform 1s;
