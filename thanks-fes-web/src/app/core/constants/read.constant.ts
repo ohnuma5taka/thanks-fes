@@ -107,7 +107,7 @@ const periodEndPersonalItems: ReadItem[] = [
   },
   {
     tag: 'lady',
-    text: 'この問題の正解者の中で一番回答が速かった方が優勝となります',
+    text: 'このピリオドの問題で正解が最も多かった方が優勝となります',
   },
   {
     tag: 'lady',
