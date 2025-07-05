@@ -19,7 +19,7 @@ Elastic IP を割り振る
 ### モジュールを圧縮
 
 ```
-rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-api/venv && for p in $(find . -type d | grep "__pycache__"); do rm -rf $p; done && tar --disable-copyfile -cfz thanks-fes.tar.gz thanks-fes
+rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-api/venv && for p in $(find . -type d | grep "__pycache__"); do rm -rf $p; done && tar --disable-copyfile -cf thanks-fes.tar.gz thanks-fes
 ```
 
 ### IP アドレスをセット
