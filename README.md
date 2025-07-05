@@ -16,6 +16,12 @@ Elastic IP を割り振る
 
 起動中インスタンスに関連付け
 
+### モジュールを圧縮
+
+```
+rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-api/venv && for p in $(find . -type d | grep "__pycache__"); do rm -rf $p; done && tar --disable-copyfile -cfz thanks-fes.tar.gz thanks-fes
+```
+
 ### IP アドレスをセット
 
 ```
@@ -37,7 +43,7 @@ ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${PUBLIC_IP}
 ### 解凍 → 移動 → 起動
 
 ```
-tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash install_docker.sh && sudo docker-compose up -d && sudo docker exec -it thanks-fes-api python /src/seed.py
+tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash install_docker.sh && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
 ```
 
 ### 解答リセット

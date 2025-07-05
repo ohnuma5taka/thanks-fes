@@ -8,8 +8,6 @@ SET
 SET
     TIME ZONE 'Asia/Tokyo';
 
-$$ LANGUAGE plpgsql;
-
 CREATE TABLE teams (
     name TEXT PRIMARY KEY,
     color TEXT NOT NULL DEFAULT ''
