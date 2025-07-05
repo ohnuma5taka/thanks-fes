@@ -24,11 +24,7 @@ async def websocket_lifespan(app: FastAPI):
 
 app_version = "1.0"
 
-app = FastAPI(
-    title="感謝祭API",
-    version=app_version,
-    lifespan=websocket_lifespan
-)
+app = FastAPI(title="感謝祭API", version=app_version, lifespan=websocket_lifespan)
 
 app.include_router(api_router)
 app.add_middleware(
@@ -53,24 +49,25 @@ async def db_session_middleware(request: Request, call_next):
     return response
 
 
-@app.get('/health', summary='ヘルスチェックAPI', response_model=HealthModel)
+@app.get("/health", summary="ヘルスチェックAPI", response_model=HealthModel)
 async def health_check():
     return HealthModel(
-        status='ok' if len(question_crud.get_all()) > 0 else 'No question saved',
-        version=app_version
+        status="ok" if len(question_crud.get_all()) > 0 else "No question saved",
+        version=app_version,
     )
 
-@app.post('/seed', summary='DB初期化API', response_model=None)
+
+@app.post("/init-db", summary="DB初期化API", response_model=None)
 async def init_db():
-    seed()
+    seed(mode="dev")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         workers=1,
-        host='0.0.0.0',
+        host="0.0.0.0",
         port=8888,
         ws_ping_interval=25,
-        reload=True
+        reload=True,
     )

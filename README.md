@@ -43,7 +43,7 @@ ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${PUBLIC_IP}
 ### 解凍 → 移動 → 起動
 
 ```
-tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash install_docker.sh && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
+rm -rf thanks-fes && tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash install_docker.sh && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
 ```
 
 ### 解答リセット
