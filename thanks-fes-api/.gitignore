@@ -13,3 +13,4 @@ ssl/*
 **/.pytest_cache
 
 /appendonlydir
+dump.rdb

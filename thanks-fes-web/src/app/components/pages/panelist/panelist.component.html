@@ -10,11 +10,11 @@
   <ng-container
     *ngIf="step === '' || step === '名前登録' || step === '登録完了'"
   >
-    <img id="title-image" src="/assets/images/logo.png" />
+    <img class="title-image" src="/assets/images/logo.png" />
   </ng-container>
 
   <ng-container *ngIf="step === 'タイトル' || step === 'オープニング'">
-    <img id="title-image" src="/assets/images/logo.png" />
+    <img class="title-image" src="/assets/images/logo.png" />
   </ng-container>
 
   <ng-container *ngIf="step === '名前登録'">
@@ -160,7 +160,6 @@
       "
     >
       <img
-        id="title-image"
         class="title-image"
         [src]="
           step === '総合チームランキングタイトル' ||
