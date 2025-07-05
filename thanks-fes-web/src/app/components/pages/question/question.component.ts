@@ -128,7 +128,7 @@ export class QuestionComponent {
 
   async displayTitle() {
     await sleep(1);
-    const titleImage = document.getElementById('title-image');
+    const titleImage = document.getElementsByClassName('title-image')[0];
     if (titleImage) titleImage.classList.add('display');
   }
 
