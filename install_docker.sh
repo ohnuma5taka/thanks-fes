@@ -11,3 +11,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker -v
 docker-compose -v
+
+sudo cp ~/thanks-fes/entrypoint.service /etc/systemd/system/entrypoint.service && \
+sudo systemctl daemon-reexec && \
+sudo systemctl daemon-reload && \
+sudo systemctl enable entrypoint.service
