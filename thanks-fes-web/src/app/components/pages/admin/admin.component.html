@@ -106,10 +106,12 @@
       />
       <div class="balloon" [ngClass]="item.tag + (isSp ? ' sp' : '')">
         <span
-          [ngClass]="{
-            'text-disabled':
-              item.text.startsWith('(') && item.text.startsWith('(')
-          }"
+          class="fs-28"
+          [ngClass]="
+            item.text.startsWith('(') && item.text.startsWith('(')
+              ? 'text-disabled'
+              : ''
+          "
           >{{ item.text || "..." }}</span
         >
       </div>

@@ -1,9 +1,9 @@
-drop schema if exists public cascade;
+drop schema if exists thanks_fes cascade;
 
-create schema public;
+create schema thanks_fes;
 
 SET
-    search_path TO public;
+    search_path TO thanks_fes;
 
 SET
     TIME ZONE 'Asia/Tokyo';
