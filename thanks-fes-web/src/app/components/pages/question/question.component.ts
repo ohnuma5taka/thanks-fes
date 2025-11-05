@@ -58,7 +58,9 @@ export class QuestionComponent {
   get optionResources() {
     return this.question.options.map((x, i) => ({
       iconSrc: `/assets/images/option-icon${i + 1}.png`,
-      imageSrc: `/assets/questions/${this.question.id}/${x.value}.png`,
+      imageSrc: decodeURIComponent(
+        `/assets/questions/${this.question.id}/${x.value}.png`
+      ),
     }));
   }
 

@@ -36,9 +36,15 @@ export class PeriodApi {
             if (question.questionFormat !== '文字') {
               const ext = question.questionFormat === '動画' ? '.mp4' : '.png';
               const file = {
-                questionPath: `/assets/questions/${question.id}/question${ext}`,
-                fullQuestionPath: `/assets/questions/${question.id}/full_question${ext}`,
-                answerPath: `/assets/questions/${question.id}/answer${ext}`,
+                questionPath: decodeURIComponent(
+                  `/assets/questions/${question.id}/question${ext}`
+                ),
+                fullQuestionPath: decodeURIComponent(
+                  `/assets/questions/${question.id}/full_question${ext}`
+                ),
+                answerPath: decodeURIComponent(
+                  `/assets/questions/${question.id}/answer${ext}`
+                ),
                 width: 0,
                 height: 0,
               };
