@@ -218,4 +218,8 @@ export class PanelistComponent {
     this.result = undefined;
     this.result = await this.resultApi.getTeamResult(this.panelist.team);
   }
+
+  reload() {
+    location.reload();
+  }
 }
