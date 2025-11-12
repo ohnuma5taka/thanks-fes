@@ -40,10 +40,16 @@ scp -i ~/.ssh/ohnuma5taka.pem thanks-fes.tar.gz ec2-user@${PUBLIC_IP}:~
 ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${PUBLIC_IP}
 ```
 
+### dockerインストール
+
+```
+sudo bash install_docker.sh
+```
+
 ### 解凍 → 移動 → 起動
 
 ```
-rm -rf thanks-fes && tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash install_docker.sh && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
+sudo rm -rf thanks-fes && sudo tar xf thanks-fes.tar.gz && cd thanks-fes && sudo docker-compose down && sudo docker rmi thanks-fes-db thanks-fes-api thanks-fes-web && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
 ```
 
 ### 解答リセット
