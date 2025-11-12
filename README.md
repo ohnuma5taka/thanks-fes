@@ -54,8 +54,9 @@ sudo rm -rf thanks-fes && sudo tar xf thanks-fes.tar.gz && cd thanks-fes && sudo
 
 ### 解答リセット
 
+ブラウザアクセス
 ```
-curl -X POST http://${PUBLIC_IP}:8888/init-db
+http://${PUBLIC_IP}:8888/init-db
 ```
 
 ```
