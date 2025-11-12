@@ -4,11 +4,11 @@
 
 ### EC2 インスタンスを用意
 
-- OS：Amazon Linux 2 with .NET 6, PowerShell, Mono, and MATE Desktop Environment
-- インスタンスタイプ：t3.2xlarge
+- OS：ami-0e68e34976bb4db93
+- インスタンスタイプ：t3.xlarge
 - キー設定：ohnuma5taka
 - セキュリティグループ：既存＞ ec2-default
-- EBS：20GiB gp2
+- EBS：30GiB gp3
 
 ### 静的 IP を関連付け
 
@@ -47,6 +47,10 @@ rm -rf thanks-fes && tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash inst
 ```
 
 ### 解答リセット
+
+```
+curl -X POST http://${PUBLIC_IP}:8888/init-db
+```
 
 ```
 sudo docker exec -it thanks-fes-api python /src/seed.py
