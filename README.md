@@ -49,5 +49,9 @@ rm -rf thanks-fes && tar xf thanks-fes.tar.gz && cd thanks-fes && sudo bash inst
 ### 解答リセット
 
 ```
+curl -X POST http://${PUBLIC_IP}:8888/init-db
+```
+
+```
 sudo docker exec -it thanks-fes-api python /src/seed.py
 ```
