@@ -31,10 +31,6 @@ question_id	value	image_origin_x	image_origin_y	image_scale
 1_FHIR	Free
 1_FHIR	Fast
 1_FHIR	Fujioka
-1_属性	type
-1_属性	enableWhen
-1_属性	required
-1_属性	meta
 1_パーカー	カナダグース	0.5	0.5	10
 1_パーカー	ノースフェイス	0.5	0.5	10
 1_パーカー	モンベル	0.5	0.5	10
@@ -55,3 +51,11 @@ question_id	value	image_origin_x	image_origin_y	image_scale
 1_来年参加	どうしようかな
 1_来年参加	行けたら行きます
 1_来年参加	やめとこっかな
+1_スペル	Questionaire
+1_スペル	Questionneire
+1_スペル	Questionnaier
+1_スペル	Questionnaire
+1_仕様	type
+1_仕様	enableWhen
+1_仕様	required
+1_仕様	meta
