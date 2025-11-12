@@ -62,6 +62,11 @@ async def init_db():
     seed(mode="dev")
 
 
+@app.get("/init-db", summary="DB初期化API", response_model=None)
+async def init_db2():
+    seed(mode="dev")
+
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",

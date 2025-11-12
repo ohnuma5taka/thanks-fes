@@ -226,8 +226,13 @@
   }
 }
 
-.reload-button {
+.reload-wrapper {
   position: absolute;
   top: 16px;
-  left: 16px;
+  right: 16px;
+  .reload-button {
+    border-radius: 4px;
+    border: 2px solid white;
+    background-color: rgba(#fff, 0.15);
+  }
 }

@@ -218,10 +218,10 @@
   </ng-container>
 </div>
 
-<fes-button
-  class="reload-button"
-  [transparent]="true"
-  buttonClass="fs-12 gx-1 px-3 py-2"
-  (emitClick)="reload()"
-  ><span class="fs-16 mdi mdi-reload"></span><span>更新</span></fes-button
->
+<div class="reload-wrapper text-white d-flex-center gx-1">
+  <button class="reload-button" (click)="reload()">
+    <div class="fs-18 d-flex-center gx-1 px-2 py-1 text-white">
+      <span class="fs-20 mdi mdi-reload"></span><span>更新</span>
+    </div>
+  </button>
+</div>
