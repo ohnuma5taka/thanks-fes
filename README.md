@@ -25,38 +25,40 @@ rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-ap
 ### IP アドレスをセット
 
 ```
-PUBLIC_IP=xxx.xxx.xxx.xxx
+EC2_PUBLIC_IP=xxx.xxx.xxx.xxx
 ```
 
 ### モジュールを転送
 
 ```
-scp -i ~/.ssh/ohnuma5taka.pem thanks-fes.tar.gz ec2-user@${PUBLIC_IP}:~
+scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/my_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/my_git_id_rsa
+scp -i ~/.ssh/ohnuma5taka.pem setup.sh ec2-user@${EC2_PUBLIC_IP}:~/setup.sh
 ```
 
 ### ssh で入る
 
 ```
-ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${PUBLIC_IP}
+ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${EC2_PUBLIC_IP}
 ```
 
 ### dockerインストール
 
 ```
-sudo bash install_docker.sh
+sudo bash setup.sh
 ```
 
 ### 解凍 → 移動 → 起動
 
 ```
-sudo rm -rf thanks-fes && sudo tar xf thanks-fes.tar.gz && cd thanks-fes && sudo docker-compose down && sudo docker rmi thanks-fes-db thanks-fes-api thanks-fes-web && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
+cd ~/thanks-fes && sudo docker-compose down && sudo docker rmi thanks-fes-db thanks-fes-api thanks-fes-web && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
 ```
 
 ### 解答リセット
 
 ブラウザアクセス
+
 ```
-http://${PUBLIC_IP}:8888/init-db
+http://${EC2_PUBLIC_IP}:8888/init-db
 ```
 
 ```

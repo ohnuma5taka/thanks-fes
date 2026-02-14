@@ -15,11 +15,12 @@ class Connection:
 
 
 class WsClient:
+    connection_map: dict[str, Connection]
     broadcaster = Broadcast(url="redis://localhost:6379")
     redis_client = redis.StrictRedis(host="localhost", port=6379, decode_responses=True)
 
     def __init__(self):
-        self.connection_map: dict[str, Connection] = {}
+        self.connection_map = {}
 
     async def connect_broadcaster(self):
         await self.broadcaster.connect()
@@ -35,7 +36,7 @@ class WsClient:
 
     async def connect(self, channel: str, websocket: WebSocket):
         await websocket.accept()
-        key = websocket.headers.get("sec-websocket-key")
+        key = websocket.headers.get("sec-websocket-key") or ""
         conn = Connection(websocket, channel)
         self.connection_map[key] = conn
 
@@ -43,11 +44,11 @@ class WsClient:
         conn.task = asyncio.create_task(self._subscribe(conn))
         self.redis_client.set(f"ws:{key}", channel, ex=1)
 
-    async def broadcast(self, channel: str, data: dict | list):
+    async def broadcast(self, channel: str, data: dict):
         await self.broadcaster.publish(channel=channel, message=json_util.dumps(data))
 
     async def disconnect(self, websocket: WebSocket):
-        key = websocket.headers.get("sec-websocket-key")
+        key = websocket.headers.get("sec-websocket-key") or ""
         conn = self.connection_map.get(key)
         if conn and conn.task:
             conn.task.cancel()
