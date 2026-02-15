@@ -22,16 +22,18 @@ Elastic IP を割り振る
 rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-api/venv && for p in $(find . -type d | grep "__pycache__"); do rm -rf $p; done && tar --disable-copyfile -cf thanks-fes.tar.gz thanks-fes
 ```
 
-### IP アドレスをセット
+### IP アドレスとブランチ名をセット
 
 ```
 EC2_PUBLIC_IP=xxx.xxx.xxx.xxx
+GIT_BRANCH_NAME=xxx
 ```
 
 ### モジュールを転送
 
 ```
-scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/my_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/git_id_rsa
+scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/private_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/git_id_rsa
+sed -i '' "s/__BRANCH_NAME__/${GIT_BRANCH_NAME}/g" ~/setup.sh
 scp -i ~/.ssh/ohnuma5taka.pem setup.sh ec2-user@${EC2_PUBLIC_IP}:~/setup.sh
 ```
 
@@ -47,10 +49,21 @@ ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${EC2_PUBLIC_IP}
 sudo bash setup.sh
 ```
 
-### 解凍 → 移動 → 起動
+一度ログアウトして再度ssh
 
 ```
-cd ~/thanks-fes && sudo docker-compose down && sudo docker rmi thanks-fes-db thanks-fes-api thanks-fes-web && sudo docker-compose up -d && sleep 10 && sudo docker exec -it thanks-fes-api python /src/seed.py
+exit
+ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${EC2_PUBLIC_IP}
+```
+
+### 起動
+
+```
+cd ~/thanks-fes && \
+docker-compose down --rmi all --volumes --remove-orphans && \
+docker-compose up -d --build && \
+sleep 10 && \
+docker exec -it thanks-fes-api python /src/seed.py
 ```
 
 ### 解答リセット
