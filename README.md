@@ -66,6 +66,10 @@ sleep 10 && \
 docker exec -it thanks-fes-api python /src/seed.py
 ```
 
+### QRコードの生成
+
+https://qr.quel.jp/
+
 ### 解答リセット
 
 ブラウザアクセス
