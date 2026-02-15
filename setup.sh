@@ -1,5 +1,5 @@
 #! /bin/bash
-BRANCH_NAME=__BRANCH_NAME__
+BRANCH_NAME=20250219_keio_ambassador
 sudo yum update
 sudo yum install -y docker git
 sudo systemctl start docker
