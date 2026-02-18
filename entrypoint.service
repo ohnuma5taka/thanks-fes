@@ -4,12 +4,25 @@ After=network.target docker.service
 Requires=docker.service
 
 [Service]
-Type=simple
+Type=oneshot
+RemainAfterExit=true
 User=ec2-user
 WorkingDirectory=/home/ec2-user/thanks-fes
+
+# コンテナ起動
 ExecStart=/usr/local/bin/docker-compose up -d
+
+# 起動後にseed実行（TTYなし）
+ExecStartPost=/bin/bash -c "\
+for i in {1..30}; do \
+  /usr/bin/docker exec thanks-fes-api curl -s http://localhost:8888/ && break; \
+  sleep 2; \
+done && \
+/usr/bin/docker exec thanks-fes-api python /src/seed.py"
+
+# 停止時にcompose down
 ExecStop=/usr/local/bin/docker-compose down
-Restart=always
+
 TimeoutStartSec=0
 
 [Install]

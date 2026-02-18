@@ -49,7 +49,7 @@ async def db_session_middleware(request: Request, call_next):
     return response
 
 
-@app.get("/health", summary="ヘルスチェックAPI", response_model=HealthModel)
+@app.get("", summary="ヘルスチェックAPI", response_model=HealthModel)
 async def health_check():
     return HealthModel(
         status="ok" if len(question_crud.get_all()) > 0 else "No question saved",
