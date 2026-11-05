@@ -13,5 +13,6 @@ RUN apt-get update && apt-get install -y gettext-base
 COPY ./default.conf.template /etc/nginx/conf.d/default.conf
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=node /app/dist/thanks-fes-web /usr/share/nginx/html
+RUN chmod -R a+rX /usr/share/nginx/html
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
