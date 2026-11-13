@@ -18,21 +18,21 @@ Elastic IP を割り振る
 
 ### モジュールを圧縮
 
-```
+```bash
 cd /path/to/dist
 rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-api/venv && for p in $(find . -type d | grep "__pycache__"); do rm -rf $p; done && tar --disable-copyfile -cf thanks-fes.tar.gz thanks-fes
 ```
 
 ### IP アドレスとブランチ名をセット
 
-```
+```bash
 EC2_PUBLIC_IP=xxx.xxx.xxx.xxx
 GIT_BRANCH_NAME=xxx
 ```
 
 ### モジュールを転送
 
-```
+```bash
 scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/private_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/git_id_rsa
 sed -i '' "s/__BRANCH_NAME__/${GIT_BRANCH_NAME}/g" thanks-fes/setup.sh
 scp -i ~/.ssh/ohnuma5taka.pem setup.sh ec2-user@${EC2_PUBLIC_IP}:~/setup.sh
@@ -40,26 +40,29 @@ scp -i ~/.ssh/ohnuma5taka.pem setup.sh ec2-user@${EC2_PUBLIC_IP}:~/setup.sh
 
 ### ssh で入る
 
-```
+```bash
 ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${EC2_PUBLIC_IP}
 ```
 
 ### dockerインストール
 
-```
+```bash
+sudo chown ec2-user:ec2-user ~/.ssh/config && \
+chmod 600 ~/.ssh/config && \
+sudo usermod -aG docker ec2-user && \
 sudo bash setup.sh
 ```
 
 一度ログアウトして再度ssh
 
-```
+```bash
 exit
 ssh -i ~/.ssh/ohnuma5taka.pem ec2-user@${EC2_PUBLIC_IP}
 ```
 
 ### 起動
 
-```
+```bash
 cd ~/thanks-fes && \
 docker-compose down --rmi all --volumes --remove-orphans && \
 docker-compose up -d --build && \
@@ -71,14 +74,11 @@ docker exec -it thanks-fes-api python /src/seed.py
 
 https://qr.quel.jp/
 
+```bash
+for x in question admin panelist; do echo "http://${EC2_PUBLIC_IP}/#/${x}"
+```
+
 ### 解答リセット
 
-ブラウザアクセス
-
-```
-http://${EC2_PUBLIC_IP}:8888/init-db
-```
-
-```
-sudo docker exec -it thanks-fes-api python /src/seed.py
-```
+以下URLでブラウザアクセス：
+`http://${EC2_PUBLIC_IP}:8888/init-db`
