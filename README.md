@@ -19,6 +19,7 @@ Elastic IP を割り振る
 ### モジュールを圧縮
 
 ```
+cd /path/to/dist
 rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-api/venv && for p in $(find . -type d | grep "__pycache__"); do rm -rf $p; done && tar --disable-copyfile -cf thanks-fes.tar.gz thanks-fes
 ```
 
@@ -33,7 +34,7 @@ GIT_BRANCH_NAME=xxx
 
 ```
 scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/private_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/git_id_rsa
-sed -i '' "s/__BRANCH_NAME__/${GIT_BRANCH_NAME}/g" setup.sh
+sed -i '' "s/__BRANCH_NAME__/${GIT_BRANCH_NAME}/g" thanks-fes/setup.sh
 scp -i ~/.ssh/ohnuma5taka.pem setup.sh ec2-user@${EC2_PUBLIC_IP}:~/setup.sh
 ```
 
