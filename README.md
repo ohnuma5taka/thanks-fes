@@ -33,7 +33,7 @@ GIT_BRANCH_NAME=xxx
 ### モジュールを転送
 
 ```
-scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/private_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/private_git_id_rsa
+scp -i ~/.ssh/ohnuma5taka.pem ~/.ssh/private_git_id_rsa ec2-user@${EC2_PUBLIC_IP}:~/.ssh/git_id_rsa
 sed -i '' "s/__BRANCH_NAME__/${GIT_BRANCH_NAME}/g" thanks-fes/setup.sh
 scp -i ~/.ssh/ohnuma5taka.pem setup.sh ec2-user@${EC2_PUBLIC_IP}:~/setup.sh
 ```
