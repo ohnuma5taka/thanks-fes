@@ -1,4 +1,4 @@
-FROM python:3.12-slim-bullseye
+FROM python:3.12-slim-bookworm
 ENV PYTHONUNBUFFERED=1
 
 RUN apt update && apt install -y build-essential vim unixodbc redis-server
