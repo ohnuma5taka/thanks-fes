@@ -26,8 +26,8 @@ rm -rf thanks-fes/thanks-fes-web/node_modules && rm -rf thanks-fes/thanks-fes-ap
 ### IP アドレスとブランチ名をセット
 
 ```bash
-EC2_PUBLIC_IP=xxx.xxx.xxx.xxx
-GIT_BRANCH_NAME=xxx
+EC2_PUBLIC_IP=57.180.130.247
+GIT_BRANCH_NAME=20261114_JASPEHR
 ```
 
 ### モジュールを転送
